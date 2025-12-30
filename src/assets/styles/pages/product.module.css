@@ -1,0 +1,948 @@
+.productContainer {
+  background: #141414;
+}
+.productContainer .productImg {
+  position: relative;
+  width: 100%;
+  height: 70vh;
+  overflow: hidden;
+}
+
+/* Multi-gradient overlay */
+.productContainer .productImg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    /* Dark overlay */ linear-gradient(
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
+    ),
+    /* Gradient từ trên xuống */
+      linear-gradient(to bottom, rgba(255, 165, 0, 0.2) 0%, transparent 30%),
+    /* Gradient từ dưới lên */
+      linear-gradient(to top, rgba(255, 215, 0, 0.1) 0%, transparent 30%);
+  z-index: 1;
+}
+
+/* Vignette effect */
+.productContainer .productImg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 30%,
+    rgba(0, 0, 0, 0.4) 70%
+  );
+  z-index: 2;
+}
+
+.productContainer .productImg .content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Style cho tiêu đề chính */
+.productContainer .productImg h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ffd700, #ffa500, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradientFlow 3s ease-in-out infinite alternate;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+/* Underline effect cho h1 */
+.productContainer .productImg h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 150px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffd700, transparent);
+  opacity: 0.7;
+}
+
+/* Style cho mô tả */
+.productContainer .description {
+  margin-top: 2rem;
+  margin-bottom: 40px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.productContainer .description h2 {
+  font-size: 1.3rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 400;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Animation */
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .productContainer .productImg h1 {
+    font-size: 2.8rem;
+  }
+
+  .productContainer .description h2 {
+    font-size: 1.2rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 768px) {
+  .productContainer .productImg h1 {
+    font-size: 2.2rem;
+  }
+
+  .productContainer .description {
+    padding: 1.5rem;
+    margin: 1.5rem auto;
+  }
+
+  .productContainer .description h2 {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+}
+
+@media (max-width: 480px) {
+  .productContainer .productImg h1 {
+    font-size: 1.8rem;
+  }
+
+  .productContainer .description {
+    padding: 1rem;
+  }
+
+  .productContainer .description h2 {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+/* Slider Styles */
+.productContainer .sliderWrapper {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  max-height: 800px;
+  overflow: hidden;
+  will-change: transform; /* Tối ưu hiệu suất */
+  backface-visibility: hidden;
+}
+
+.productContainer .slideItem {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  max-height: 800px;
+  outline: none; /* Loại bỏ outline khi focus */
+}
+
+.productContainer .slideBackground {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.05); /* Scale nhẹ để tạo hiệu ứng */
+  transition: transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  image-rendering: -webkit-optimize-contrast; /* Tối ưu hiển thị ảnh */
+  image-rendering: crisp-edges;
+}
+
+/* Active slide zoom effect */
+.slick-active .productContainer .slideBackground {
+  transform: scale(1);
+}
+
+/* Dots Customization */
+.productContainer .customDotsContainer {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.productContainer .customDots {
+  display: flex !important;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.productContainer .dotIndicator {
+  position: relative;
+  width: 60px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.productContainer .dotIndicator.active {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.productContainer .dotIndicator:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.productContainer .dotNumber {
+  position: absolute;
+  top: -25px;
+  left: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.productContainer .dotIndicator.active .dotNumber {
+  color: white;
+}
+
+.productContainer .dotProgress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: white;
+  transition: width 5s linear;
+}
+
+.productContainer .dotIndicator.active .dotProgress {
+  width: 100%;
+  transition: width 5s linear;
+}
+
+/* Slick slider overrides */
+.productContainer :global(.slick-list),
+.productContainer :global(.slick-track) {
+  height: 100%;
+}
+
+.productContainer :global(.slick-slide) {
+  height: 100vh;
+  min-height: 600px;
+  max-height: 800px;
+}
+
+.productContainer :global(.slick-arrow) {
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.productContainer :global(.slick-arrow:hover) {
+  opacity: 1;
+}
+
+.productContainer :global(.slick-arrow:before) {
+  font-size: 40px;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .productContainer .sliderWrapper,
+  .productContainer .slideItem,
+  .productContainer :global(.slick-slide) {
+    height: 80vh;
+    min-height: 500px;
+    max-height: 700px;
+  }
+
+  .productContainer .customDotsContainer {
+    bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .productContainer .sliderWrapper,
+  .productContainer .slideItem,
+  .productContainer :global(.slick-slide) {
+    height: 70vh;
+    min-height: 450px;
+    max-height: 600px;
+  }
+
+  .productContainer .dotIndicator {
+    width: 40px;
+  }
+
+  .productContainer .dotNumber {
+    font-size: 12px;
+    top: -20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .productContainer .sliderWrapper,
+  .productContainer .slideItem,
+  .productContainer :global(.slick-slide) {
+    height: 60vh;
+    min-height: 400px;
+    max-height: 500px;
+  }
+
+  .productContainer .customDotsContainer {
+    bottom: 20px;
+  }
+
+  .productContainer .customDots {
+    gap: 15px;
+  }
+}
+
+/* Reduced Motion và tối ưu hiệu suất */
+@media (prefers-reduced-motion: reduce) {
+  .productContainer .slideBackground,
+  .productContainer .dotIndicator,
+  .productContainer .dotProgress {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .productContainer .slideBackground {
+    transform: scale(1) !important;
+  }
+}
+
+/* Hardware Acceleration */
+.productContainer .sliderWrapper {
+  transform: translateZ(0);
+}
+
+/* Loading state */
+.productContainer .slideBackground {
+  background-color: #f5f5f5; /* Màu nền khi đang tải ảnh */
+}
+
+/* Firefox optimization */
+@supports (-moz-appearance: none) {
+  .productContainer .slideBackground {
+    image-rendering: auto;
+  }
+}
+
+/* TabSpecification.module.css */
+
+.productContainer .tableResponsive {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+.productContainer .specificationHeader {
+  padding: 24px 30px;
+  background: rgba(255, 215, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.15);
+}
+
+.productContainer .specificationHeader .title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffd700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.productContainer .specificationTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.productContainer .specificationTable tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.productContainer .specificationTable tr:last-child {
+  border-bottom: none;
+}
+
+.productContainer .specificationTable tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.productContainer .specificationTable td {
+  padding: 16px 20px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.productContainer .specificationTable td:first-child {
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  width: 40%;
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.productContainer .specificationTable td:last-child {
+  color: rgba(255, 255, 255, 0.8);
+  width: 60%;
+}
+
+/* Alternating row colors */
+.productContainer .specificationTable tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.productContainer .specificationTable tr:nth-child(even):hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Header row if needed */
+.productContainer .specificationTable th {
+  padding: 18px 20px;
+  text-align: left;
+  background-color: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 16px;
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .productContainer .specificationTable td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .productContainer .specificationTable td:first-child,
+  .productContainer .specificationTable td:last-child {
+    width: auto;
+    display: block;
+  }
+
+  .productContainer .specificationTable tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+  }
+
+  .productContainer .specificationTable td:first-child {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Figures */
+
+/* Variables */
+.productContainer .figureContainer {
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* Header */
+.productContainer .header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-radius: 16px;
+  border: 1px solid #333;
+  position: relative;
+  overflow: hidden;
+}
+
+.productContainer .header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #fcb800, #ffd95e);
+}
+
+.productContainer .title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  background: linear-gradient(90deg, #fcb800, #ffd95e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.productContainer .subtitle {
+  font-size: 1.1rem;
+  color: #aaa;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Brands Container */
+.productContainer .brandsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+/*.productContainer  Brand Card */
+.productContainer .brandCard {
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-radius: 16px;
+  border: 1px solid #333;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.productContainer .brandCard.expanded {
+  box-shadow: 0 8px 32px rgba(252, 184, 0, 0.1);
+  border-color: #fcb800;
+}
+
+.productContainer .brandHeader {
+  display: flex;
+  align-items: center;
+  padding: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.productContainer .brandHeader:hover {
+  background-color: rgba(252, 184, 0, 0.05);
+}
+
+.productContainer .brandImageContainer {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  margin-right: 20px;
+  border: 2px solid #fcb800;
+}
+
+.productContainer .brandImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.productContainer .brandImageContainer:hover .brandImage {
+  transform: scale(1.1);
+}
+
+.productContainer .brandOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(252, 184, 0, 0.2), transparent);
+}
+
+.productContainer .brandInfo {
+  flex: 1;
+}
+
+.productContainer .brandName {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.modelCount {
+  font-size: 0.9rem;
+  color: #fcb800;
+  background-color: rgba(252, 184, 0, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.expandIcon {
+  color: #fcb800;
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+/* Models Container */
+.modelsContainer {
+  padding: 0 25px 25px;
+}
+
+.modelsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Model Card */
+.modelCard {
+  background: linear-gradient(135deg, #222 0%, #1a1a1a 100%);
+  border-radius: 12px;
+  border: 1px solid #333;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.modelCard:hover {
+  border-color: #fcb800;
+  transform: translateY(-2px);
+}
+
+.modelCard.modelExpanded {
+  border-color: #fcb800;
+  box-shadow: 0 4px 20px rgba(252, 184, 0, 0.15);
+}
+
+.modelHeader {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modelHeader:hover {
+  background-color: rgba(252, 184, 0, 0.05);
+}
+
+.modelImageContainer {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  margin-right: 15px;
+  border: 2px solid #333;
+}
+
+.modelImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.modelImageContainer:hover .modelImage {
+  transform: scale(1.1);
+}
+
+.modelOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, rgba(252, 184, 0, 0.1), transparent);
+}
+
+.modelInfo {
+  flex: 1;
+}
+
+.modelName {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.specCount {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.modelExpandIcon {
+  color: #fcb800;
+  font-size: 1rem;
+}
+
+/* Specs Container */
+.specsContainer {
+  padding: 0 20px 20px;
+}
+
+.specsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.specCard {
+  background: linear-gradient(135deg, #2a2a2a 0%, #222 100%);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+}
+
+.specCard:hover {
+  border-color: #fcb800;
+  transform: translateX(4px);
+}
+
+.specIcon {
+  color: #fcb800;
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.specContent {
+  flex: 1;
+}
+
+.specKey {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.specValue {
+  font-size: 1rem;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* Model Actions */
+.modelActions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  padding-top: 20px;
+  border-top: 1px solid #333;
+}
+
+.actionButton {
+  flex: 1;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: linear-gradient(135deg, #2a2a2a 0%, #222 100%);
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  background: linear-gradient(135deg, #333 0%, #2a2a2a 100%);
+  border-color: #444;
+}
+
+.primaryButton {
+  background: linear-gradient(135deg, #fcb800 0%, #ffd95e 100%);
+  color: #000000;
+  border: none;
+  font-weight: 600;
+}
+
+.primaryButton:hover {
+  background: linear-gradient(135deg, #ffd95e 0%, #fcb800 100%);
+}
+
+/* Footer */
+.footer {
+  margin-top: 40px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  border-radius: 16px;
+  border: 1px solid #333;
+  overflow: hidden;
+}
+
+.footerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px;
+}
+
+.footerInfo h3 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.footerInfo p {
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.contactButton {
+  padding: 14px 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #fcb800 0%, #ffd95e 100%);
+  color: #000000;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contactButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(252, 184, 0, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .productContainer .brandHeader {
+    padding: 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .productContainer .brandImageContainer {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .modelsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .footerInfo {
+    margin-bottom: 15px;
+  }
+
+  .modelActions {
+    flex-direction: column;
+  }
+
+  .actionButton {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.6rem;
+  }
+
+  .productContainer .brandName {
+    font-size: 1.4rem;
+  }
+
+  .modelName {
+    font-size: 1.1rem;
+  }
+
+  .specsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Animation for expanding */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modelsContainer {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.specsContainer {
+  animation: fadeIn 0.3s ease-out;
+}

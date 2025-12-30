@@ -1,0 +1,101 @@
+/* Input Groups */
+.inputCommon {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.labelIcon {
+  color: #ffd700;
+  opacity: 0.8;
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.textInput {
+  width: 100%;
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.textInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.textInput:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: #ffd700;
+}
+
+.inputBorder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(255, 215, 0, 0),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.textInput:focus ~ .inputBorder {
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1),
+    inset 0 0 0 1px rgba(255, 215, 0, 0.3);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.3s ease;
+}
+
+.passwordToggle:hover {
+  color: #ffd700;
+}
+
+/* Form Options */
+.inputCommon option {
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 12px;
+  font-size: 14px;
+}
+
+.inputCommon option:hover,
+.inputCommon option:focus {
+  background: #ffd700;
+  color: #000;
+}
+
+.inputCommon option:checked {
+  background: #ffd700;
+  color: #000;
+  font-weight: 600;
+}

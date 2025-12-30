@@ -1,26 +1,121 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+* {
+  font-family: 'Work Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Common Responsive CSS */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Large Desktop (1600px and up) */
+@media (min-width: 1600px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 1600px;
+    margin: 0 auto;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Desktop (1200px to 1599px) */
+@media (min-width: 1200px) and (max-width: 1599px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 100%;
+  }
+}
+
+/* Desktop (992px to 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 40px 40px;
+    max-width: 100%;
+  }
+}
+
+/* Tablet (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 60px 30px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile Landscape (576px to 767px) */
+@media (max-width: 767px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 60px 30px;
+    max-width: 100%;
+  }
+}
+
+/* Mobile Portrait (under 576px) */
+@media (max-width: 576px) {
+  .padding-common,
+  .main-layout-client .header-layout-client,
+  .main-layout-client .footer-layout-client {
+    padding: 20px 20px;
+    max-width: 100%;
+  }
+}
+
+/* scroll custom */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 0px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 10px;
+}
+
+.home-page-loading {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(255, 255, 255);
+  z-index: 99999;
+}
+
+.text-truncate,
+.text-truncate-2,
+.text-truncate-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal; /* Sửa từ 'initial' để giữ xuống dòng đúng */
+}
+
+.text-truncate {
+  -webkit-line-clamp: 1;
+}
+
+.text-truncate-2 {
+  -webkit-line-clamp: 2;
+}
+
+.text-truncate-3 {
+  -webkit-line-clamp: 3;
 }

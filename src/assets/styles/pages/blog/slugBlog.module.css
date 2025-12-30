@@ -1,0 +1,175 @@
+.blogSlugContainer {
+  /* display: flex;
+  flex-direction: column;
+  gap: 20px; */
+}
+
+.blogSlugContainer .blogImg {
+  position: relative;
+  width: 100%;
+  height: 60vh;
+  overflow: hidden;
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain; /* Hiển thị toàn bộ ảnh, không crop */
+}
+
+.blogSlugContainer h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ffd700, #ffa500, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  background-size: 200% auto;
+  animation: gradientFlow 3s ease-in-out infinite alternate;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.blogSlugContainer .newsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.blogSlugContainer .newsCard {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.blogSlugContainer .newsCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.blogSlugContainer .cardImage {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.blogSlugContainer .cardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blogSlugContainer .newsCard:hover .cardImage img {
+  transform: scale(1.05);
+}
+
+.blogSlugContainer .cardCategory {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.blogSlugContainer .categoryText {
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.blogSlugContainer .cardOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+}
+
+.blogSlugContainer .cardContent {
+  padding: 20px;
+}
+
+.blogSlugContainer .cardTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blogSlugContainer .cardExcerpt {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0 0 15px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.blogSlugContainer .cardMeta {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.blogSlugContainer .cardMeta .metaItem {
+  font-size: 0.85rem;
+}
+
+.blogSlugContainer .cardFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.blogSlugContainer .cardReadBtn {
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+}
+
+.blogSlugContainer .cardReadBtn:hover {
+  border-color: #ffd700;
+  color: #000;
+  background: rgba(255, 215, 0, 0.05);
+}
