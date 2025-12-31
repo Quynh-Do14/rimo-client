@@ -38,6 +38,13 @@ const ProductSlugPage = async ({ params }: Props) => {
         res.json()
     );
 
+    const dataProductSeries = await fetch(`${baseURL}${Endpoint.ProductSeries.Get}?product_id=${splitTakeId(params.slug)}`, {
+        cache: 'no-store', // Tắt cache
+    }).then((res) =>
+        res.json()
+    );
+    console.log('dataProductSeries', dataProductSeries);
+
     return (
         <ClientLayout>
             <div className={styles.productContainer}>
@@ -76,7 +83,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                     <ProductAdvantageComponent product={dataDetail.productFigure} />
                 </div>
                 <div className={`${styles.content} padding-common`}>
-                    <ProductFiguresComponent />
+                    <ProductFiguresComponent dataProductSeries={dataProductSeries.data} />
                 </div>
             </div>
         </ClientLayout>

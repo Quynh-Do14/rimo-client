@@ -119,3 +119,7 @@
 .text-truncate-3 {
   -webkit-line-clamp: 3;
 }
+
+/* .main-layout-client {
+  overflow-x: hidden;
+} */

@@ -770,3 +770,142 @@
     height: 1.5px;
   }
 }
+
+/* Avatar Container */
+.avatar-container {
+  position: relative;
+}
+
+/* Avatar Button */
+.avatar-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 50px;
+  transition: background-color 0.2s;
+}
+
+.avatar-btn:hover {
+  background-color: #f5f5f5;
+}
+
+/* Avatar Image */
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chevron {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Dropdown */
+.dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  min-width: 250px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Dropdown Header */
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f8f9fa;
+}
+
+.dropdown-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.user-email {
+  color: #666;
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+/* Divider */
+.dropdown-divider {
+  height: 1px;
+  background-color: #e9ecef;
+  margin: 0.25rem 0;
+}
+
+/* Dropdown Items */
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #495057;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #212529;
+}
+
+.dropdown-item i {
+  width: 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+/* Logout Button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #dc3545;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #f8f9fa;
+  color: #bd2130;
+}
+
+.logout-btn i {
+  width: 20px;
+  text-align: center;
+}

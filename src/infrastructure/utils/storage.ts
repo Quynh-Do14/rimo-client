@@ -2,25 +2,22 @@
 import Cookies from "js-cookie";
 export const clearToken = () => {
     if (typeof window !== "undefined") {
-        Cookies.remove('accessToken', { path: '/' });
-        Cookies.remove('refreshToken', { path: '/' });
+        sessionStorage.removeItem('token');
     }
 };
 
 export const getTokenStoraged = () => {
     if (typeof window !== "undefined") {
-        return Cookies.get("accessToken");
+        return sessionStorage.getItem("token");
     }
-    return
 };
 
 export const isTokenStoraged = () => {
     if (typeof window !== "undefined") {
-        return !!Cookies.get("accessToken");
+        return !!sessionStorage.getItem("token");
     }
     return false;
 };
-
 export const saveToken = (name: string, token: string) => {
     if (typeof window !== "undefined") {
         Cookies.set(name, token);

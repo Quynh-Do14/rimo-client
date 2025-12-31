@@ -19,12 +19,14 @@ import { BrandState } from "@/core/common/atoms/brand/brandState";
 import { ProfileState } from "@/core/common/atoms/profile/profileState";
 import { ProductState } from "@/core/common/atoms/product/productState";
 import ButtonCommon from "../button/button-common";
+import avatar from "@/assets/images/avatar.png";
 
 const HeaderSection = () => {
     const pathname = usePathname(); // Lấy đường dẫn hiện tại
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const [isScrolled, setIsScrolled] = useState<boolean>(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+    const [showDropdown, setShowDropdown] = useState(false);
 
     const [, setCategoryProductState] = useRecoilState(CategoryProductState);
     const [, setCategoryBlogState] = useRecoilState(CategoryBlogState);
@@ -167,6 +169,18 @@ const HeaderSection = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            await authService.logout(() => { })
+                .then(() => {
+                    window.location.href = ROUTE_PATH.HOME_PAGE;
+                })
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+
     const menuItems = [
         {
             id: "home",
@@ -194,7 +208,7 @@ const HeaderSection = () => {
     return (
         <>
             {/* Main Header */}
-            <header className={`main-header ${isScrolled ? 'scrolled' : ''}`}>
+            <header className={`main-header`}>
                 <div className="header-container">
                     {/* Logo */}
                     <Link href={ROUTE_PATH.HOME_PAGE} className="logo-container">
@@ -258,9 +272,70 @@ const HeaderSection = () => {
 
                     {/* CTA Buttons */}
                     <div className="header-actions">
-                        <Link href={ROUTE_PATH.LOGIN} className="cta-btn">
-                            <span className="btn-text">Đăng nhập</span>
-                        </Link>
+                        {
+                            isTokenStoraged() ?
+                                <div className="avatar-container">
+                                    <button
+                                        className="avatar-btn"
+                                        onClick={() => setShowDropdown(!showDropdown)}
+                                    >
+                                        <img
+                                            src={avatar.src}
+                                            alt="avatar"
+                                            width={50}
+                                            height={50}
+                                            className="avatar"
+                                        />
+                                        <i className={`fa fa-chevron-down chevron`} aria-hidden="true"></i>
+                                    </button>
+
+                                    {showDropdown && (
+                                        <div className="dropdown">
+                                            <div className="dropdown-header">
+                                                <img
+                                                    src={avatar.src}
+                                                    alt="avatar"
+                                                    width={40}
+                                                    height={40}
+                                                    className="dropdown-avatar"
+                                                />
+                                                <div className="user-info">
+                                                    <p className="user-name">Admin</p>
+                                                    <p className="user-email">admin@gmail.com</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="dropdown-divider"></div>
+
+                                            {/* <a href="/admin/profile" className="dropdown-item">
+                <i className="fa fa-user" aria-hidden="true"></i>
+                <span>Thông tin tài khoản</span>
+            </a>
+
+            <a href="/admin/settings" className="dropdown-item">
+                <i className="fa fa-cog" aria-hidden="true"></i>
+                <span>Cài đặt</span>
+            </a> */}
+
+                                            <div className="dropdown-divider"></div>
+
+                                            <button
+                                                className="logout-btn"
+                                                onClick={handleLogout}
+                                            >
+                                                <i className="fa fa-sign-out" aria-hidden="true"></i>
+                                                <span>Đăng xuất</span>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                :
+                                <Link href={ROUTE_PATH.LOGIN} className="cta-btn">
+                                    <span className="btn-text">Đăng nhập</span>
+                                </Link>
+
+                        }
+
                     </div>
 
                     {/* Mobile Menu Toggle */}
@@ -298,7 +373,7 @@ const HeaderSection = () => {
                                 <li key={item.id} className="mobile-nav-item">
                                     <div className="mobile-nav-header-item">
                                         <Link
-                                            href={item.href}
+                                            href={!!!item.dropdown ? item.href : ""}
                                             className={`mobile-nav-link ${activeMenu === item.id ? 'active' : ''}`}
                                             onClick={() => {
                                                 setActiveDropdown(null);
@@ -326,6 +401,7 @@ const HeaderSection = () => {
                                     {/* Mobile Dropdown */}
                                     {item.dropdown && activeDropdown === item.id && (
                                         <div className="mobile-dropdown">
+
                                             {item.dropdown.map((subItem, index) => (
                                                 <Link
                                                     key={index}
@@ -348,12 +424,55 @@ const HeaderSection = () => {
                                         </div>
                                     )}
                                 </li>
-                            ))}
-                        </ul>
 
-                        <div className="mobile-actions">
-                            <ButtonCommon onClick={() => { }} title={"Đăng nhập"} />
-                        </div>
+                            ))}
+                            <li>
+                                {
+                                    isTokenStoraged()
+                                        ?
+                                        <li className="mobile-nav-item">
+                                            <div className="mobile-nav-header-item">
+                                                <Link
+                                                    href={""}
+                                                    className={`mobile-nav-link`}
+                                                    onClick={() => {
+                                                        handleLogout();
+                                                        setIsMobileMenuOpen(false);
+                                                    }}
+                                                >
+                                                    <span className="link-text">Đăng xuất</span>
+                                                </Link>
+                                            </div>
+
+                                        </li>
+                                        :
+                                        null
+                                }
+                            </li>
+                        </ul>
+                        {
+                            isTokenStoraged()
+                                ?
+                                <div className="avatar-container">
+                                    <button
+                                        className="avatar-btn"
+                                        onClick={() => setShowDropdown(!showDropdown)}
+                                    >
+                                        <img
+                                            src={avatar.src}
+                                            alt="avatar"
+                                            width={50}
+                                            height={50}
+                                            className="avatar"
+                                        />
+                                    </button>
+                                </div>
+                                :
+                                <div className="mobile-actions">
+                                    <ButtonCommon onClick={() => { }} title={"Đăng nhập"} />
+                                </div>
+                        }
+
                     </div>
                 </div>
             </header >
