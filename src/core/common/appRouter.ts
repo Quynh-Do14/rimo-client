@@ -13,6 +13,7 @@ export const ROUTE_PATH = {
     HOME_PAGE: `${PREFIX}/`,
     PRODUCT: `${PREFIX}/san-pham`,
     BLOG: `${PREFIX}/tin-tuc`,
+    AGENCY: `${PREFIX}/dai-ly`,
 
     ///Management
     MANAGE_LAYOUT: `${ADMIN_PREFIX}`,

@@ -13,15 +13,19 @@ const FooterSection = () => {
                     <div className={styles.contactInfo}>
                         <p className={styles.contactItem}>
                             <FaMapMarkerAlt className={styles.contactIcon} />
-                            <span>Số 78 Khác Thái Dự, phường Cầu Giấy, thành phố Hà Nội, Việt Nam</span>
+                            <span>Địa chỉ: Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội</span>
+                        </p>
+                        <p className={styles.contactItem}>
+                            <FaMapMarkerAlt className={styles.contactIcon} />
+                            <span>Địa chỉ: Số 15 Tùng Thiện Vương – Phường Phú Định – Thành phố Hồ Chí Minh</span>
                         </p>
                         <p className={styles.contactItem}>
                             <FaEnvelope className={styles.contactIcon} />
-                            <span>info.quadfilmvn@gmail.com</span>
+                            <span>inmax.quangminh@gmail.com</span>
                         </p>
                         <p className={styles.contactItem}>
                             <FaPhoneAlt className={styles.contactIcon} />
-                            <span>ISO0958525</span>
+                            <span>1900.8113</span>
                         </p>
                     </div>
                 </div>
@@ -51,7 +55,7 @@ const FooterSection = () => {
                         THEO DÕI CHÚNG TÔI
                     </h3>
                     <div className={styles.socialLinks}>
-                        <a href="#" className={`${styles.socialIcon} ${styles.facebook}`} aria-label="Facebook">
+                        <a href="https://www.facebook.com/rimo.vietnam/" className={`${styles.socialIcon} ${styles.facebook}`} aria-label="Facebook">
                             <FaFacebook />
                         </a>
                         <a href="#" className={`${styles.socialIcon} ${styles.zalo}`} aria-label="Zalo">
@@ -64,12 +68,11 @@ const FooterSection = () => {
                             <FaTiktok />
                         </a>
                     </div>
-                    <p className={styles.followText}>Theo dõi để cập nhật khuyến mãi mới nhất</p>
                 </div>
             </div>
 
             <div className={styles.footerBottom}>
-                <p>&copy; {new Date().getFullYear()} QuadFilm VN. Tất cả các quyền được bảo lưu.</p>
+                <p>&copy; {new Date().getFullYear()} RIMO. Tất cả các quyền được bảo lưu.</p>
                 <p>Chuyên gia phim cách nhiệt & chăm sóc ô tô hàng đầu Việt Nam</p>
             </div>
         </footer>

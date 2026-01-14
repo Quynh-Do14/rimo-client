@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '@/assets/styles/pages/product.module.css'
+import styles from '@/assets/styles/pages/product/slugProduct.module.css'
 type Props = {
     product: any[]
 }

@@ -1,7 +1,7 @@
 import { ROUTE_PATH } from '@/core/common/appRouter';
 import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb';
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout';
-import styles from '@/assets/styles/pages/product.module.css'
+import styles from '@/assets/styles/pages/product/slugProduct.module.css'
 import { configImageURL, splitTakeId } from '@/infrastructure/helper/helper';
 import { Metadata } from 'next';
 import GalleryComponent from './components/gallery';

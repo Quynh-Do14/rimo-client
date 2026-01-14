@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useCallback, memo } from 'react'
 import Slider, { Settings } from 'react-slick';
-import styles from '@/assets/styles/pages/product.module.css'
+import styles from '@/assets/styles/pages/product/slugProduct.module.css'
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { configImageURL } from '@/infrastructure/helper/helper';

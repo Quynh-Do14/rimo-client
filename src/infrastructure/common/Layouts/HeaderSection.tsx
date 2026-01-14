@@ -39,9 +39,9 @@ const HeaderSection = () => {
     // Xác định menu active dựa trên URL
     const getActiveMenu = () => {
         if (pathname === "/") return "home";
-        if (pathname.startsWith("/san-pham")) return "products";
-        if (pathname.startsWith("/tin-tuc")) return "blog";
-        if (pathname.includes("dai-ly")) return "agency";
+        if (pathname.startsWith(ROUTE_PATH.PRODUCT)) return "products";
+        if (pathname.startsWith(ROUTE_PATH.BLOG)) return "blog";
+        if (pathname.includes(ROUTE_PATH.AGENCY)) return "agency";
         return "";
     };
 
@@ -185,23 +185,23 @@ const HeaderSection = () => {
         {
             id: "home",
             label: "TRANG CHỦ",
-            href: "/"
+            href: ROUTE_PATH.HOME_PAGE,
         },
         {
             id: "products",
             label: "SẢN PHẨM",
-            href: "/san-pham",
+            href: ROUTE_PATH.PRODUCT,
             dropdown: productState.data
         },
         {
             id: "agency",
             label: "ĐẠI Lý",
-            href: "/dai-ly",
+            href: ROUTE_PATH.AGENCY,
         },
         {
             id: "blog",
             label: "TIN TỨC",
-            href: "/tin-tuc"
+            href: ROUTE_PATH.BLOG,
         },
     ];
 
@@ -228,7 +228,7 @@ const HeaderSection = () => {
                                     onMouseLeave={() => item.dropdown && setActiveDropdown(null)}
                                 >
                                     <Link
-                                        href={!!!item.dropdown ? item.href : ""}
+                                        href={item.href}
                                         className="nav-link"
                                     >
                                         <span className="link-text">{item.label}</span>
@@ -307,16 +307,6 @@ const HeaderSection = () => {
 
                                             <div className="dropdown-divider"></div>
 
-                                            {/* <a href="/admin/profile" className="dropdown-item">
-                <i className="fa fa-user" aria-hidden="true"></i>
-                <span>Thông tin tài khoản</span>
-            </a>
-
-            <a href="/admin/settings" className="dropdown-item">
-                <i className="fa fa-cog" aria-hidden="true"></i>
-                <span>Cài đặt</span>
-            </a> */}
-
                                             <div className="dropdown-divider"></div>
 
                                             <button
@@ -353,9 +343,28 @@ const HeaderSection = () => {
                 {/* Mobile Navigation */}
                 <div className={`mobile-nav ${isMobileMenuOpen ? 'open' : ''}`}>
                     <div className="mobile-nav-header">
-                        <div className="mobile-logo">
-                            <Image src={logo} alt="RIMO" width={80} />
-                        </div>
+                        {
+                            isTokenStoraged()
+                                ?
+                                <div className="dropdown-header">
+                                    <img
+                                        src={avatar.src}
+                                        alt="avatar"
+                                        width={40}
+                                        height={40}
+                                        className="dropdown-avatar"
+                                    />
+                                    <div className="user-info">
+                                        <p className="user-name">Admin</p>
+                                        <p className="user-email">admin@gmail.com</p>
+                                    </div>
+                                </div>
+                                :
+                                <div className="mobile-logo">
+                                    <Image src={logo} alt="RIMO" width={80} />
+                                </div>
+                        }
+
                         <button
                             className="mobile-close-btn"
                             onClick={() => setIsMobileMenuOpen(false)}
@@ -373,7 +382,7 @@ const HeaderSection = () => {
                                 <li key={item.id} className="mobile-nav-item">
                                     <div className="mobile-nav-header-item">
                                         <Link
-                                            href={!!!item.dropdown ? item.href : ""}
+                                            href={item.href}
                                             className={`mobile-nav-link ${activeMenu === item.id ? 'active' : ''}`}
                                             onClick={() => {
                                                 setActiveDropdown(null);
@@ -458,13 +467,6 @@ const HeaderSection = () => {
                                         className="avatar-btn"
                                         onClick={() => setShowDropdown(!showDropdown)}
                                     >
-                                        <img
-                                            src={avatar.src}
-                                            alt="avatar"
-                                            width={50}
-                                            height={50}
-                                            className="avatar"
-                                        />
                                     </button>
                                 </div>
                                 :

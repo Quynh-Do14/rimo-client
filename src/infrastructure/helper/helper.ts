@@ -78,9 +78,9 @@ export const convertDateBooking = (date: any) => {
     } return null;
 };
 
-export const formatCurrencyVND = (amount: string) => {
+export const formatCurrencyVND = (amount: number) => {
     // Định dạng số với phân cách hàng nghìn
-    let formattedAmount = amount.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    let formattedAmount = String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     return `${formattedAmount} ₫`;
 }
 export function formatCurrency(value: number): string {

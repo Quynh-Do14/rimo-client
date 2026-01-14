@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import styles from '@/assets/styles/pages/product.module.css'
+import styles from '@/assets/styles/pages/product/slugProduct.module.css'
 import seriesService from '@/infrastructure/repository/series/series.service';
 
 interface ProductSpec {

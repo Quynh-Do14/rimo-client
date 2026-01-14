@@ -44,9 +44,9 @@ const ArticleSection = () => {
                 <div className="article-badge">
                     <span className="badge-text">TIN TỨC & BÀI VIẾT</span>
                 </div>
-                <h1 className="article-title">
+                <h2 className="article-title">
                     Cập Nhật <span className="highlight">Tin Tức</span> Mới Nhất
-                </h1>
+                </h2>
                 <p className="article-subtitle">
                     Thông tin mới nhất về công nghệ, sự kiện và kiến thức chuyên sâu về bảo vệ ô tô
                 </p>
@@ -71,8 +71,8 @@ const ArticleSection = () => {
                         <div className="category-tag">
                             <span className="tag-text">{featuredArticle.category_name}</span>
                         </div>
-                        <h2 className="featured-title">{featuredArticle.title}</h2>
-                        <p className="featured-excerpt">{featuredArticle.short_description}</p>
+                        <h3 className="featured-title">{featuredArticle.title}</h3>
+                        <p className="featured-excerpt text-truncate-3">{featuredArticle.short_description}</p>
                         <div className="featured-meta">
                             <div className="meta-item">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -111,10 +111,10 @@ const ArticleSection = () => {
                     </div>
                     <div className="tech-content">
                         <div className="tech-badge">
-                            <span className="badge-text">CÔNG NGHỆ ĐỘT PHÁ</span>
+                            <span className="badge-text">{highlightedArticle.category_name}</span>
                         </div>
                         <h3 className="tech-title">{highlightedArticle.title}</h3>
-                        <p className="tech-description">{highlightedArticle.short_description}</p>
+                        <p className="tech-description text-truncate-3">{highlightedArticle.short_description}</p>
                         <button className="tech-cta-btn">
                             <span className="btn-text">KHÁM PHÁ NGAY</span>
                             <span className="btn-icon">
@@ -155,8 +155,8 @@ const ArticleSection = () => {
                                 <div className="card-overlay"></div>
                             </div>
                             <div className="card-content">
-                                <h3 className="card-title">{article.title}</h3>
-                                <p className="card-excerpt">{article.short_description}</p>
+                                <h4 className="card-title">{article.title}</h4>
+                                <p className="card-excerpt text-truncate-3">{article.short_description}</p>
                                 <div className="card-meta">
                                     <div className="meta-item">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

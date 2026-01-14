@@ -4,22 +4,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import '@/assets/styles/pages/home/product.css'
 import productService from "@/infrastructure/repository/product/product.service";
-import { configImageURL } from "@/infrastructure/helper/helper";
-
-interface GalleryItem {
-    id: number;
-    type: 'image' | 'video';
-    title: string;
-    description?: string;
-    thumbnail: string;
-    videoUrl?: string;
-    category: string;
-    tags: string[];
-}
+import { configImageURL, convertSlug, formatCurrencyVND } from "@/infrastructure/helper/helper";
+import Link from "next/link";
+import { ROUTE_PATH } from "@/core/common/appRouter";
 
 const ProductSection = () => {
-    const [activeCategory, setActiveCategory] = useState<string>("all");
-    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
     const [listProduct, setListProduct] = useState<Array<any>>([])
 
     const onGetListProductAsync = async () => {
@@ -44,7 +33,7 @@ const ProductSection = () => {
     }, []);
 
     return (
-        <section className="slogan-section">
+        <section className="product-section">
             {/* Fixed Background */}
             {/* <div className="fixed-background">
                 <div className="bg-overlay"></div>
@@ -61,9 +50,9 @@ const ProductSection = () => {
                                 <span className="title-part">RIMO</span>
                                 <span className="title-highlight"></span>
                             </div>
-                            <h1 className="section-title">
+                            <h2 className="section-title">
                                 Sản phẩm nổi bật
-                            </h1>
+                            </h2>
                         </div>
 
                         <div className="intro-text">
@@ -80,11 +69,9 @@ const ProductSection = () => {
                 {/* Gallery Grid */}
                 <div className="gallery-grid">
                     {listProduct.map(item => (
-                        <div
+                        <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
                             key={item.id}
                             className={`gallery-item ${item.type}`}
-                            onMouseEnter={() => setHoveredItem(item.id)}
-                            onMouseLeave={() => setHoveredItem(null)}
                         >
                             <div className="item-media">
                                 <div className="media-container">
@@ -95,16 +82,6 @@ const ProductSection = () => {
                                             style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
                                         />
                                         <div className="media-overlay"></div>
-
-                                        {/* Type Badge */}
-                                        <div className="type-badge">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                                <path d="M21 15l-5-5L5 21" />
-                                            </svg>
-                                            <span>ẢNH</span>
-                                        </div>
 
                                         {/* Play Button for Video */}
                                         {item.type === 'video' && (
@@ -122,26 +99,25 @@ const ProductSection = () => {
                             <div className="item-content">
                                 <div className="content-wrapper">
                                     <h3 className="item-title">{item.name}</h3>
-                                    {item.description && (
-                                        <p className="item-description text-truncate-2">{item.short_description}</p>
-                                    )}
+                                    <div className="item-price">
+                                        {item.price_sale ? (
+                                            <>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                    <span className="sale-price">{formatCurrencyVND(item.price_sale)}</span>
+                                                </div>
+                                                <span className="original-price">{formatCurrencyVND(item.price)}</span>
+                                            </>
+                                        ) : (
+                                            <span className="normal-price">{formatCurrencyVND(item.price)}</span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-
-                            {/* Hover Effect */}
-                            <div className={`item-hover-effect ${hoveredItem === item.id ? 'active' : ''}`}>
-                                <div className="hover-content">
-                                    <span className="hover-text">XEM CHI TIẾT</span>
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
-        </section>
+        </section >
     );
 };
 

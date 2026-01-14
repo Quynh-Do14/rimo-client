@@ -2,19 +2,19 @@
 import Cookies from "js-cookie";
 export const clearToken = () => {
     if (typeof window !== "undefined") {
-        sessionStorage.removeItem('token');
+        Cookies.remove('token');
     }
 };
 
 export const getTokenStoraged = () => {
     if (typeof window !== "undefined") {
-        return sessionStorage.getItem("token");
+        return Cookies.get("token");
     }
 };
 
 export const isTokenStoraged = () => {
     if (typeof window !== "undefined") {
-        return !!sessionStorage.getItem("token");
+        return !!Cookies.get("token");
     }
     return false;
 };

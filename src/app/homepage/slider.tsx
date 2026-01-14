@@ -150,35 +150,8 @@ const FullWidthSlider = () => {
                                     '--overlay-color': 'rgba(0, 0, 0, 0.4)'
                                 } as React.CSSProperties}
                             >
-                                <div className="image-overlay"></div>
                             </div>
 
-                            {/* Content Overlay */}
-                            <div className="slide-content">
-                                <div className="content-wrapper">
-                                    {/* Slide Badge */}
-                                    <div className="slide-badge">
-                                        <span className="badge-text">QUAD FILM PREMIUM</span>
-                                        <div className="badge-line"></div>
-                                    </div>
-
-                                    {/* Main Content */}
-                                    <div className="main-content">
-                                        {/* <div className="title-group">
-                                            <h2 className="slide-title">
-                                                {slide.title}
-                                            </h2>
-                                            <h3 className="slide-subtitle">
-                                                {slide.subtitle}
-                                            </h3>
-                                        </div>
-
-                                        <p className="slide-description">
-                                            {slide.description}
-                                        </p> */}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     ))}
                 </Slider>
