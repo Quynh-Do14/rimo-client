@@ -59,181 +59,47 @@
   z-index: 1;
   max-width: 1600px;
   margin: 0 auto;
-  padding: 80px 0px;
+  padding: 40px 0px;
 }
 
 /* Header Section */
-.gallery-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 60px;
-}
-
-.header-left {
-  flex: 1;
-}
-
-.title-group {
-  margin-bottom: 40px;
-}
-
-.product-section .main-title {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.title-part {
-  font-size: 4rem;
-  font-weight: 900;
-  color: white;
-  letter-spacing: 2px;
-}
-
-.title-highlight {
-  font-size: 4rem;
-  font-weight: 900;
-  background: linear-gradient(90deg, #ffd700, #ffa500);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: white;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  margin: 0;
-  position: relative;
-  padding-left: 20px;
-}
-
-.section-title::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 8px;
-  height: 80%;
-  background: #ffd700;
-  border-radius: 4px;
-}
-
-.intro-text {
-  margin-bottom: 40px;
-  max-width: 800px;
-}
-
-.intro-paragraph {
-  font-size: 1.1rem;
-  line-height: 1.7;
-  margin-bottom: 20px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.brand-name {
-  font-weight: 700;
-  color: #ffd700;
-}
-
-.company-stats {
-  display: flex;
-  gap: 40px;
-  padding: 30px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.stat-item {
+.gallery-container .gallery-header {
   text-align: center;
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #ffd700;
-  margin-bottom: 5px;
-  line-height: 1;
-}
-
-.stat-label {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
-.view-all-btn {
-  background: transparent;
-  border: 2px solid #ffd700;
-  color: white;
-  padding: 16px 32px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
+  margin-bottom: 30px;
   position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  padding: 0 10px;
 }
 
-.view-all-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 215, 0, 0.2),
-    transparent
-  );
-  transition: left 0.5s ease;
+.gallery-container .gallery-header .main-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  text-transform: capitalize;
+  letter-spacing: 2px;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
 }
 
-.view-all-btn:hover::before {
-  left: 100%;
+.gallery-container .gallery-header .main-title .highlight {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  display: inline-block;
 }
 
-.view-all-btn:hover {
-  background: rgba(255, 215, 0, 0.1);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+/* Optional: Add smooth entrance animation */
+@keyframes elegantFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.btn-counter {
-  background: #ffd700;
-  color: #000;
-  font-weight: 700;
-  font-size: 0.9rem;
-  padding: 4px 10px;
-  border-radius: 4px;
-  margin-left: 4px;
-}
-
-.btn-icon svg {
-  transition: transform 0.3s ease;
-}
-
-.view-all-btn:hover .btn-icon svg {
-  transform: translateX(5px);
+.gallery-header {
+  animation: elegantFadeIn 0.8s ease-out;
 }
 
 /* Category Filter */
@@ -463,7 +329,6 @@
 }
 
 .product-section .item-price {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-weight: 600;
   margin: 8px 0;
   display: flex;
@@ -479,14 +344,14 @@
 }
 
 .product-section .original-price {
-  color: #999;
+  color: #fffcfc;
   font-size: 16px;
   text-decoration: line-through;
   font-weight: 400;
 }
 
 .product-section .normal-price {
-  color: #333;
+  color: #ffffff;
   font-size: 18px;
   font-weight: 600;
 }

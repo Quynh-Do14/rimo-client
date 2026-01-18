@@ -1,6 +1,5 @@
-.productSection {
+.relationProductSection {
   position: relative;
-  background: #1a1a1a;
   overflow: hidden;
   isolation: isolate;
 }
@@ -76,7 +75,7 @@
   margin-bottom: 40px;
 }
 
-.productSection .mainTitle {
+.relationProductSection .mainTitle {
   display: flex;
   align-items: baseline;
   gap: 10px;
@@ -442,17 +441,18 @@
   margin-left: 3px;
 }
 
-.productSection .itemContent {
+.relationProductSection .itemContent {
   padding: 10px 14px;
+  background: #1a1a1a;
 }
 
-.productSection .contentWrapper {
+.relationProductSection .contentWrapper {
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
-.productSection .itemTitle {
+.relationProductSection .itemTitle {
   font-size: 1.3rem;
   font-weight: 600;
   color: white;
@@ -460,8 +460,7 @@
   line-height: 1.3;
 }
 
-.productSection .itemPrice {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+.relationProductSection .itemPrice {
   font-weight: 600;
   margin: 8px 0;
   display: flex;
@@ -470,26 +469,26 @@
   gap: 10px;
 }
 
-.productSection .salePrice {
+.relationProductSection .salePrice {
   color: #ff4242;
   font-size: 18px;
   font-weight: 700;
 }
 
-.productSection .originalPrice {
+.relationProductSection .originalPrice {
   color: #ffffff;
   font-size: 16px;
   text-decoration: line-through;
   font-weight: 400;
 }
 
-.productSection .normalPrice {
+.relationProductSection .normalPrice {
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
 }
 
-.productSection .saleBadge {
+.relationProductSection .saleBadge {
   background: #ff4242;
   color: white;
   padding: 2px 8px;
@@ -706,97 +705,97 @@
 }
 
 @media (max-width: 992px) {
-  .productSection .galleryHeader {
+  .relationProductSection .galleryHeader {
     flex-direction: column;
     gap: 30px;
   }
 
-  .productSection .headerRight {
+  .relationProductSection .headerRight {
     align-self: flex-start;
   }
 
-  .productSection .galleryGrid {
+  .relationProductSection .galleryGrid {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 12px;
   }
 
-  .productSection .galleryCta {
+  .relationProductSection .galleryCta {
     padding: 40px 30px;
   }
-  .productSection .salePrice {
+  .relationProductSection .salePrice {
     font-size: 16px;
   }
 
-  .productSection .originalPrice {
+  .relationProductSection .originalPrice {
     font-size: 13px;
   }
 
-  .productSection .normalPrice {
+  .relationProductSection .normalPrice {
     font-size: 16px;
   }
 
-  .productSection .itemPrice {
+  .relationProductSection .itemPrice {
     gap: 8px;
     margin: 6px 0;
   }
 }
 
 @media (max-width: 768px) {
-  .productSection .titlePart,
-  .productSection .titleHighlight {
+  .relationProductSection .titlePart,
+  .relationProductSection .titleHighlight {
     font-size: 2.8rem;
   }
 
-  .productSection .sectionTitle {
+  .relationProductSection .sectionTitle {
     font-size: 1.6rem;
     letter-spacing: 2px;
   }
 
-  .productSection .introParagraph {
+  .relationProductSection .introParagraph {
     font-size: 1rem;
   }
 
-  .productSection .companyStats {
+  .relationProductSection .companyStats {
     flex-direction: column;
     gap: 20px;
     text-align: center;
   }
 
-  .productSection .categoryFilter {
+  .relationProductSection .categoryFilter {
     flex-direction: column;
     gap: 20px;
     align-items: flex-start;
   }
 
-  .productSection .filterScroll {
+  .relationProductSection .filterScroll {
     width: 100%;
   }
 
-  .productSection .galleryGrid {
+  .relationProductSection .galleryGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .productSection .galleryCta {
+  .relationProductSection .galleryCta {
     padding: 30px 20px;
   }
 
-  .productSection .ctaTitle {
+  .relationProductSection .ctaTitle {
     font-size: 1.6rem;
   }
 
-  .productSection .salePrice {
+  .relationProductSection .salePrice {
     font-size: 15px;
   }
 
-  .productSection .originalPrice {
+  .relationProductSection .originalPrice {
     font-size: 12px;
   }
 
-  .productSection .normalPrice {
+  .relationProductSection .normalPrice {
     font-size: 15px;
   }
 
-  .productSection .itemPrice {
+  .relationProductSection .itemPrice {
     gap: 6px;
     margin: 4px 0;
     justify-content: center;
@@ -804,41 +803,41 @@
 }
 
 @media (max-width: 480px) {
-  .productSection .itemTitle {
+  .relationProductSection .itemTitle {
     font-size: 14px;
     text-align: center;
   }
-  .productSection .titlePart,
-  .productSection .titleHighlight {
+  .relationProductSection .titlePart,
+  .relationProductSection .titleHighlight {
     font-size: 2.2rem;
   }
 
-  .productSection .sectionTitle {
+  .relationProductSection .sectionTitle {
     font-size: 1.4rem;
   }
 
-  .productSection .viewAllBtn {
+  .relationProductSection .viewAllBtn {
     width: 100%;
     justify-content: center;
   }
 
-  .productSection .itemMedia {
+  .relationProductSection .itemMedia {
     height: 160px;
   }
 
-  .productSection .salePrice {
+  .relationProductSection .salePrice {
     font-size: 14px;
   }
 
-  .productSection .originalPrice {
+  .relationProductSection .originalPrice {
     font-size: 11px;
   }
 
-  .productSection .normalPrice {
+  .relationProductSection .normalPrice {
     font-size: 14px;
   }
 
-  .productSection .itemPrice {
+  .relationProductSection .itemPrice {
     gap: 5px;
     margin: 3px 0;
   }
@@ -873,57 +872,5 @@
   .galleryCta::before {
     animation: none;
     background: #ffd700;
-  }
-}
-
-.noDataContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px 20px;
-  text-align: center;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-top: 20px;
-}
-
-.noDataIcon {
-  margin-bottom: 20px;
-  color: #ccc;
-}
-
-.noDataTitle {
-  font-size: 24px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 12px;
-}
-
-.noDataDescription {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 24px;
-  max-width: 400px;
-  line-height: 1.5;
-}
-
-.resetButton:hover {
-  background: #4338ca;
-}
-
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .noDataContainer {
-    padding: 40px 16px;
-  }
-
-  .noDataTitle {
-    font-size: 20px;
-  }
-
-  .noDataDescription {
-    font-size: 14px;
   }
 }

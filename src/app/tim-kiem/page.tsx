@@ -14,7 +14,7 @@ import { useRecoilValue } from "recoil";
 import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import SkeletonProduct from "../tim-kiem/skeleton";
+import SkeletonProduct from "./skeleton";
 const ProductPage = () => {
     const [listProduct, setListProduct] = useState<Array<any>>([])
     const [searchText, setSearchText] = useState<string>("");
@@ -122,7 +122,7 @@ const ProductPage = () => {
             <div className={styles.productSection}>
                 <div className="padding-common">
                     <BreadcrumbCommon
-                        breadcrumb={"Sản phẩm"}
+                        breadcrumb={"Tìm kiếm sản phẩm"}
                         redirect={ROUTE_PATH.PRODUCT}
                         title={""}
                     />
@@ -160,77 +160,77 @@ const ProductPage = () => {
                     {/* Loading State */}
                     {loading ? (
                         <SkeletonProduct />
-                    ) : listProduct.length > 0 ? (
+                    ) : (
                         /* Data State */
                         <div className={styles.galleryContainer}>
-                            <div className={styles.galleryGrid}>
-                                {listProduct.map(item => (
-                                    <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
-                                        key={item.id}
-                                        className={styles.galleryItem}
-                                    >
-                                        <div className={styles.itemMedia}>
-                                            <div className={styles.mediaContainer}>
-                                                <div className={styles.thumbnailWrapper}>
-                                                    <div
-                                                        className={styles.thumbnail}
-                                                        style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
-                                                    />
-                                                    <div className={styles.mediaOverlay}></div>
+                            {listProduct.length > 0 ? (
+                                <div className={styles.galleryGrid}>
+                                    {listProduct.map(item => (
+                                        <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                            key={item.id}
+                                            className={styles.galleryItem}
+                                        >
+                                            <div className={styles.itemMedia}>
+                                                <div className={styles.mediaContainer}>
+                                                    <div className={styles.thumbnailWrapper}>
+                                                        <div
+                                                            className={styles.thumbnail}
+                                                            style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
+                                                        />
+                                                        <div className={styles.mediaOverlay}></div>
 
-                                                    {item.type === 'video' && (
-                                                        <button className={styles.playBtn}>
-                                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                <circle cx="12" cy="12" r="10" />
-                                                                <polygon points="10 8 16 12 10 16 10 8" />
-                                                            </svg>
-                                                        </button>
-                                                    )}
+                                                        {item.type === 'video' && (
+                                                            <button className={styles.playBtn}>
+                                                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <circle cx="12" cy="12" r="10" />
+                                                                    <polygon points="10 8 16 12 10 16 10 8" />
+                                                                </svg>
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div className={styles.itemContent}>
-                                            <div className={styles.contentWrapper}>
-                                                <h3 className={styles.itemTitle}>{item.name}</h3>
-                                                <div className={styles.itemPrice}>
-                                                    {item.price_sale ? (
-                                                        <>
-                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                                <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
-                                                            </div>
-                                                            <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                        </>
-                                                    ) : (
-                                                        <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                    )}
+                                            <div className={styles.itemContent}>
+                                                <div className={styles.contentWrapper}>
+                                                    <h3 className={styles.itemTitle}>{item.name}</h3>
+                                                    <div className={styles.itemPrice}>
+                                                        {item.price_sale ? (
+                                                            <>
+                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                                    <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
+                                                                </div>
+                                                                <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
+                                                            </>
+                                                        ) : (
+                                                            <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        /* No Data State - chỉ hiển thị khi không loading và không có data */
-                        <div className={styles.galleryContainer}>
-                            <div className={styles.noDataContainer}>
-                                <div className={styles.noDataIcon}>
-                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <line x1="8" y1="8" x2="16" y2="16" />
-                                        <line x1="16" y1="8" x2="8" y2="16" />
-                                    </svg>
+                                        </Link>
+                                    ))}
                                 </div>
-                                <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                <p className={styles.noDataDescription}>
-                                    Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                </p>
-                                <ButtonCommon
-                                    onClick={onReset}
-                                    title={'Xóa bộ lọc'}
-                                />
-                            </div>
+                            ) : (
+                                /* No Data State */
+                                <div className={styles.noDataContainer}>
+                                    <div className={styles.noDataIcon}>
+                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="8" y1="8" x2="16" y2="16" />
+                                            <line x1="16" y1="8" x2="8" y2="16" />
+                                        </svg>
+                                    </div>
+                                    <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
+                                    <p className={styles.noDataDescription}>
+                                        Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
+                                    </p>
+                                    <ButtonCommon
+                                        onClick={onReset}
+                                        title={'Xóa bộ lọc'}
+                                    />
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>

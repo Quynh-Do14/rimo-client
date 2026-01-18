@@ -8,7 +8,7 @@ import styles from "@/assets/styles/pages/blog/blog.module.css";
 import Link from 'next/link';
 import { configImageURL, convertDateOnlyShow, convertSlug } from '@/infrastructure/helper/helper';
 import blogService from '@/infrastructure/repository/blog/blog.service'
-import { useRouter, useSearchParams } from 'next/navigation' // Thay đổi import
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useRecoilValue } from 'recoil';
 import Image from 'next/image'
 import BlogSkeleton from './skeleton'
@@ -74,7 +74,7 @@ const BlogPage = () => {
         params.set('search', searchText);
         params.set('category_id', categoryId);
         params.set('page', '1'); // Reset về trang 1 khi search
-        router.push(`/tin-tuc?${params.toString()}`);
+        router.push(`${ROUTE_PATH.BLOG}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, 1, categoryId).then(_ => { });
     }
@@ -93,7 +93,7 @@ const BlogPage = () => {
         // Cập nhật params với page mới
         const params = new URLSearchParams(searchParams?.toString() || '');
         params.set('page', page.toString());
-        router.push(`/tin-tuc?${params.toString()}`);
+        router.push(`${ROUTE_PATH.BLOG}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, page, categoryId).then(_ => { });
     }
@@ -149,6 +149,7 @@ const BlogPage = () => {
                                 <SelectSearchCommon
                                     listDataOfItem={categoryBlogState}
                                     onChange={onChangeCategory}
+                                    label={"Danh mục tin tức"}
                                 />
                             </div>
 

@@ -11,6 +11,7 @@ const RelationBlogComponent = (props: Props) => {
 
     return (
         <div className={styles.newsGrid}>
+            <p className={styles.title}>Bài viết tương tự</p>
             {relatedBlogs.map(article => (
                 <div key={article.id} className={styles.newsCard}>
                     <div className={styles.cardImage}>

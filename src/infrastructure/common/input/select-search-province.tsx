@@ -6,10 +6,10 @@ type Props = {
     onChange: any
     valueName?: string;
     labelName?: string;
-    label: string
+    label: string;
 }
 
-const SelectSearchCommon = (props: Props) => {
+const SelectSearchProvince = (props: Props) => {
     const {
         listDataOfItem,
         onChange,
@@ -24,13 +24,12 @@ const SelectSearchCommon = (props: Props) => {
                 <select
                     onChange={onChange}
                     className={styles.textInput}
-                >
-                    <option value="">-- Chọn {label.toLowerCase()} --</option>
+                >  <option value="">-- Chọn {label.toLowerCase()} --</option>
                     {
                         listDataOfItem && listDataOfItem.length && listDataOfItem.map((item, index) => {
                             return (
                                 <option key={index}
-                                    value={item[valueName]}
+                                    value={`${item[valueName]}-${item[labelName]}`}
                                     title={item[labelName]}
                                 >
                                     {item[labelName]}
@@ -45,4 +44,4 @@ const SelectSearchCommon = (props: Props) => {
     );
 };
 
-export default SelectSearchCommon;
+export default SelectSearchProvince;

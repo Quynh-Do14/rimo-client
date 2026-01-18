@@ -54,9 +54,13 @@ const BlogSlugPage = async ({ params }: Props) => {
                             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
                                 {blog.title}
                             </h1>
-                            <div className={styles.blogImg}
+                            {/* <div className={styles.blogImg}
                                 style={{ backgroundImage: `url(${configImageURL(blog.image)})` }}
-                            ></div>
+                            ></div> */}
+
+                            <div className={styles.blogImg}>
+                                <img src={configImageURL(blog.image)} alt="Description" loading="lazy" />
+                            </div>
                             <article
                                 className="prose max-w-none"
                                 dangerouslySetInnerHTML={{ __html: blog.description }}
