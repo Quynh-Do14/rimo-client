@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import productService from "@/infrastructure/repository/product/product.service";
 import { configImageURL, convertSlug, formatCurrencyVND } from "@/infrastructure/helper/helper";
 import Link from "next/link";
@@ -12,10 +12,9 @@ import SelectSearchCommon from "@/infrastructure/common/input/select-search-comm
 import ButtonCommon from "@/infrastructure/common/button/button-common";
 import { useRecoilValue } from "recoil";
 import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
-import { useRouter } from "next/navigation";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import SkeletonProduct from "../tim-kiem/skeleton";
-const ProductPage = () => {
+const ProductContent = () => {
     const [listProduct, setListProduct] = useState<Array<any>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -177,15 +176,6 @@ const ProductPage = () => {
                                                         style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
                                                     />
                                                     <div className={styles.mediaOverlay}></div>
-
-                                                    {item.type === 'video' && (
-                                                        <button className={styles.playBtn}>
-                                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                <circle cx="12" cy="12" r="10" />
-                                                                <polygon points="10 8 16 12 10 16 10 8" />
-                                                            </svg>
-                                                        </button>
-                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -237,6 +227,14 @@ const ProductPage = () => {
             </div>
         </ClientLayout>
 
+    );
+};
+
+const ProductPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ProductContent />
+        </Suspense>
     );
 };
 

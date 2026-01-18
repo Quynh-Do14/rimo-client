@@ -4,7 +4,7 @@ import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb';
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout';
 import agencyService from '@/infrastructure/repository/agency/agency.service';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import styles from '@/assets/styles/pages/agency/agency.module.css'
 import Image from 'next/image';
 import { configImageURL } from '@/infrastructure/helper/helper';
@@ -27,7 +27,7 @@ export interface Location {
     province: string;
     district: string;
 }
-const AgencyPage = () => {
+const AgencyContent = () => {
     const [listAgency, setListAgency] = useState<Array<any>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -276,5 +276,13 @@ const AgencyPage = () => {
         </ClientLayout>
     )
 }
+
+const AgencyPage = () => {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AgencyContent />
+        </Suspense>
+    );
+};
 
 export default AgencyPage
