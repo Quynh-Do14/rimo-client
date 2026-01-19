@@ -23,9 +23,10 @@ const ArticleSection = () => {
                 param,
                 setLoading
             ).then((res) => {
-                setHighlightedArticle(res.data?.[0]);
-                setFeaturedArticle(res.data?.[1]);
-                setListBlog(res.data?.slice(2, 6));
+                // setHighlightedArticle(res.data?.[0]);
+                // setFeaturedArticle(res.data?.[1]);
+                // setListBlog(res.data?.slice(2, 6));
+                setListBlog(res.data);
             })
         }
         catch (error) {
@@ -53,14 +54,14 @@ const ArticleSection = () => {
             </div>
 
             {/* Featured Article */}
-            {featuredArticle && (
+            {/* {featuredArticle && (
                 <div className="featured-article">
                     <div className="featured-image">
                         <Image
                             src={configImageURL(featuredArticle.image)}
                             alt={featuredArticle.title}
-                            width={500} // Thêm width bắt buộc
-                            height={300} // Thêm height bắt buộc
+                            width={500}
+                            height={300}
                             className="object-cover" />
                         <div className="image-overlay"></div>
                         <div className="featured-badge">
@@ -99,10 +100,10 @@ const ArticleSection = () => {
                         </button>
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* Highlighted Technology Card */}
-            {highlightedArticle && (
+            {/* {highlightedArticle && (
                 <div className="tech-highlight-card">
                     <div className="tech-icon">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFD700" strokeWidth="2">
@@ -128,25 +129,25 @@ const ArticleSection = () => {
                         <Image
                             src={configImageURL(highlightedArticle.image)}
                             alt={highlightedArticle.title}
-                            width={500} // Thêm width bắt buộc
-                            height={300} // Thêm height bắt buộc
+                            width={500}
+                            height={300}
                             className="object-cover" />
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* News Grid */}
             <div className="news-grid">
                 {listBlog
-                    .filter(article => !article.featured && !article.highlight)
+                    // .filter(article => !article.featured && !article.highlight)
                     .map(article => (
                         <div key={article.id} className="news-card">
                             <div className="card-image">
                                 <Image
                                     src={configImageURL(article.image)}
                                     alt={article.title}
-                                    width={500} // Thêm width bắt buộc
-                                    height={300} // Thêm height bắt buộc
+                                    width={500}
+                                    height={300}
                                     className="object-cover"
                                 />
                                 <div className="card-category">

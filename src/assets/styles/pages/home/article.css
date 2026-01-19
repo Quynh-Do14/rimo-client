@@ -13,7 +13,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 40px;
-  gap: 20px;
+  gap: 16px;
 }
 
 .news-article-container .article-badge {
@@ -21,7 +21,6 @@
   background: linear-gradient(90deg, #ffd700, #ffa500);
   padding: 8px 16px;
   border-radius: 20px;
-  margin-bottom: 15px;
 }
 
 .news-article-container .badge-text {
@@ -36,8 +35,8 @@
   font-size: 2rem;
   font-weight: 800;
   color: #000;
-  margin: 0 0 10px 0;
   line-height: 1.2;
+  text-align: center;
 }
 
 .news-article-container .article-title .highlight {
@@ -934,7 +933,8 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .news-article-container {
-    background: #1a1a1a;
+    /* background: #1a1a1a; */
+    /* border-top: 1px solid #1a1a1a; */
   }
 
   .news-article-container .article-title,

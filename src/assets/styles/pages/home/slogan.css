@@ -2,7 +2,7 @@
 .car-tech-slider-container {
   width: 100%;
   margin: 0 auto;
-  padding: 20px 15px;
+  padding: 30px 20px;
   background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(255, 215, 0, 0.1);
@@ -297,7 +297,7 @@
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
   .car-tech-slider-container {
-    padding: 40px;
+    padding: 80px 60px;
     max-width: 1200px;
     border-radius: 20px;
   }
@@ -322,8 +322,8 @@
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
   .car-tech-slider-container {
-    max-width: 1400px;
-    padding: 50px;
+    max-width: 1600px;
+    padding: 80px 60px;
   }
 
   .car-tech-slider-container .car-slide-content {

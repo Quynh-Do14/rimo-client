@@ -37,20 +37,28 @@ const ProductSection = () => {
             {/* Content Container */}
             {
                 categoryProductState.map((category, key) => {
+                    const productFromCategory = listProduct.filter(filter => filter.category_id == category.id)
+                    const gridStyle = productFromCategory.length == 2
+                        ?
+                        'gallery-grid-2-col'
+                        : productFromCategory.length == 3
+                            ?
+                            "gallery-grid-3-col"
+                            :
+                            "gallery-grid";
                     return (
                         <div className="gallery-container" key={key}>
                             {/* Header Section */}
                             <div className="gallery-header">
-                                <h1 className="main-title">
+                                <h2 className="main-title">
                                     {category.name}
                                     {/* Phim phản xạ nhiệt <span className="highlight">Automotive Window Film</span> */}
-                                </h1>
+                                </h2>
                             </div>
 
-
                             {/* Gallery Grid */}
-                            <div className="gallery-grid">
-                                {listProduct.filter(filter => filter.category_id == category.id).slice(0, 4).map(item => (
+                            <div className={gridStyle}>
+                                {productFromCategory.slice(0, 4).map(item => (
                                     <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
                                         key={item.id}
                                         className={`gallery-item`}

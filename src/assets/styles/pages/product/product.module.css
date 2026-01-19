@@ -4,7 +4,12 @@
   overflow: hidden;
   isolation: isolate;
 }
-
+.productSection .productContent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin: 20px 0;
+}
 /* Fixed Background */
 .fixedBackground {
   position: fixed;
@@ -57,7 +62,6 @@
   position: relative;
   z-index: 1;
   max-width: 1600px;
-  margin: 20px auto;
 }
 
 /* Header Section */

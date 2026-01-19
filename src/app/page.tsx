@@ -5,6 +5,7 @@ import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
 import styles from '@/assets/styles/pages/home/home.module.css'
 import ProductSection from "./homepage/product";
 import SloganSlider from "./homepage/slogan";
+import IntroduceSection from "./homepage/introduce";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
         <FullWidthSlider />
         <SloganSlider />
         <ProductSection />
+        <IntroduceSection />
         <ArticleSection />
       </div>
     </ClientLayout>

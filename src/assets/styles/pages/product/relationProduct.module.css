@@ -444,6 +444,7 @@
 .relationProductSection .itemContent {
   padding: 10px 14px;
   background: #1a1a1a;
+  height: 100%;
 }
 
 .relationProductSection .contentWrapper {

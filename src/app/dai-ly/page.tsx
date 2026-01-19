@@ -175,7 +175,6 @@ const AgencyContent = () => {
     useEffect(() => {
         onGetListProvinceAsync().then(_ => { });
     }, []);
-    console.log('provinceSelected', provinceSelected);
 
     useEffect(() => {
         onGetListDistrictAsync().then(_ => { });
@@ -184,92 +183,103 @@ const AgencyContent = () => {
     return (
         <ClientLayout>
             <div className={styles.agencyContainer}>
-                <div className='padding-common flex flex-col gap-5'>
+                <div className='padding-common'>
                     <BreadcrumbCommon
                         breadcrumb={"Đại lý"}
                         redirect={ROUTE_PATH.AGENCY}
                         title={""}
                     />
-                    <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 mb-8">
-                        {/* Search Input - 5/12 columns on desktop, full on mobile */}
-                        <div className="sm:col-span-4">
-                            <InputSearchCommon
-                                placeholder={'Tìm kiếm đại lý'}
-                                value={searchText}
-                                onChange={onChangeSearchText}
-                                disabled={false}
-                            />
-                        </div>
-                        <div className="sm:col-span-3">
-                            <SelectSearchProvince
-                                listDataOfItem={listProvince}
-                                onChange={onChangeProvince}
-                                valueName='code'
-                                labelName='name'
-                                label={'Tỉnh/Thành phố'}
-                            />
-                        </div>
-
-                        {/* Category Select - 4/12 columns on desktop, full on mobile */}
-                        <div className="sm:col-span-3">
-                            <SelectSearchCommon
-                                listDataOfItem={listDistrict}
-                                onChange={onChangeDistrict}
-                                valueName='name'
-                                labelName='name'
-                                label={'Quận/Huyện'} />
-                        </div>
-
-                        {/* Search Button - 3/12 columns on desktop, full on mobile */}
-                        <div className="sm:col-span-2">
-                            <ButtonCommon
-                                onClick={onSearchParam}
-                                title={'Tìm kiếm'}
-                            />
-                        </div>
-                    </div>
-
                     <div className={styles.agencyContent}>
-                        <div className={styles.leftSide}>
-                            {listAgency.map((item, index) => (
-                                <div className={styles.agencyCard} key={index}
-                                    onClick={() => onSelectAgency(item)}
-                                >
-                                    <div className={styles.cardImage}>
-                                        <Image
-                                            src={configImageURL(item.image)}
-                                            alt={item.name}
-                                            width={300}
-                                            height={200}
-                                            className={styles.cardImageImg}
-                                        />
-                                    </div>
-                                    <div className={styles.cardContent}>
-                                        <h3 className={styles.cardName}>{item.name}</h3>
+                        <div className="pageHeader">
+                            <div className="badge">
+                                <span className="badgeText">Đại lý & Chi nhánh</span>
+                            </div>
+                            <h1 className="headerTitle">
+                                <span className="highlight">Danh Sách</span> Đại Lý
+                            </h1>
+                        </div>
 
-                                        <div className={styles.cardInfo}>
-                                            <div className={styles.infoItem}>
-                                                <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                                    <circle cx="12" cy="10" r="3"></circle>
-                                                </svg>
-                                                <p className={styles.cardAddress}>{item.address}</p>
-                                            </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 mb-8">
+                            {/* Search Input - 5/12 columns on desktop, full on mobile */}
+                            <div className="sm:col-span-4">
+                                <InputSearchCommon
+                                    placeholder={'Tìm kiếm đại lý'}
+                                    value={searchText}
+                                    onChange={onChangeSearchText}
+                                    disabled={false}
+                                />
+                            </div>
+                            <div className="sm:col-span-3">
+                                <SelectSearchProvince
+                                    listDataOfItem={listProvince}
+                                    onChange={onChangeProvince}
+                                    valueName='code'
+                                    labelName='name'
+                                    label={'Tỉnh/Thành phố'}
+                                />
+                            </div>
 
-                                            <div className={styles.infoItem}>
-                                                <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                                </svg>
-                                                <p className={styles.cardPhone}>{item.phone_number}</p>
+                            {/* Category Select - 4/12 columns on desktop, full on mobile */}
+                            <div className="sm:col-span-3">
+                                <SelectSearchCommon
+                                    listDataOfItem={listDistrict}
+                                    onChange={onChangeDistrict}
+                                    valueName='name'
+                                    labelName='name'
+                                    label={'Quận/Huyện'} />
+                            </div>
+
+                            {/* Search Button - 3/12 columns on desktop, full on mobile */}
+                            <div className="sm:col-span-2">
+                                <ButtonCommon
+                                    onClick={onSearchParam}
+                                    title={'Tìm kiếm'}
+                                />
+                            </div>
+                        </div>
+
+                        <div className={styles.agencyMain}>
+                            <div className={styles.leftSide}>
+                                {listAgency.map((item, index) => (
+                                    <div className={styles.agencyCard} key={index}
+                                        onClick={() => onSelectAgency(item)}
+                                    >
+                                        <div className={styles.cardImage}>
+                                            <Image
+                                                src={configImageURL(item.image)}
+                                                alt={item.name}
+                                                width={300}
+                                                height={200}
+                                                className={styles.cardImageImg}
+                                            />
+                                        </div>
+                                        <div className={styles.cardContent}>
+                                            <h3 className={styles.cardName}>{item.name}</h3>
+
+                                            <div className={styles.cardInfo}>
+                                                <div className={styles.infoItem}>
+                                                    <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                        <circle cx="12" cy="10" r="3"></circle>
+                                                    </svg>
+                                                    <p className={styles.cardAddress}>{item.address}</p>
+                                                </div>
+
+                                                <div className={styles.infoItem}>
+                                                    <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                    </svg>
+                                                    <p className={styles.cardPhone}>{item.phone_number}</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
-                        {/* <div className={styles.rightSide}>
+                                ))}
+                            </div>
+                            {/* <div className={styles.rightSide}>
                             <LocationMap dataLocation={selectedAgency} />
                         </div> */}
+                        </div>
                     </div>
                 </div>
             </div>

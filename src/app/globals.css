@@ -125,6 +125,69 @@
   -webkit-line-clamp: 4;
 }
 
-/* .main-layout-client {
-  overflow-x: hidden;
-} */
+/* Header */
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.pageHeader .badge {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.pageHeader .badgeText {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pageHeader .headerTitle {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.pageHeader .headerTitle .highlight {
+  color: #ffd700;
+  position: relative;
+}
+
+.pageHeader .headerTitle .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+}
+
+@media (max-width: 1600px) {
+  .pageHeader .headerTitle {
+    font-size: 2.8rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .pageHeader .headerTitle {
+    font-size: 2.5rem;
+  }
+}
+@media (max-width: 992px) {
+  .pageHeader .headerTitle {
+    font-size: 2.2rem;
+  }
+}
+@media (max-width: 576px) {
+  .pageHeader .headerTitle {
+    font-size: 2rem;
+  }
+}

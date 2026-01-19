@@ -1,8 +1,14 @@
 .agencyContainer {
   background: #141414;
 }
+.agencyContainer .agencyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin: 20px 0;
+}
 
-.agencyContent {
+.agencyContainer .agencyMain {
   margin: 0 auto;
   width: 100%;
   display: grid;
@@ -106,7 +112,7 @@
 
 /* Tablet (1024px) */
 @media (max-width: 1024px) {
-  .agencyContent {
+  .agencyContainer .agencyMain {
     grid-template-columns: 1fr; /* Chuyển thành 1 cột */
     gap: 30px;
     padding: 0 16px;
@@ -153,7 +159,7 @@
     padding: 30px 0;
   }
 
-  .agencyContent {
+  .agencyContainer .agencyMain {
     gap: 24px;
   }
 
@@ -185,7 +191,7 @@
     padding: 20px 0;
   }
 
-  .agencyContent {
+  .agencyContainer .agencyMain {
     padding: 0 12px;
     gap: 20px;
   }
@@ -224,7 +230,7 @@
 
 /* Mobile rất nhỏ (360px) */
 @media (max-width: 360px) {
-  .agencyContent {
+  .agencyContainer .agencyMain {
     padding: 0 8px;
   }
 
