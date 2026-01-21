@@ -110,7 +110,7 @@
 
 /* Main Header */
 .main-header {
-  background: var(--white);
+  background: #131313;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
@@ -125,7 +125,7 @@
 }
 
 .header-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
@@ -134,6 +134,7 @@
   height: 70px;
   position: relative;
   background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+  border-bottom: 1px solid #f5f5f54d;
 }
 
 /* Logo */
@@ -183,7 +184,7 @@
   align-items: center;
   gap: 6px;
   padding: 12px 18px;
-  color: var(--gray-dark);
+  color: #fff;
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
@@ -388,7 +389,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f516;
 }
 
 .mobile-logo {
@@ -445,7 +446,7 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: #fff;
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f516;
 }
 
 .mobile-nav-link.active {
@@ -684,61 +685,6 @@
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
-  }
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .main-header {
-    background: var(--dark);
-  }
-
-  .main-header.scrolled {
-    background: rgba(26, 26, 26, 0.95);
-  }
-
-  .brand-name,
-  .mobile-brand-name {
-    color: var(--white);
-  }
-
-  .brand-tagline {
-    color: var(--gray-light);
-  }
-
-  .nav-link {
-    color: var(--gray-light);
-  }
-
-  .nav-link:hover {
-    color: var(--white);
-    background: rgba(255, 215, 0, 0.1);
-  }
-
-  .dropdown-menu {
-    background: var(--gray-dark);
-  }
-
-  .dropdown-item {
-    color: #fff;
-  }
-
-  .dropdown-item:hover {
-    color: var(--white);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .mobile-brand-name,
-  .mobile-nav-link,
-  .contact-title,
-  .contact-value {
-    color: var(--white);
-  }
-
-  .mobile-nav-header,
-  .mobile-nav-item,
-  .mobile-contact-info {
-    border-color: #f5f5f5;
   }
 }
 

@@ -66,11 +66,11 @@ const ProductSlugPage = async ({ params }: Props) => {
                                     <span className="text-2xl font-bold text-red-600">
                                         {formatCurrency(dataDetail.price)}đ
                                     </span>
-                                    {dataDetail.price_sale && (
+                                    {dataDetail.price_sale ? (
                                         <span className="text-lg text-gray-500 line-through">
                                             {formatCurrency(dataDetail.price_sale)}đ
                                         </span>
-                                    )}
+                                    ) : null}
                                 </div>
                             </div>
                             <div className="flex">
@@ -86,10 +86,15 @@ const ProductSlugPage = async ({ params }: Props) => {
                     className={styles.productImg}
                     style={{
                         backgroundImage: `url(${configImageURL(dataDetail.image)})`,
-                        backgroundPosition: 'center',
+                        backgroundPosition: 'center center',
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
-                        backgroundAttachment: 'fixed'
+                        backgroundAttachment: 'fixed',
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        overflow: 'hidden'
                     }}
                 >
                     <div className={`${styles.content} padding-common`}>
