@@ -478,6 +478,13 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .slide-item {
+    height: 30vh;
+    min-height: 465px;
+  }
+}
+
 @media (max-width: 992px) {
   .slide-item {
     height: 80vh;
@@ -508,8 +515,8 @@
 
 @media (max-width: 768px) {
   .slide-item {
-    height: 70vh;
-    min-height: 450px;
+    height: 30vh;
+    min-height: 350px;
   }
 
   .modern-slider-container .content-wrapper {
@@ -576,7 +583,7 @@
 @media (max-width: 576px) {
   .slide-item {
     height: 20vh;
-    min-height: 200px;
+    min-height: 180px;
   }
 
   .slide-title {
