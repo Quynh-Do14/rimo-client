@@ -229,7 +229,19 @@
 
 .item-media {
   position: relative;
-  height: 240px;
+  height: 280px;
+  overflow: hidden;
+}
+
+.item-media-2-col {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+
+.item-media-3-col {
+  position: relative;
+  height: 310px;
   overflow: hidden;
 }
 
@@ -728,7 +740,15 @@
   }
 
   .product-section .item-media {
-    height: 160px;
+    height: 320px;
+  }
+
+  .item-media-2-col {
+    height: 320px;
+  }
+
+  .item-media-3-col {
+    height: 320px;
   }
 
   .product-section .sale-price {

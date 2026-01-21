@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useLayoutEffect } from "react";
 import productService from "@/infrastructure/repository/product/product.service";
 import { configImageURL, convertSlug, formatCurrencyVND } from "@/infrastructure/helper/helper";
 import Link from "next/link";
@@ -24,6 +24,7 @@ const SearchContent = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [loading, setLoading] = useState<boolean>(false);
     const [categoryId, setCategoryId] = useState<string>("");
+    const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
     const router = useRouter(); // Từ next/navigation
     const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
@@ -116,6 +117,10 @@ const SearchContent = () => {
         router.push(`${ROUTE_PATH.SEARCH}`);
     }
 
+    useLayoutEffect(() => {
+        setInitialLoading(false);
+    });
+
     return (
         <ClientLayout>
             <div className={styles.productSection}>
@@ -156,7 +161,7 @@ const SearchContent = () => {
                         </div>
 
                         {/* Loading State */}
-                        {loading ? (
+                        {initialLoading || loading ? (
                             <SkeletonProduct />
                         ) : (
                             /* Data State */

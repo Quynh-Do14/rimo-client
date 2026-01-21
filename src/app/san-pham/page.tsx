@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, Suspense, useLayoutEffect } from "react";
 import productService from "@/infrastructure/repository/product/product.service";
 import { configImageURL, convertSlug, formatCurrencyVND } from "@/infrastructure/helper/helper";
 import Link from "next/link";
@@ -14,8 +14,9 @@ import { useRecoilValue } from "recoil";
 import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
 import { useRouter, useSearchParams } from "next/navigation";
 import SkeletonProduct from "../tim-kiem/skeleton";
+import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
 const ProductContent = () => {
-    const [listProduct, setListProduct] = useState<Array<any>>([])
+    const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
@@ -23,6 +24,7 @@ const ProductContent = () => {
     const [totalElement, setTotalElement] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(10);
     const [loading, setLoading] = useState<boolean>(false);
+    const [initialLoading, setInitialLoading] = useState<boolean>(true);
     const [categoryId, setCategoryId] = useState<string>("");
 
     const router = useRouter(); // Từ next/navigation
@@ -37,7 +39,7 @@ const ProductContent = () => {
     const categoryProductState = useRecoilValue(CategoryProductState).data
 
     const onGetListProductAsync = async ({ name = searchText, limit = pageSize, page = currentPage, category_id = categoryId }) => {
-        const param = {
+        const param: ProductParams = {
             page: page,
             limit: limit,
             search: name,
@@ -70,7 +72,7 @@ const ProductContent = () => {
         params.set('search', searchText);
         params.set('category_id', categoryId);
         params.set('page', '1'); // Reset về trang 1 khi search
-        router.push(`${ROUTE_PATH.SEARCH}?${params.toString()}`);
+        router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, 1, categoryId).then(_ => { });
     }
@@ -89,7 +91,7 @@ const ProductContent = () => {
         // Cập nhật params với page mới
         const params = new URLSearchParams(searchParams?.toString() || '');
         params.set('page', page.toString());
-        router.push(`${ROUTE_PATH.SEARCH}?${params.toString()}`);
+        router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, page, categoryId).then(_ => { });
     }
@@ -113,8 +115,12 @@ const ProductContent = () => {
         setSearchText('');
         setCategoryId('');
         setCurrentPage(1);
-        router.push(`${ROUTE_PATH.SEARCH}`);
+        router.push(`${ROUTE_PATH.PRODUCT}`);
     }
+
+    useLayoutEffect(() => {
+        setInitialLoading(false);
+    });
 
     return (
         <ClientLayout>
@@ -123,7 +129,7 @@ const ProductContent = () => {
                     <BreadcrumbCommon
                         breadcrumb={"Sản phẩm"}
                         redirect={ROUTE_PATH.PRODUCT}
-                        title={""}
+                        title={"Danh sách sản phẩm"}
                     />
                     <div className={styles.productContent}>
                         <div className="pageHeader">
@@ -164,72 +170,72 @@ const ProductContent = () => {
                         </div>
 
                         {/* Loading State */}
-                        {loading ? (
-                            <SkeletonProduct />
-                        ) : listProduct.length > 0 ? (
-                            /* Data State */
-                            <div className={styles.galleryContainer}>
-                                <div className={styles.galleryGrid}>
-                                    {listProduct.map(item => (
-                                        <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
-                                            key={item.id}
-                                            className={styles.galleryItem}
-                                        >
-                                            <div className={styles.itemMedia}>
-                                                <div className={styles.mediaContainer}>
-                                                    <div className={styles.thumbnailWrapper}>
-                                                        <div
-                                                            className={styles.thumbnail}
-                                                            style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
-                                                        />
-                                                        <div className={styles.mediaOverlay}></div>
+                        {
+                            initialLoading || loading ? (
+                                <SkeletonProduct />
+                            ) : listProduct.length > 0 ? (
+                                /* Data State */
+                                <div className={styles.galleryContainer}>
+                                    <div className={styles.galleryGrid}>
+                                        {listProduct.map(item => (
+                                            <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                                key={item.id}
+                                                className={styles.galleryItem}
+                                            >
+                                                <div className={styles.itemMedia}>
+                                                    <div className={styles.mediaContainer}>
+                                                        <div className={styles.thumbnailWrapper}>
+                                                            <div
+                                                                className={styles.thumbnail}
+                                                                style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
+                                                            />
+                                                            <div className={styles.mediaOverlay}></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <div className={styles.itemContent}>
-                                                <div className={styles.contentWrapper}>
-                                                    <h2 className={styles.itemTitle}>{item.name}</h2>
-                                                    <div className={styles.itemPrice}>
-                                                        {item.price_sale ? (
-                                                            <>
-                                                                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                                    <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
-                                                                </div>
-                                                                <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                            </>
-                                                        ) : (
-                                                            <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                        )}
+                                                <div className={styles.itemContent}>
+                                                    <div className={styles.contentWrapper}>
+                                                        <h2 className={styles.itemTitle}>{item.name}</h2>
+                                                        <div className={styles.itemPrice}>
+                                                            {item.price_sale ? (
+                                                                <>
+                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                                                        <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
+                                                                    </div>
+                                                                    <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
+                                                                </>
+                                                            ) : (
+                                                                <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            /* No Data State - chỉ hiển thị khi không loading và không có data */
-                            <div className={styles.galleryContainer}>
-                                <div className={styles.noDataContainer}>
-                                    <div className={styles.noDataIcon}>
-                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                            <circle cx="12" cy="12" r="10" />
-                                            <line x1="8" y1="8" x2="16" y2="16" />
-                                            <line x1="16" y1="8" x2="8" y2="16" />
-                                        </svg>
+                                            </Link>
+                                        ))}
                                     </div>
-                                    <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                    <p className={styles.noDataDescription}>
-                                        Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                    </p>
-                                    <ButtonCommon
-                                        onClick={onReset}
-                                        title={'Xóa bộ lọc'}
-                                    />
                                 </div>
-                            </div>
-                        )}
+                            ) : (
+                                <div className={styles.galleryContainer}>
+                                    <div className={styles.noDataContainer}>
+                                        <div className={styles.noDataIcon}>
+                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                <circle cx="12" cy="12" r="10" />
+                                                <line x1="8" y1="8" x2="16" y2="16" />
+                                                <line x1="16" y1="8" x2="8" y2="16" />
+                                            </svg>
+                                        </div>
+                                        <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
+                                        <p className={styles.noDataDescription}>
+                                            Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
+                                        </p>
+                                        <ButtonCommon
+                                            onClick={onReset}
+                                            title={'Xóa bộ lọc'}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                     </div>
                 </div>
             </div>
@@ -240,7 +246,7 @@ const ProductContent = () => {
 
 const ProductPage = () => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<SkeletonProduct />}>
             <ProductContent />
         </Suspense>
     );

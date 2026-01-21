@@ -46,6 +46,14 @@ const ProductSection = () => {
                             "gallery-grid-3-col"
                             :
                             "gallery-grid";
+                    const itemMediaCol = productFromCategory.length == 2
+                        ?
+                        'item-media-2-col'
+                        : productFromCategory.length == 3
+                            ?
+                            "item-media-3-col"
+                            :
+                            "item-media";
                     return (
                         <div className="gallery-container" key={key}>
                             {/* Header Section */}
@@ -63,7 +71,7 @@ const ProductSection = () => {
                                         key={item.id}
                                         className={`gallery-item`}
                                     >
-                                        <div className="item-media">
+                                        <div className={itemMediaCol}>
                                             <div className="media-container">
                                                 {/* Thumbnail */}
                                                 <div className="thumbnail-wrapper">

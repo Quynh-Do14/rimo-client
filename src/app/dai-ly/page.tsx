@@ -16,6 +16,7 @@ import LocationMap from './map';
 import districtService from '@/infrastructure/repository/district/district.service';
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
+import { AgencyInterface, AgencyParams } from '@/infrastructure/interface/agency/agency.interface';
 export interface Location {
     id: number;
     name: string;
@@ -28,7 +29,7 @@ export interface Location {
     district: string;
 }
 const AgencyContent = () => {
-    const [listAgency, setListAgency] = useState<Array<any>>([])
+    const [listAgency, setListAgency] = useState<Array<AgencyInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
@@ -56,7 +57,7 @@ const AgencyContent = () => {
 
 
     const onGetListAgencyAsync = async ({ name = searchText, limit = pageSize, page = currentPage, province = provinceSelected, district = districtSelected }) => {
-        const param = {
+        const param: AgencyParams = {
             page: page,
             limit: limit,
             search: name,
@@ -135,7 +136,7 @@ const AgencyContent = () => {
         onSearch(parsedSearch, parsedLimit, parsedPage, parsedProvince, parsedDistrict);
     }, [search, page, limit, province, district]); // Theo dõi các giá trị từ searchParams
 
-    const onSelectAgency = (item: Location) => {
+    const onSelectAgency = (item: AgencyInterface) => {
         setSelectedAgency(item)
     };
 

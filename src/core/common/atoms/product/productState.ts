@@ -1,16 +1,13 @@
+import { ProductHref } from "@/infrastructure/interface/product/product.interface";
 import { atom } from "recoil";
 
-interface Product {
-    href: string
-    label: string
-}
 
 export const ProductState = atom({
     key: 'PRODUCT_STATE', // unique ID (with respect to other atoms/selectors)
     default: {
         // isLoading: false,
         // uri: '',
-        data: <Array<Product>>[],
+        data: <Array<ProductHref>>[],
 
     }, // default value (aka initial value)
 });

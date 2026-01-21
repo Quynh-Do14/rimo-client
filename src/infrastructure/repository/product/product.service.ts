@@ -1,9 +1,10 @@
 import { Endpoint } from "@/core/common/apiLink";
 import { FailMessage, SuccessMessage } from "@/infrastructure/common/toast/message";
+import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
 import { RequestService } from "@/infrastructure/utils/response";
 
 class ProductService {
-    async GetProduct(params: any, setLoading: Function) {
+    async GetProduct(params: ProductParams, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -43,7 +44,7 @@ class ProductService {
     };
 
 
-    async AddProductAdmin(data: object, onBack: Function, setLoading: Function) {
+    async AddProductAdmin(data: ProductInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -66,7 +67,7 @@ class ProductService {
             setLoading(false);
         }
     }
-    async UpdateProductAdmin(id: string, data: object, onBack: Function, setLoading: Function) {
+    async UpdateProductAdmin(id: string, data: ProductInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService

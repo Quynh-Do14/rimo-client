@@ -3,7 +3,7 @@
 import { ROUTE_PATH } from '@/core/common/appRouter'
 import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb'
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import styles from "@/assets/styles/pages/blog/blog.module.css";
 import Link from 'next/link';
 import { configImageURL, convertDateOnlyShow, convertSlug } from '@/infrastructure/helper/helper';
@@ -17,9 +17,10 @@ import InputSearchCommon from '@/infrastructure/common/input/input-search-common
 import SelectSearchCommon from '@/infrastructure/common/input/select-search-common'
 import ButtonCommon from '@/infrastructure/common/button/button-common'
 import { CategoryBlogState } from '@/core/common/atoms/category/categoryState'
+import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface'
 
 const BlogPage = () => {
-    const [listBlog, setListBlog] = useState<Array<any>>([])
+    const [listBlog, setListBlog] = useState<Array<BlogInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
     const [total, setTotal] = useState<number>(0);
@@ -28,6 +29,7 @@ const BlogPage = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [loading, setLoading] = useState<boolean>(false);
     const [categoryId, setCategoryId] = useState<string>("");
+    const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
     const router = useRouter(); // Từ next/navigation
     const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
@@ -113,7 +115,9 @@ const BlogPage = () => {
         onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory);
     }, [search, page, limit, category_id]); // Theo dõi các giá trị từ searchParams
 
-
+    useLayoutEffect(() => {
+        setInitialLoading(false);
+    });
     return (
         <ClientLayout>
             <div className={styles.blogContainer}>
@@ -163,7 +167,7 @@ const BlogPage = () => {
                         </div>
                         {/* News Grid */}
                         <div className={styles.newsGrid}>
-                            {loading
+                            {loading || initialLoading
                                 ?
                                 <BlogSkeleton />
                                 :

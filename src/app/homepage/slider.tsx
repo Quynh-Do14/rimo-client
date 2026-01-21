@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import '@/assets/styles/pages/home/fullWidthSlider.css'
 import bannerService from "@/infrastructure/repository/banner/banner.service";
 import { configImageURL } from "@/infrastructure/helper/helper";
+import { BannerInterface } from "@/infrastructure/interface/banner/banner.interface";
 
 interface Stat {
     number: string;
@@ -24,7 +25,7 @@ const FullWidthSlider = () => {
                 {},
                 setLoading
             ).then((res) => {
-                const listImg = res.data.map((item: any) => item.image)
+                const listImg = res.data.map((item: BannerInterface) => item.image)
                 setListBanner(listImg);
             })
         }

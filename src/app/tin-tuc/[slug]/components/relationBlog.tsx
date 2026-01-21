@@ -1,10 +1,11 @@
 import styles from "@/assets/styles/pages/blog/slugBlog.module.css";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import { configImageURL, convertDateOnlyShow, convertSlug } from "@/infrastructure/helper/helper";
+import { BlogInterface } from "@/infrastructure/interface/blog/blog.interface";
 import Image from "next/image";
 import Link from "next/link";
 type Props = {
-    relatedBlogs: any[]
+    relatedBlogs: BlogInterface[]
 }
 const RelationBlogComponent = (props: Props) => {
     const { relatedBlogs } = props;

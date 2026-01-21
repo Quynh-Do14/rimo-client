@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import styles from "@/assets/styles/pages/blog/slugBlog.module.css";
 import RelationBlogComponent from './components/relationBlog';
 import { Endpoint } from '@/core/common/apiLink';
+import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface';
 
 type Props = {
     params: { slug: string };
@@ -13,7 +14,7 @@ type Props = {
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-    const blog = await fetch(`${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`, {
+    const blog: BlogInterface = await fetch(`${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) => res.json());
 
@@ -30,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const BlogSlugPage = async ({ params }: Props) => {
 
-    const dataDetail = await fetch(`${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`, {
+    const dataDetail: BlogInterface = await fetch(`${baseURL}${Endpoint.Blog.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) =>
         res.json()

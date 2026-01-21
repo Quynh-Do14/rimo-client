@@ -21,6 +21,7 @@ import { ProductState } from "@/core/common/atoms/product/productState";
 import ButtonCommon from "../button/button-common";
 import avatar from "@/assets/images/avatar.png";
 import SearchBoxHeader from "./SearchBox";
+import { ProductInterface } from "@/infrastructure/interface/product/product.interface";
 
 const HeaderSection = () => {
     const pathname = usePathname(); // Lấy đường dẫn hiện tại
@@ -120,7 +121,7 @@ const HeaderSection = () => {
                 {},
                 () => { }
             ).then((res) => {
-                const data = res.data?.map((item: any) => {
+                const data = res.data?.map((item: ProductInterface) => {
                     const result = {
                         href: `${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`,
                         label: item.name,
@@ -141,7 +142,7 @@ const HeaderSection = () => {
     useEffect(() => {
         onGetListCategoryAsync().then(_ => { });
         onGetListBlogCategoryAsync().then(_ => { });
-        onGetListBrandAsync().then(_ => { });
+        // onGetListBrandAsync().then(_ => { });
         onGetListProductAsync().then(_ => { });
     }, []);
 

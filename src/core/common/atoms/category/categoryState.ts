@@ -1,3 +1,5 @@
+import { CategoryBlogInterface } from "@/infrastructure/interface/category/categoryBlog.interface";
+import { CategoryProductInterface } from "@/infrastructure/interface/category/categoryProduct.interface";
 import { atom } from "recoil";
 
 export const CategoryBlogState = atom({
@@ -5,7 +7,7 @@ export const CategoryBlogState = atom({
     default: {
         // isLoading: false,
         // uri: '',
-        data: <Array<any>>[],
+        data: <Array<CategoryBlogInterface>>[],
 
     }, // default value (aka initial value)
 });
@@ -15,7 +17,7 @@ export const CategoryProductState = atom({
     default: {
         // isLoading: false,
         // uri: '',
-        data: <Array<any>>[],
+        data: <Array<CategoryProductInterface>>[],
 
     }, // default value (aka initial value)
 });

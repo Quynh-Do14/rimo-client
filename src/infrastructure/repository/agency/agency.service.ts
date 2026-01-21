@@ -1,9 +1,10 @@
 import { Endpoint } from "@/core/common/apiLink";
 import { FailMessage, SuccessMessage } from "@/infrastructure/common/toast/message";
+import { AgencyInterface, AgencyParams } from "@/infrastructure/interface/agency/agency.interface";
 import { RequestService } from "@/infrastructure/utils/response";
 
 class AgencyService {
-    async GetAgency(params: any, setLoading: Function) {
+    async GetAgency(params: AgencyParams, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -43,7 +44,7 @@ class AgencyService {
     };
 
 
-    async AddAgencyAdmin(data: object, onBack: Function, setLoading: Function) {
+    async AddAgencyAdmin(data: AgencyInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -66,7 +67,7 @@ class AgencyService {
             setLoading(false);
         }
     }
-    async UpdateAgencyAdmin(id: string, data: object, onBack: Function, setLoading: Function) {
+    async UpdateAgencyAdmin(id: string, data: AgencyInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService

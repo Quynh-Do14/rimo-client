@@ -1,9 +1,10 @@
 import { Endpoint } from "@/core/common/apiLink";
 import { FailMessage, SuccessMessage } from "@/infrastructure/common/toast/message";
+import { BannerInterface, BannerParams } from "@/infrastructure/interface/banner/banner.interface";
 import { RequestService } from "@/infrastructure/utils/response";
 
 class BannerService {
-    async GetBanner(params: any, setLoading: Function) {
+    async GetBanner(params: BannerParams, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -43,7 +44,7 @@ class BannerService {
     };
 
 
-    async AddBannerAdmin(data: object, onBack: Function, setLoading: Function) {
+    async AddBannerAdmin(data: BannerInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
@@ -66,7 +67,7 @@ class BannerService {
             setLoading(false);
         }
     }
-    async UpdateBannerAdmin(id: string, data: object, onBack: Function, setLoading: Function) {
+    async UpdateBannerAdmin(id: string, data: BannerInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService

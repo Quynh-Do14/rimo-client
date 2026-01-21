@@ -8,6 +8,7 @@ import GalleryComponent from './components/gallery';
 import { Endpoint } from '@/core/common/apiLink';
 import ProductAdvantageComponent from './components/advantage';
 import RelationProductComponent from './components/relationProduct';
+import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
 
 type Props = {
     params: { slug: string };
@@ -16,23 +17,23 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function generateMetadata
     ({ params }: Props): Promise<Metadata> {
-    const blog = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
+    const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) => res.json());
 
     return {
-        title: blog.name,
-        description: blog.short_description,
+        title: product.name,
+        description: product.short_description,
         openGraph: {
-            title: blog.name,
-            description: blog.short_description,
-            images: configImageURL(blog.image),
+            title: product.name,
+            description: product.short_description,
+            images: configImageURL(product.image),
         },
     };
 }
 
 const ProductSlugPage = async ({ params }: Props) => {
-    const dataDetail = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
+    const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) =>
         res.json()
@@ -65,9 +66,9 @@ const ProductSlugPage = async ({ params }: Props) => {
                                     <span className="text-2xl font-bold text-red-600">
                                         {formatCurrency(dataDetail.price)}đ
                                     </span>
-                                    {dataDetail.sale_price && (
+                                    {dataDetail.price_sale && (
                                         <span className="text-lg text-gray-500 line-through">
-                                            {formatCurrency(dataDetail.sale_price)}đ
+                                            {formatCurrency(dataDetail.price_sale)}đ
                                         </span>
                                     )}
                                 </div>
