@@ -388,7 +388,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid var(--gray-lighter);
+  border-bottom: 1px solid #f5f5f5;
 }
 
 .mobile-logo {
@@ -439,12 +439,13 @@
   justify-content: space-between;
   width: 100%;
   padding: 16px 0;
-  color: var(--gray-dark);
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  color: #fff;
+  border-bottom: 1px solid #f5f5f5;
 }
 
 .mobile-nav-link.active {
@@ -737,7 +738,7 @@
   .mobile-nav-header,
   .mobile-nav-item,
   .mobile-contact-info {
-    border-color: var(--gray-dark);
+    border-color: #f5f5f5;
   }
 }
 
