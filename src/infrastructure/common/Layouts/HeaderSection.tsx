@@ -283,7 +283,49 @@ const HeaderSection = () => {
                         {
                             isTokenStoraged() ?
                                 <div className="avatar-container">
-                                    {/* ... existing avatar code ... */}
+                                    <button
+                                        className="avatar-btn"
+                                        onClick={() => setShowDropdown(!showDropdown)}
+                                    >
+                                        <img
+                                            src={avatar.src}
+                                            alt="avatar"
+                                            width={50}
+                                            height={50}
+                                            className="avatar"
+                                        />
+                                        <i className={`fa fa-chevron-down chevron`} aria-hidden="true"></i>
+                                    </button>
+
+                                    {showDropdown && (
+                                        <div className="dropdown">
+                                            <div className="dropdown-header">
+                                                <img
+                                                    src={avatar.src}
+                                                    alt="avatar"
+                                                    width={40}
+                                                    height={40}
+                                                    className="dropdown-avatar"
+                                                />
+                                                <div className="user-info">
+                                                    <p className="user-name">Admin</p>
+                                                    <p className="user-email">admin@gmail.com</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="dropdown-divider"></div>
+
+                                            <div className="dropdown-divider"></div>
+
+                                            <button
+                                                className="logout-btn"
+                                                onClick={handleLogout}
+                                            >
+                                                <i className="fa fa-sign-out" aria-hidden="true"></i>
+                                                <span>Đăng xuất</span>
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                                 :
                                 <Link href={ROUTE_PATH.LOGIN} className="cta-btn">

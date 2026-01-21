@@ -110,7 +110,8 @@
 
 /* Main Header */
 .main-header {
-  background: #131313;
+  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+  border-bottom: 1px solid #f5f5f54d;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   position: sticky;
   top: 0;
@@ -125,7 +126,7 @@
 }
 
 .header-container {
-  max-width: 1600px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
@@ -133,8 +134,6 @@
   justify-content: space-between;
   height: 70px;
   position: relative;
-  background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
-  border-bottom: 1px solid #f5f5f54d;
 }
 
 /* Logo */
