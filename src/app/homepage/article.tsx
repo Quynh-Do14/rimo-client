@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import "@/assets/styles/pages/home/article.css";
 import blogService from "@/infrastructure/repository/blog/blog.service";
-import { configImageURL, convertDateOnlyShow } from "@/infrastructure/helper/helper";
+import { configImageURL, convertDateOnlyShow, convertSlug } from "@/infrastructure/helper/helper";
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import Image from "next/image";
@@ -156,7 +156,7 @@ const ArticleSection = () => {
                                 <div className="card-overlay"></div>
                             </div>
                             <div className="card-content">
-                                <h4 className="card-title">{article.title}</h4>
+                                <h3 className="card-title">{article.title}</h3>
                                 <p className="card-excerpt text-truncate-3">{article.short_description}</p>
                                 <div className="card-meta">
                                     <div className="meta-item">
@@ -174,7 +174,8 @@ const ArticleSection = () => {
                                         <span>{article.user_name}</span>
                                     </div>
                                 </div>
-                                <div className="card-footer">
+                                <Link
+                                    href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} className="card-footer">
                                     <button className="card-read-btn">
                                         <span className="btn-text">Xem chi tiết</span>
                                         <span className="btn-icon">
@@ -183,7 +184,7 @@ const ArticleSection = () => {
                                             </svg>
                                         </span>
                                     </button>
-                                </div>
+                                </Link>
                             </div>
                         </div>
                     ))}
@@ -202,7 +203,7 @@ const ArticleSection = () => {
                     </button>
                 </div>
             </Link>
-        </div>
+        </div >
     );
 };
 

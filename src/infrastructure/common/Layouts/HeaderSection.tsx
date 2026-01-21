@@ -20,6 +20,7 @@ import { ProfileState } from "@/core/common/atoms/profile/profileState";
 import { ProductState } from "@/core/common/atoms/product/productState";
 import ButtonCommon from "../button/button-common";
 import avatar from "@/assets/images/avatar.png";
+import SearchBoxHeader from "./SearchBox";
 
 const HeaderSection = () => {
     const pathname = usePathname(); // Lấy đường dẫn hiện tại
@@ -35,7 +36,7 @@ const HeaderSection = () => {
     const [, setProfileState] = useRecoilState(ProfileState);
     const [productState, setProductState] = useRecoilState(ProductState);
     const token = isTokenStoraged();
-    const router = useRouter(); // Từ next/navigation
+    const router = useRouter();
 
     // Xác định menu active dựa trên URL
     const getActiveMenu = () => {
@@ -277,41 +278,7 @@ const HeaderSection = () => {
                     {/* CTA Buttons */}
                     <div className="header-actions">
                         {/* Search Box */}
-                        <div className="search-container">
-                            <div className="search-box">
-                                <input
-                                    type="text"
-                                    placeholder="Tìm kiếm..."
-                                    className="search-input"
-                                    aria-label="Search input"
-                                    onChange={(e) => setSearchText(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
-                                            onSearch();
-                                        }
-                                    }}
-                                    value={searchText}
-                                />
-                                <button
-                                    className="search-btn"
-                                    aria-label="Search"
-                                >
-                                    <svg
-                                        width="18"
-                                        height="18"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        className="search-icon"
-                                    >
-                                        <circle cx="11" cy="11" r="8" />
-                                        <path d="m21 21-4.35-4.35" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
+                        <SearchBoxHeader />
                         {
                             isTokenStoraged() ?
                                 <div className="avatar-container">
@@ -373,38 +340,8 @@ const HeaderSection = () => {
                     </div>
 
                     <div className="mobile-nav-content">
-                        <div className="mobile-search-box">
-                            <input
-                                type="text"
-                                placeholder="Tìm kiếm..."
-                                className="mobile-search-input"
-                                aria-label="Search in mobile menu"
-                                onChange={(e) => setSearchText(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        onSearch();
-                                    }
-                                }}
-                                value={searchText}
-                            />
-                            <button
-                                className="mobile-search-btn"
-                                aria-label="Search"
-                                onClick={onSearch}
-                            >
-                                <svg
-                                    width="18"
-                                    height="18"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                >
-                                    <circle cx="11" cy="11" r="8" />
-                                    <path d="m21 21-4.35-4.35" />
-                                </svg>
-                            </button>
-                        </div>
+                        <SearchBoxHeader />
+
                         <ul className="mobile-menu">
                             {menuItems.map((item) => (
                                 <li key={item.id} className="mobile-nav-item">
