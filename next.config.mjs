@@ -1,8 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['giphy.com', 'media.giphy.com'],
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'giphy.com',
+        pathname: '/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'media.giphy.com',
+        pathname: '/**'
+      },
       {
         protocol: 'https',
         hostname: 'autofusion.vn',
@@ -32,8 +41,9 @@ const nextConfig = {
       }
     ]
   },
-  reactStrictMode: true, // Khuyến nghị bật chế độ strict mode
-  swcMinify: true // Bật SWC để tối ưu hóa build
+
+  reactStrictMode: true,
+  swcMinify: true
 }
 
 export default nextConfig
