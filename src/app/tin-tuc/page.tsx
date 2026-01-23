@@ -3,7 +3,7 @@
 import { ROUTE_PATH } from '@/core/common/appRouter'
 import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb'
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react'
 import styles from "@/assets/styles/pages/blog/blog.module.css";
 import Link from 'next/link';
 import { configImageURL, convertDateOnlyShow, convertSlug } from '@/infrastructure/helper/helper';
@@ -19,7 +19,7 @@ import ButtonCommon from '@/infrastructure/common/button/button-common'
 import { CategoryBlogState } from '@/core/common/atoms/category/categoryState'
 import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface'
 
-const BlogPage = () => {
+const BlogContent = () => {
     const [listBlog, setListBlog] = useState<Array<BlogInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -239,4 +239,12 @@ const BlogPage = () => {
     )
 }
 
-export default BlogPage
+const BlogPage = () => {
+    return (
+        <Suspense fallback={<BlogSkeleton />}>
+            <BlogContent />
+        </Suspense>
+    );
+};
+
+export default BlogPage;

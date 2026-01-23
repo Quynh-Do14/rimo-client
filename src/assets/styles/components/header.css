@@ -196,8 +196,8 @@
 }
 
 .nav-link:hover {
-  color: var(--black);
-  background: rgba(255, 215, 0, 0.05);
+  color: #fff;
+  background: #826f00;
 }
 
 .nav-item.active .nav-link {

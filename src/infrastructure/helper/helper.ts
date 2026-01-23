@@ -110,3 +110,20 @@ export const splitTakeId = (route: string) => {
     return "";
 }
 
+
+export const calculateCenter = (features: any[]): [number, number] => {
+    if (!features || features.length === 0) return [105.8342, 21.0278];
+
+    let lngSum = 0;
+    let latSum = 0;
+
+    features.forEach((f) => {
+        lngSum += Number(f.geometry.coordinates[0]);
+        latSum += Number(f.geometry.coordinates[1]);
+    });
+
+    return [
+        lngSum / features.length,
+        latSum / features.length,
+    ];
+};

@@ -1,115 +1,101 @@
-'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import Map, { Marker, Popup, MapRef } from 'react-map-gl';
+import React, { useEffect, useRef, useState } from 'react';
+import mapboxgl from 'mapbox-gl';
+
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Location } from './page';
-
+import { AgencyInterface } from '@/infrastructure/interface/agency/agency.interface';
+mapboxgl.accessToken = 'pk.eyJ1IjoibnRkMTAxMDIwMDAiLCJhIjoiY2tvbzJ4anl1MDZjMzJwbzNpcnA5NXZpcCJ9.dePfFDv0RlCLnWoDq1zHlw';
 type Props = {
-    dataLocation: Location
-    zoom?: number
+    listAgency: AgencyInterface[]
+    selectedAgency: AgencyInterface
 }
-
-const MAPBOX_TOKEN = "pk.eyJ1IjoibnRkMTAxMDIwMDAiLCJhIjoiY2tvbzJ4anl1MDZjMzJwbzNpcnA5NXZpcCJ9.dePfFDv0RlCLnWoDq1zHlw";
-
 const LocationAgency = (props: Props) => {
-    const { dataLocation, zoom = 12 } = props;
-    const latitude = Number(dataLocation.lat);
-    const longitude = Number(dataLocation.long);
+    const { listAgency, selectedAgency } = props
+    const mapContainerRef = useRef<any>(null);
+    const [coordinates, setCoordinates] = useState<any>({});
 
-    const mapRef = useRef<MapRef>(null);
-
-    const [viewState, setViewState] = useState({
-        latitude: latitude || 21.0285,
-        longitude: longitude || 105.8542,
-        zoom: zoom
-    });
-
-    const [showPopup, setShowPopup] = useState(true);
-
-    // Hiệu ứng bay đến vị trí mới khi dữ liệu thay đổi
     useEffect(() => {
-        if (latitude && longitude && mapRef.current) {
-            // Tạo hiệu ứng bay mượt đến vị trí mới
-            mapRef.current.flyTo({
-                center: [longitude, latitude],
-                zoom: zoom,
-                duration: 2000, // Thời gian bay (ms)
-                essential: true // Đảm bảo animation chạy
+        const data = listAgency.map((item) => {
+            const result = {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "coordinates": [
+                        item.long,
+                        item.lat
+                    ],
+                    "type": "Point"
+                }
+            }
+            return result
+        })
+        const data1 = {
+            "type": "FeatureCollection",
+            "features": data
+        }
+        setCoordinates(data1)
+    }, [listAgency])
+
+
+
+    useEffect(() => {
+        let map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/streets-v12',
+            zoom: 13,
+            center: [108, 4]
+        });
+        map.on('load', () => {
+            map.addSource('earthquakes', {
+                type: 'geojson',
+                data: coordinates
             });
 
-            // Cũng cập nhật viewState để Popup và Marker hiển thị đúng
-            setViewState(prev => ({
-                ...prev,
-                latitude,
-                longitude
-            }));
+            map.addLayer({
+                id: 'earthquakes-layer',
+                type: 'circle',
+                source: 'earthquakes',
+                paint: {
+                    'circle-radius': 4,
+                    'circle-stroke-width': 2,
+                    'circle-color': 'red',
+                    'circle-stroke-color': 'white'
+                }
+            });
+        });
+
+        // return () => mapRef.current.remove();
+    }, [coordinates]);
+
+    useEffect(() => {
+        let map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/street',
+            zoom: 13,
+            center: [108, 4]
+        });
+        if (Object.keys(selectedAgency).length) {
+            console.log('selectedAgency', selectedAgency);
+            console.log('long', Number(selectedAgency.long));
+            console.log('long', Number(selectedAgency.lat));
+
+            console.log('vào', (Math.random() - 0.5) * 360, (Math.random() - 0.5) * 100);
+
+            map.flyTo({
+                center: [105.79691347774877, 21.038582146742414],
+                essential: true // this animation is considered essential with respect to prefers-reduced-motion
+            });
+            new mapboxgl.Marker()
+                .setLngLat([105.79691347774877, 21.038582146742414])
+                .addTo(map);
+            new mapboxgl.Popup({ closeOnClick: false })
+                .setLngLat([105.79691347774877, 21.038582146742414])
+                .setHTML('<h1>Hello World!</h1>')
+                .addTo(map);
+
         }
-    }, [latitude, longitude, zoom]);
-
-    // Xử lý khi dữ liệu rỗng
-    if (!dataLocation || Object.keys(dataLocation).length === 0) {
-        return (
-            <div style={{ width: '100%', height: '50vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <p>Không có dữ liệu vị trí</p>
-            </div>
-        );
-    }
-
-    // Kiểm tra lat/long hợp lệ
-    const isValidLocation = latitude && longitude &&
-        !isNaN(latitude) && !isNaN(longitude) &&
-        Math.abs(latitude) <= 90 && Math.abs(longitude) <= 180;
-
-    return (
-        <div style={{ width: '100%', height: '50vh' }}>
-            <Map
-                ref={mapRef}
-                {...viewState}
-                onMove={(evt: any) => setViewState(evt.viewState)}
-                mapStyle="mapbox://styles/mapbox/streets-v11"
-                mapboxAccessToken={MAPBOX_TOKEN}
-                style={{ width: '100%', height: '100%' }}
-            >
-                {isValidLocation && (
-                    <>
-                        <Marker
-                            latitude={latitude}
-                            longitude={longitude}
-                        >
-                            <div
-                                style={{
-                                    width: '30px',
-                                    height: '30px',
-                                    background: '#ff0000',
-                                    borderRadius: '50%',
-                                    border: '2px solid white',
-                                    boxShadow: '0 2px 5px rgba(0,0,0,0.3)',
-                                    cursor: 'pointer'
-                                }}
-                                onClick={() => setShowPopup(true)}
-                            />
-                        </Marker>
-
-                        {showPopup && (
-                            <Popup
-                                latitude={latitude}
-                                longitude={longitude}
-                                anchor="bottom"
-                                onClose={() => setShowPopup(false)}
-                                closeOnClick={false}
-                            >
-                                <div style={{ padding: '8px' }}>
-                                    <strong>{dataLocation.name || 'Địa điểm'}</strong>
-                                    <p>{dataLocation.address || 'Chưa có địa chỉ'}</p>
-                                </div>
-                            </Popup>
-                        )}
-                    </>
-                )}
-            </Map>
-        </div>
-    );
-}
+    }, [selectedAgency])
+    return <div ref={mapContainerRef} id="map" style={{ height: '100vh' }}></div>;
+};
 
 export default LocationAgency;
