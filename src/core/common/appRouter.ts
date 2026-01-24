@@ -15,6 +15,8 @@ export const ROUTE_PATH = {
     BLOG: `${PREFIX}/tin-tuc`,
     AGENCY: `${PREFIX}/dai-ly`,
     SEARCH: `${PREFIX}/tim-kiem`,
+    INTRODUCE: `${PREFIX}/gioi-thieu`,
+    CONTACT: `${PREFIX}/lien-he`,
 
     ///Management
     MANAGE_LAYOUT: `${ADMIN_PREFIX}`,

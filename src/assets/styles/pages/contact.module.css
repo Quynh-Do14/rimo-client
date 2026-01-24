@@ -1,0 +1,10 @@
+.contactContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contactContainer iframe {
+  width: 100%;
+  height: 800px;
+}

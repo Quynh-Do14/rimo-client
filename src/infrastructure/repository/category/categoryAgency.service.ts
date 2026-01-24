@@ -1,14 +1,14 @@
 import { Endpoint } from "@/core/common/apiLink";
 import { FailMessage, SuccessMessage } from "@/infrastructure/common/toast/message";
-import { CategoryBlogInterface, CategoryBlogParams } from "@/infrastructure/interface/category/categoryBlog.interface";
+import { CategoryAgencyInterface, CategoryAgencyParams } from "@/infrastructure/interface/category/categoryAgency.interface";
 import { RequestService } from "@/infrastructure/utils/response";
 
-class CategoryBlogService {
-    async GetBlogCategory(params: CategoryBlogParams, setLoading: Function) {
+class CategoryAgencyService {
+    async GetAgencyCategory(params: CategoryAgencyParams, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
-                .get(Endpoint.BlogCategory.Get, {
+                .get(Endpoint.AgencyCategory.Get, {
                     ...params
                 })
                 .then(response => {
@@ -24,11 +24,11 @@ class CategoryBlogService {
             setLoading(false);
         }
     };
-    async GetBlogCategoryById(id: string, setLoading: Function) {
+    async GetAgencyCategoryById(id: string, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.BlogCategory.GetById}/${id}`)
+                .get(`${Endpoint.AgencyCategory.GetById}/${id}`)
                 .then(response => {
                     if (response) {
                         return response
@@ -44,11 +44,11 @@ class CategoryBlogService {
     };
 
 
-    async AddBlogCategoryAdmin(data: CategoryBlogInterface, onBack: Function, setLoading: Function) {
+    async AddAgencyCategoryAdmin(data: CategoryAgencyInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
-                .post(Endpoint.BlogCategory.Add,
+                .post(Endpoint.AgencyCategory.Add,
                     data
                 )
                 .then(response => {
@@ -67,11 +67,11 @@ class CategoryBlogService {
             setLoading(false);
         }
     }
-    async UpdateBlogCategoryAdmin(id: string, data: CategoryBlogInterface, onBack: Function, setLoading: Function) {
+    async UpdateAgencyCategoryAdmin(id: string, data: CategoryAgencyInterface, onBack: Function, setLoading: Function) {
         setLoading(true)
         try {
             return await RequestService
-                .put(`${Endpoint.BlogCategory.Update}/${id}`,
+                .put(`${Endpoint.AgencyCategory.Update}/${id}`,
                     data
                 )
                 .then(response => {
@@ -112,6 +112,6 @@ class CategoryBlogService {
     }
 }
 
-const categoryBlogService = new CategoryBlogService();
+const categoryAgencyService = new CategoryAgencyService();
 
-export default categoryBlogService;
+export default categoryAgencyService;

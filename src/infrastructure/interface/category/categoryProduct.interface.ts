@@ -10,3 +10,7 @@ export interface CategoryProductParams {
     limit?: number;
     search?: string;
 }
+export interface CategoryProductHref {
+    href: string
+    label: string
+}

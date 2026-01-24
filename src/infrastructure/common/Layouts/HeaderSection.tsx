@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "@/assets/styles/components/header.css";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import logo from '@/assets/images/logo.png'
 import Image from "next/image";
@@ -14,7 +14,7 @@ import brandService from "@/infrastructure/repository/brand/brand.service";
 import authService from "@/infrastructure/repository/auth/auth.service";
 import productService from "@/infrastructure/repository/product/product.service";
 import { convertSlug } from "@/infrastructure/helper/helper";
-import { CategoryBlogState, CategoryProductState } from "@/core/common/atoms/category/categoryState";
+import { CategoryAgencyState, CategoryBlogState, CategoryProductHrefState, CategoryProductState } from "@/core/common/atoms/category/categoryState";
 import { BrandState } from "@/core/common/atoms/brand/brandState";
 import { ProfileState } from "@/core/common/atoms/profile/profileState";
 import { ProductState } from "@/core/common/atoms/product/productState";
@@ -22,22 +22,23 @@ import ButtonCommon from "../button/button-common";
 import avatar from "@/assets/images/avatar.png";
 import SearchBoxHeader from "./SearchBox";
 import { ProductInterface } from "@/infrastructure/interface/product/product.interface";
+import categoryAgencyService from "@/infrastructure/repository/category/categoryAgency.service";
+import { CategoryProductInterface } from "@/infrastructure/interface/category/categoryProduct.interface";
 
 const HeaderSection = () => {
     const pathname = usePathname(); // Lấy đường dẫn hiện tại
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-    const [isScrolled, setIsScrolled] = useState<boolean>(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const [showDropdown, setShowDropdown] = useState<boolean>(false);
-    const [searchText, setSearchText] = useState<string>('');
 
-    const [categoryProductState, setCategoryProductState] = useRecoilState(CategoryProductState);
+    const [, setCategoryProductState] = useRecoilState(CategoryProductState);
+    const [categoryProductHrefState, setCategoryProductHrefState] = useRecoilState(CategoryProductHrefState);
     const [, setCategoryBlogState] = useRecoilState(CategoryBlogState);
+    const [, setCategoryAgencyState] = useRecoilState(CategoryAgencyState);
     const [, setBrandState] = useRecoilState(BrandState);
     const [, setProfileState] = useRecoilState(ProfileState);
     const [productState, setProductState] = useRecoilState(ProductState);
     const token = isTokenStoraged();
-    const router = useRouter();
 
     // Xác định menu active dựa trên URL
     const getActiveMenu = () => {
@@ -59,6 +60,18 @@ const HeaderSection = () => {
                 setCategoryProductState({
                     data: res.data
                 })
+                const data = res.data?.map((item: CategoryProductInterface) => {
+                    const result = {
+                        href: `${ROUTE_PATH.PRODUCT}?category_id=${item.id}`,
+                        label: item.name,
+                    }
+                    return result;
+                })
+
+                setCategoryProductHrefState({
+                    data: data
+                })
+
             })
         }
         catch (error) {
@@ -73,6 +86,24 @@ const HeaderSection = () => {
                 () => { }
             ).then((res) => {
                 setCategoryBlogState({
+                    data: res.data
+                })
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+
+    const onGetListAgencyCategoryAsync = async () => {
+        try {
+            await categoryAgencyService.GetAgencyCategory(
+                {
+                    limit: 1000
+                },
+                () => { }
+            ).then((res) => {
+                setCategoryAgencyState({
                     data: res.data
                 })
             })
@@ -144,6 +175,7 @@ const HeaderSection = () => {
         onGetListBlogCategoryAsync().then(_ => { });
         // onGetListBrandAsync().then(_ => { });
         onGetListProductAsync().then(_ => { });
+        onGetListAgencyCategoryAsync().then(_ => { });
     }, []);
 
     useEffect(() => {
@@ -175,10 +207,6 @@ const HeaderSection = () => {
         }
     };
 
-    const onSearch = () => {
-        router.push(`${ROUTE_PATH.SEARCH}?search=${searchText.toString()}`);
-    }
-
     const menuItems = [
         {
             id: "home",
@@ -189,7 +217,7 @@ const HeaderSection = () => {
             id: "products",
             label: "SẢN PHẨM",
             href: ROUTE_PATH.PRODUCT,
-            dropdown: productState.data
+            dropdown: categoryProductHrefState.data
         },
         {
             id: "agency",

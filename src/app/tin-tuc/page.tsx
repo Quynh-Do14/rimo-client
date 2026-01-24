@@ -154,6 +154,7 @@ const BlogContent = () => {
                                     listDataOfItem={categoryBlogState}
                                     onChange={onChangeCategory}
                                     label={"Danh mục tin tức"}
+                                    value={categoryId}
                                 />
                             </div>
 

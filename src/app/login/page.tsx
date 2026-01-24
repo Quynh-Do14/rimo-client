@@ -46,8 +46,6 @@ const ModernLogin = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Xử lý login logic
-        console.log('Login submitted:', formData);
         handleLoginSubmit()
     };
     return (

@@ -11,7 +11,7 @@ import { calculateCenter, configImageURL } from '@/infrastructure/helper/helper'
 import SelectSearchCommon from '@/infrastructure/common/input/select-search-common';
 import ButtonCommon from '@/infrastructure/common/button/button-common';
 import { useRecoilValue } from 'recoil';
-import { CategoryBlogState } from '@/core/common/atoms/category/categoryState';
+import { CategoryAgencyState, CategoryBlogState } from '@/core/common/atoms/category/categoryState';
 import LocationMap from './map';
 import districtService from '@/infrastructure/repository/district/district.service';
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
@@ -33,11 +33,14 @@ const AgencyContent = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [provinceSelected, setProvinceSelected] = useState<string>("");
     const [districtSelected, setDistrictSelected] = useState<string>("");
+    const [categoryIdSelected, setCategoryIdSelected] = useState<string>("");
+
     const [selectedAgency, setSelectedAgency] = useState<AgencyInterface | null>();
     const [map, setMap] = useState<any>({});
 
     const [listProvince, setListProvince] = useState<Array<any>>([])
     const [listDistrict, setListDistrict] = useState<Array<any>>([])
+    const categoryAgencyState = useRecoilValue(CategoryAgencyState).data;
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -46,15 +49,18 @@ const AgencyContent = () => {
     const limit = searchParams?.get('limit') || '10';
     const province = searchParams?.get('province') || '';
     const district = searchParams?.get('district') || '';
+    const categoryId = searchParams?.get('category_id') || '';
+
     const mapContainerRef = useRef<any>(null);
 
-    const onGetListAgencyAsync = async ({ name = searchText, limit = pageSize, page = currentPage, province = provinceSelected, district = districtSelected }) => {
+    const onGetListAgencyAsync = async ({ name = searchText, limit = pageSize, page = currentPage, province = provinceSelected, district = districtSelected, category_id = categoryIdSelected }) => {
         const param: AgencyParams = {
             page: page,
             limit: limit,
             search: name,
             province: province,
-            district: district
+            district: district,
+            category_id: category_id
         };
 
         try {
@@ -126,8 +132,8 @@ const AgencyContent = () => {
     };
 
 
-    const onSearch = async (name = searchText, limit = pageSize, page = 1, province = provinceSelected, district = districtSelected) => {
-        await onGetListAgencyAsync({ name: name, limit: limit, page: page, province: province, district: district }).then(_ => { });
+    const onSearch = async (name = searchText, limit = pageSize, page = 1, province = provinceSelected, district = districtSelected, category_id = categoryIdSelected) => {
+        await onGetListAgencyAsync({ name: name, limit: limit, page: page, province: province, district: district, category_id: category_id }).then(_ => { });
     };
 
     const onSearchParam = async () => {
@@ -136,10 +142,11 @@ const AgencyContent = () => {
         params.set('search', searchText);
         params.set('province', provinceSelected);
         params.set('district', districtSelected);
+        params.set('category_id', categoryIdSelected);
         params.set('page', '1'); // Reset về trang 1 khi search
         router.push(`${ROUTE_PATH.AGENCY}?${params.toString()}`);
 
-        await onSearch(searchText, pageSize, 1, provinceSelected, districtSelected).then(_ => { });
+        await onSearch(searchText, pageSize, 1, provinceSelected, districtSelected, categoryIdSelected).then(_ => { });
         setSelectedAgency(null);
     }
 
@@ -155,6 +162,10 @@ const AgencyContent = () => {
         setDistrictSelected(e.target.value);
     };
 
+    const onChangeCategory = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setCategoryIdSelected(e.target.value);
+    };
+
     const onChangePage = async (page: number) => {
         setCurrentPage(page);
 
@@ -163,7 +174,7 @@ const AgencyContent = () => {
         params.set('page', page.toString());
         router.push(`${ROUTE_PATH.AGENCY}?${params.toString()}`);
 
-        await onSearch(searchText, pageSize, page, provinceSelected, districtSelected).then(_ => { });
+        await onSearch(searchText, pageSize, page, provinceSelected, districtSelected, categoryIdSelected).then(_ => { });
     }
 
 
@@ -173,14 +184,16 @@ const AgencyContent = () => {
         const parsedSearch = search || "";
         const parsedProvince = province || "";
         const parsedDistrict = district || "";
+        const parsedCategoryId = categoryId || "";
 
         setSearchText(parsedSearch);
         setCurrentPage(parsedPage);
         setPageSize(parsedLimit);
         setProvinceSelected(parsedProvince);
+        setCategoryIdSelected(parsedCategoryId);
 
-        onSearch(parsedSearch, parsedLimit, parsedPage, parsedProvince, parsedDistrict);
-    }, [search, page, limit, province, district]); // Theo dõi các giá trị từ searchParams
+        onSearch(parsedSearch, parsedLimit, parsedPage, parsedProvince, parsedDistrict, parsedCategoryId);
+    }, [search, page, limit, province, district, categoryId]); // Theo dõi các giá trị từ searchParams
 
     const selectedMarkerRef = useRef<mapboxgl.Marker | null>(null);
     const selectedPopupRef = useRef<mapboxgl.Popup | null>(null);
@@ -301,7 +314,7 @@ const AgencyContent = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 mb-8">
                             {/* Search Input - 5/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-4">
+                            <div className="sm:col-span-3">
                                 <InputSearchCommon
                                     placeholder={'Tìm kiếm đại lý'}
                                     value={searchText}
@@ -309,27 +322,35 @@ const AgencyContent = () => {
                                     disabled={false}
                                 />
                             </div>
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-2">
                                 <SelectSearchProvince
                                     listDataOfItem={listProvince}
                                     onChange={onChangeProvince}
                                     valueName='code'
                                     labelName='name'
+                                    value={provinceSelected}
                                     label={'Tỉnh/Thành phố'}
                                 />
                             </div>
 
-                            {/* Category Select - 4/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-2">
                                 <SelectSearchCommon
                                     listDataOfItem={listDistrict}
                                     onChange={onChangeDistrict}
                                     valueName='name'
                                     labelName='name'
+                                    value={districtSelected}
                                     label={'Quận/Huyện'} />
                             </div>
-
-                            {/* Search Button - 3/12 columns on desktop, full on mobile */}
+                            <div className="sm:col-span-3">
+                                <SelectSearchCommon
+                                    listDataOfItem={categoryAgencyState}
+                                    onChange={onChangeCategory}
+                                    valueName='id'
+                                    labelName='name'
+                                    label={'Dòng sản phẩm'}
+                                    value={categoryIdSelected} />
+                            </div>
                             <div className="sm:col-span-2">
                                 <ButtonCommon
                                     onClick={onSearchParam}

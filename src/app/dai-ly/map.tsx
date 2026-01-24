@@ -75,12 +75,6 @@ const LocationAgency = (props: Props) => {
             center: [108, 4]
         });
         if (Object.keys(selectedAgency).length) {
-            console.log('selectedAgency', selectedAgency);
-            console.log('long', Number(selectedAgency.long));
-            console.log('long', Number(selectedAgency.lat));
-
-            console.log('vào', (Math.random() - 0.5) * 360, (Math.random() - 0.5) * 100);
-
             map.flyTo({
                 center: [105.79691347774877, 21.038582146742414],
                 essential: true // this animation is considered essential with respect to prefers-reduced-motion

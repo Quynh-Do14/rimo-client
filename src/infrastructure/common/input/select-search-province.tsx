@@ -4,6 +4,7 @@ import styles from "@/assets/styles/components/input.module.css"
 type Props = {
     listDataOfItem: Array<any>,
     onChange: any
+    value: string,
     valueName?: string;
     labelName?: string;
     label: string;
@@ -13,6 +14,7 @@ const SelectSearchProvince = (props: Props) => {
     const {
         listDataOfItem,
         onChange,
+        value,
         valueName = 'id',
         labelName = 'name',
         label
@@ -24,6 +26,7 @@ const SelectSearchProvince = (props: Props) => {
                 <select
                     onChange={onChange}
                     className={styles.textInput}
+                    value={value}
                 >  <option value="">-- Chọn {label.toLowerCase()} --</option>
                     {
                         listDataOfItem && listDataOfItem.length && listDataOfItem.map((item, index) => {

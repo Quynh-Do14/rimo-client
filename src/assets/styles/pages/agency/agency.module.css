@@ -345,7 +345,6 @@
   .agencyContainer .agencyMain {
     grid-template-columns: 1fr;
     gap: 32px;
-    padding: 0 20px;
   }
 
   .rightSide {
@@ -418,7 +417,6 @@
   }
 
   .agencyContainer .agencyMain {
-    padding: 0 16px;
     gap: 20px;
   }
 

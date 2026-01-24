@@ -80,16 +80,6 @@ const ProductSection = () => {
                                                         style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
                                                     />
                                                     <div className="media-overlay"></div>
-
-                                                    {/* Play Button for Video */}
-                                                    {item.type === 'video' && (
-                                                        <button className="play-btn">
-                                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                <circle cx="12" cy="12" r="10" />
-                                                                <polygon points="10 8 16 12 10 16 10 8" />
-                                                            </svg>
-                                                        </button>
-                                                    )}
                                                 </div>
                                             </div>
                                         </div>

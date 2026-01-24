@@ -16,4 +16,5 @@ export interface AgencyParams {
     search: string;
     province: string;
     district: string;
+    category_id: string;
 }

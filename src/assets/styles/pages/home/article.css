@@ -830,7 +830,7 @@
 @media (min-width: 1600px) {
   .news-article-container {
     max-width: 1600px;
-    padding: 80px 60px;
+    padding: 40px 60px;
   }
 
   .news-article-container .article-title {

@@ -84,7 +84,6 @@ const FullWidthSlider = () => {
         { number: "99%", label: "Hài lòng", suffix: "hài lòng" },
         { number: "24/7", label: "Hỗ trợ", suffix: "hỗ trợ" }
     ];
-    console.log('listBanner', listBanner);
 
     return (
         <div className="modern-slider-container">

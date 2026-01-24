@@ -46,7 +46,6 @@
 .car-tech-slider-container .slider-wrapper {
   position: relative;
   padding: 0 5px;
-  margin-bottom: 40px;
 }
 
 .car-tech-slider-container .car-slide-item {
@@ -323,7 +322,7 @@
 @media (min-width: 1200px) {
   .car-tech-slider-container {
     max-width: 1600px;
-    padding: 80px 60px;
+    padding: 40px 60px;
   }
 
   .car-tech-slider-container .car-slide-content {
