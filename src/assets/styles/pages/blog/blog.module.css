@@ -1,16 +1,16 @@
 /* Base Styles - Mobile First */
 .blogContainer {
-  background: #141414;
+  /* background: #1a1a1a; */
+  /* background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); */
+  background: linear-gradient(180deg, #222222 0%, #3a3a3a 100%);
 }
 
 .newsArticleContainer {
   width: 100%;
-  max-width: 1400px;
-  margin: 20px auto;
-  padding: 30px 20px;
   display: flex;
   flex-direction: column;
   gap: 40px;
+  margin: 20px 0;
 }
 
 /* Header */
@@ -365,10 +365,6 @@
 
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-  .newsArticleContainer {
-    padding: 40px 25px;
-  }
-
   .newsArticleContainer .articleTitle {
     font-size: 2.2rem;
   }
@@ -443,10 +439,6 @@
 
 /* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) {
-  .newsArticleContainer {
-    padding: 60px 40px;
-  }
-
   .newsArticleContainer .articleTitle {
     font-size: 2.5rem;
   }
@@ -470,10 +462,6 @@
 
 /* Extra large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
-  .newsArticleContainer {
-    max-width: 1400px;
-  }
-
   .newsArticleContainer .articleTitle {
     font-size: 2.8rem;
   }
@@ -501,11 +489,6 @@
 
 /* Ultra wide devices (4K, 1600px and up) */
 @media (min-width: 1600px) {
-  .newsArticleContainer {
-    max-width: 1600px;
-    padding: 80px 60px;
-  }
-
   .newsArticleContainer .articleTitle {
     font-size: 3rem;
   }
@@ -593,10 +576,6 @@
 
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
-  .newsArticleContainer {
-    background: #1a1a1a;
-  }
-
   .newsArticleContainer .articleTitle,
   .newsArticleContainer .articleSubtitle,
   .newsArticleContainer .featuredTitle,

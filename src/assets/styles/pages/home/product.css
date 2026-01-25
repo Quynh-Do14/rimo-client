@@ -80,7 +80,7 @@
 .gallery-container .gallery-header .main-title {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #fff;
+  color: #333333;
   text-transform: capitalize;
   letter-spacing: 2px;
   line-height: 1.2;
@@ -221,7 +221,7 @@
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid #ffd700b8;
   transition: all 0.4s ease;
 }
 
@@ -353,7 +353,7 @@
 .product-section .item-title {
   font-size: 1.3rem;
   font-weight: 600;
-  color: white;
+  color: #323232;
   margin: 0 0 12px 0;
   line-height: 1.3;
 }
@@ -365,6 +365,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  color: #323232;
 }
 
 .product-section .sale-price {
@@ -374,14 +375,14 @@
 }
 
 .product-section .original-price {
-  color: #fffcfc;
+  color: #323232;
   font-size: 16px;
   text-decoration: line-through;
   font-weight: 400;
 }
 
 .product-section .normal-price {
-  color: #ffffff;
+  color: #323232;
   font-size: 18px;
   font-weight: 600;
 }

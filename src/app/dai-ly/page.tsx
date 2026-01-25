@@ -19,6 +19,8 @@ import SelectSearchProvince from '@/infrastructure/common/input/select-search-pr
 import { AgencyInterface, AgencyParams } from '@/infrastructure/interface/agency/agency.interface';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import BannerCommon from '@/infrastructure/common/banner/BannerCommon';
+import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibnRkMTAxMDIwMDAiLCJhIjoiY2tvbzJ4anl1MDZjMzJwbzNpcnA5NXZpcCJ9.dePfFDv0RlCLnWoDq1zHlw';
 
@@ -85,7 +87,7 @@ const AgencyContent = () => {
             // 👉 Init map (CHỈ TẠO 1 LẦN)
             const mapInstance = new mapboxgl.Map({
                 container: mapContainerRef.current!,
-                style: 'mapbox://styles/mapbox/streets-v12',
+                style: 'mapbox://styles/mapbox/outdoors-v12',
                 center,
                 zoom: 12
             });
@@ -295,6 +297,9 @@ const AgencyContent = () => {
 
     return (
         <ClientLayout>
+            <BannerCommon
+                bannerImg={banner}
+            />
             <div className={styles.agencyContainer}>
                 <div className='padding-common'>
                     <BreadcrumbCommon

@@ -214,6 +214,11 @@ const HeaderSection = () => {
             href: ROUTE_PATH.HOME_PAGE,
         },
         {
+            id: "introduce",
+            label: "GIỚI THIỆU",
+            href: ROUTE_PATH.INTRODUCE,
+        },
+        {
             id: "products",
             label: "SẢN PHẨM",
             href: ROUTE_PATH.PRODUCT,
@@ -228,6 +233,11 @@ const HeaderSection = () => {
             id: "blog",
             label: "TIN TỨC",
             href: ROUTE_PATH.BLOG,
+        },
+        {
+            id: "contact",
+            label: "LIÊN HỆ",
+            href: ROUTE_PATH.CONTACT,
         },
     ];
 

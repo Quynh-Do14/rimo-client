@@ -12,9 +12,13 @@ export default function Home() {
     <ClientLayout>
       <div className={styles.homePageContainer}>
         <FullWidthSlider />
-        <SloganSlider />
+        <div className={styles.darkBackground}>
+          <SloganSlider />
+        </div>
         <ProductSection />
-        <IntroduceSection />
+        <div className={styles.darkBackground}>
+          <IntroduceSection />
+        </div>
         <ArticleSection />
       </div>
     </ClientLayout>

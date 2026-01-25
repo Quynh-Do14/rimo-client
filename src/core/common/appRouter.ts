@@ -16,7 +16,15 @@ export const ROUTE_PATH = {
     AGENCY: `${PREFIX}/dai-ly`,
     SEARCH: `${PREFIX}/tim-kiem`,
     INTRODUCE: `${PREFIX}/gioi-thieu`,
+
     CONTACT: `${PREFIX}/lien-he`,
+    TERMS_AND_CONDITIONS: `${PREFIX}/chinh-sach/thong-tin-ve-dieu-kien-giao-dich-chung`,
+    PRIVACY_POLICY: `${PREFIX}/chinh-sach/chinh-sach-bao-mat`,
+    PURCHASE_POLICY: `${PREFIX}/chinh-sach/chinh-sach-mua-hang`,
+    WARRANTY_RETURN_POLICY: `${PREFIX}/chinh-sach/chinh-sach-bao-hanh-doi-tra-hang`,
+    SHIPPING_DELIVERY_INFO: `${PREFIX}/chinh-sach/chinh-sach-giao-hang`,
+    PAYMENT_METHODS_INFO: `${PREFIX}/chinh-sach/chinh-sach-thanh-toan`,
+
 
     ///Management
     MANAGE_LAYOUT: `${ADMIN_PREFIX}`,

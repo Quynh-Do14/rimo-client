@@ -125,7 +125,7 @@ const BlogContent = () => {
                     <BreadcrumbCommon
                         breadcrumb={"Tin tức"}
                         redirect={ROUTE_PATH.BLOG}
-                        title={""}
+                        title={"Tin tức mới nhất"}
                     />
                     <div className={styles.newsArticleContainer}>
                         {/* Header */}
@@ -172,8 +172,8 @@ const BlogContent = () => {
                                 ?
                                 <BlogSkeleton />
                                 :
-                                listBlog.map(article => (
-                                    <div key={article.id} className={styles.newsCard}>
+                                listBlog.map((article, index) => (
+                                    <div key={index} className={styles.newsCard}>
                                         <div className={styles.cardImage}>
                                             <Image
                                                 src={configImageURL(article.image)}

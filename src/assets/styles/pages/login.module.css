@@ -1,7 +1,7 @@
 /* ===== Main Container ===== */
 .loginPage {
   min-height: 100vh;
-  background: #0A0A0A;
+  background: #ffffff;
   position: relative;
   overflow: hidden;
   display: flex;

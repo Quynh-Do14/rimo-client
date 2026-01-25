@@ -1,16 +1,11 @@
 'use client'
-import styles from '@/assets/styles/pages/introduce.module.css'
+import styles from '@/assets/styles/pages/policy.module.css'
 
-const tableOfContents = [
-    { id: 'gioi-thieu', name: 'Giới thiệu chung' },
-    { id: 'tam-nhin', name: 'Tầm nhìn' },
-    { id: 'su-menh', name: 'Sứ mệnh' },
-    { id: 'gia-tri-cot-loi', name: 'Giá trị cốt lõi RIMO' },
-    { id: 'su-khac-biet', name: 'Sự khác biệt của phim cách nhiệt Rimo' },
-    { id: 'doi-tac', name: 'Đối tác của Rimo' },
-]
-
-const TocClient = () => {
+type Props = {
+    tableOfContents: Array<{ id: string, name: string }>
+}
+const TocClient = (props: Props) => {
+    const { tableOfContents } = props
     const onHref = (id: string) => {
         const el = document.getElementById(id)
         if (!el) return
@@ -25,7 +20,7 @@ const TocClient = () => {
             <ol className={styles.tocList}>
                 {
                     tableOfContents.map((item, index) => (
-                        <li key={index}><a onClick={() => onHref(item.id)}>{index + 1}. {item.name}</a></li>
+                        <li key={index}><a onClick={() => onHref(item.id)}>{item.name}</a></li>
 
                     ))
                 }

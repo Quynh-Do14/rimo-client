@@ -148,6 +148,7 @@ const SearchContent = () => {
                                     listDataOfItem={categoryProductState}
                                     onChange={onChangeCategory}
                                     label={"Danh mục sản phẩm"}
+                                    value={categoryId}
                                 />
                             </div>
 

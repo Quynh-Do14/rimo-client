@@ -191,7 +191,7 @@ const ArticleSection = () => {
             </div>
 
             {/* Load More */}
-            <Link href={ROUTE_PATH.BLOG}>
+            {/* <Link href={ROUTE_PATH.BLOG}>
                 <div className="load-more-article">
                     <button className="load-more-btn">
                         <span className="btn-text">TẢI THÊM BÀI VIẾT</span>
@@ -202,7 +202,7 @@ const ArticleSection = () => {
                         </span>
                     </button>
                 </div>
-            </Link>
+            </Link> */}
         </div >
     );
 };
