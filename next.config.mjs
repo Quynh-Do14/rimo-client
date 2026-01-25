@@ -38,6 +38,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'api.autofusion.vn',
         pathname: '/api/uploads/**'
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/**'
       }
     ]
   },

@@ -9,17 +9,63 @@ import { Endpoint } from '@/core/common/apiLink';
 import ProductAdvantageComponent from './components/advantage';
 import RelationProductComponent from './components/relationProduct';
 import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
+import BlogInProductSlug from './components/blogRandom';
 
 type Props = {
     params: { slug: string };
 };
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
-
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 export async function generateMetadata
     ({ params }: Props): Promise<Metadata> {
     const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${splitTakeId(params.slug)}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) => res.json());
+    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${params.slug}`;
+
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": productUrl,    // ✅ Nhất quán
+        "url": productUrl,    // ✅ Nhất quán
+        "name": product.name,
+        "description": product.short_description || product.description,
+        "image": configImageURL(product.image),
+        "offers": {
+            "@type": "Offer",
+            "url": productUrl, // ✅ Nhất quán
+            "priceCurrency": "VND",
+            "price": product.price?.toString(),
+            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            // ❓ "availability": "https://schema.org/InStock", // Xem phần 2
+            // ❓ "itemCondition": "https://schema.org/NewCondition" // Xem phần 3
+        },
+    };
+
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Sản phẩm",
+                "item": `${publicURL}/${ROUTE_PATH.PRODUCT}` // ✅ Nhất quán
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": product.name,
+                "item": productUrl // ✅ Nhất quán
+            }
+        ]
+    };
 
     return {
         title: product.name,
@@ -29,6 +75,9 @@ export async function generateMetadata
             description: product.short_description,
             images: configImageURL(product.image),
         },
+        other: {
+            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema])
+        }
     };
 }
 
@@ -127,7 +176,12 @@ const ProductSlugPage = async ({ params }: Props) => {
                     </div>
                     <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
                 </div>
-
+                <div className={`${styles.content} padding-common`}>
+                    <div className={styles.specificationHeader}>
+                        <div className={styles.title}>Tin tức</div>
+                    </div>
+                    <BlogInProductSlug />
+                </div>
             </div>
         </ClientLayout>
     )

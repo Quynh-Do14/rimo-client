@@ -8,6 +8,8 @@ export interface AgencyInterface {
     image: string;
     province: string;
     district: string;
+    star_rate: number;
+    categories: AgencyCategory[]
 }
 
 export interface AgencyParams {
@@ -17,4 +19,11 @@ export interface AgencyParams {
     province: string;
     district: string;
     category_id: string;
+}
+
+interface AgencyCategory {
+    id?: number;
+    category_id: string,
+    agency_id: string,
+    category_name: string,
 }

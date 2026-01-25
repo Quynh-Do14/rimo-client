@@ -4,14 +4,15 @@ import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb';
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout';
 import agencyService from '@/infrastructure/repository/agency/agency.service';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import styles from '@/assets/styles/pages/agency/agency.module.css'
 import Image from 'next/image';
-import { configImageURL } from '@/infrastructure/helper/helper';
+import { calculateCenter, configImageURL } from '@/infrastructure/helper/helper';
 import SelectSearchCommon from '@/infrastructure/common/input/select-search-common';
 import ButtonCommon from '@/infrastructure/common/button/button-common';
 import { useRecoilValue } from 'recoil';
-import { CategoryAgencyState } from '@/core/common/atoms/category/categoryState';
+import { CategoryAgencyState, CategoryBlogState } from '@/core/common/atoms/category/categoryState';
+import LocationMap from './map';
 import districtService from '@/infrastructure/repository/district/district.service';
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
@@ -20,8 +21,8 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon';
 import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
-import GoogleMapView from './ggmap';
-import AgencySkeleton from './skeleton';
+
+mapboxgl.accessToken = 'pk.eyJ1IjoibnRkMTAxMDIwMDAiLCJhIjoiY2tvbzJ4anl1MDZjMzJwbzNpcnA5NXZpcCJ9.dePfFDv0RlCLnWoDq1zHlw';
 
 const AgencyContent = () => {
     const [listAgency, setListAgency] = useState<Array<AgencyInterface>>([])
@@ -35,7 +36,6 @@ const AgencyContent = () => {
     const [provinceSelected, setProvinceSelected] = useState<string>("");
     const [districtSelected, setDistrictSelected] = useState<string>("");
     const [categoryIdSelected, setCategoryIdSelected] = useState<string>("");
-    const [initialLoading, setInitialLoading] = useState<boolean>(true);
 
     const [selectedAgency, setSelectedAgency] = useState<AgencyInterface | null>();
     const [map, setMap] = useState<any>({});
@@ -72,6 +72,62 @@ const AgencyContent = () => {
             setTotalElement(res.limit);
             setTotalPage(res.totalPages);
             setTotal(res.total);
+
+            // 👉 Tính center map
+            const features = res.data.map((item: AgencyInterface) => ({
+                lng: Number(item.long),
+                lat: Number(item.lat)
+            }));
+
+            const center = [
+                features.reduce((s: any, f: any) => s + f.lng, 0) / features.length,
+                features.reduce((s: any, f: any) => s + f.lat, 0) / features.length
+            ] as [number, number];
+
+            // 👉 Init map (CHỈ TẠO 1 LẦN)
+            const mapInstance = new mapboxgl.Map({
+                container: mapContainerRef.current!,
+                style: 'mapbox://styles/mapbox/outdoors-v12',
+                center,
+                zoom: 12
+            });
+
+            setMap(mapInstance);
+
+            mapInstance.on('load', () => {
+                // 👉 Add marker + popup
+                res.data.forEach((item: AgencyInterface) => {
+                    const popup = new mapboxgl.Popup({
+                        offset: 25,
+                        closeButton: true
+                    }).setHTML(`
+                <div class="agency-popup">
+                            <strong>${item.name}</strong>
+
+                            <p class="popup-row">
+                            <svg class="popup-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span>${item.address}</span>
+                            </p>
+
+                            <p class="popup-row">
+                            <svg class="popup-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                            <span>${item.phone_number}</span>
+                            </p>
+                        </div>
+                    `);
+
+                    new mapboxgl.Marker({ color: 'red' })
+                        .setLngLat([Number(item.long), Number(item.lat)])
+                        .setPopup(popup)
+                        .addTo(mapInstance);
+                });
+            });
+
         } catch (error) {
             console.error(error);
         }
@@ -90,10 +146,7 @@ const AgencyContent = () => {
         params.set('district', districtSelected);
         params.set('category_id', categoryIdSelected);
         params.set('page', '1'); // Reset về trang 1 khi search
-        router.replace(`${ROUTE_PATH.AGENCY}?${params.toString()}`,
-            {
-                scroll: false  // Không scroll lên đầu trang
-            });
+        router.push(`${ROUTE_PATH.AGENCY}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, 1, provinceSelected, districtSelected, categoryIdSelected).then(_ => { });
         setSelectedAgency(null);
@@ -121,10 +174,7 @@ const AgencyContent = () => {
         // Cập nhật params với page mới
         const params = new URLSearchParams(searchParams?.toString() || '');
         params.set('page', page.toString());
-        router.replace(`${ROUTE_PATH.AGENCY}?${params.toString()}`,
-            {
-                scroll: false  // Không scroll lên đầu trang
-            });
+        router.push(`${ROUTE_PATH.AGENCY}?${params.toString()}`);
 
         await onSearch(searchText, pageSize, page, provinceSelected, districtSelected, categoryIdSelected).then(_ => { });
     }
@@ -147,8 +197,62 @@ const AgencyContent = () => {
         onSearch(parsedSearch, parsedLimit, parsedPage, parsedProvince, parsedDistrict, parsedCategoryId);
     }, [search, page, limit, province, district, categoryId]); // Theo dõi các giá trị từ searchParams
 
+    const selectedMarkerRef = useRef<mapboxgl.Marker | null>(null);
+    const selectedPopupRef = useRef<mapboxgl.Popup | null>(null);
+
     const onSelectAgency = (item: AgencyInterface) => {
         setSelectedAgency(item);
+        if (!map) return;
+        map.flyTo({
+            center: [Number(item.long), Number(item.lat)],
+            zoom: 16,
+            speed: 1.2,
+            essential: true
+        });
+
+        // ✅ Xoá marker & popup cũ
+        selectedMarkerRef.current?.remove();
+        selectedPopupRef.current?.remove();
+        // ✅ Tạo popup mới
+        const popup = new mapboxgl.Popup({
+            offset: 25,
+            closeButton: true,
+            closeOnClick: false,
+            maxWidth: '240px',
+            focusAfterOpen: false
+        }).setHTML(`
+            <div class="agency-popup">
+                <strong>${item.name}</strong>
+
+                <p class="popup-row">
+                <svg class="popup-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>${item.address}</span>
+                </p>
+
+                <p class="popup-row">
+                <svg class="popup-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>${item.phone_number}</span>
+                </p>
+            </div>
+            `)
+
+        // ✅ Tạo marker mới
+        const marker = new mapboxgl.Marker({ color: 'red' })
+            .setLngLat([Number(item.long), Number(item.lat)])
+            .setPopup(popup)
+            .addTo(map);
+
+        // ✅ Lưu lại reference
+        selectedMarkerRef.current = marker;
+        selectedPopupRef.current = popup;
+
+        // ✅ Mở popup
+        marker.togglePopup();
     };
     const onGetListProvinceAsync = async () => {
         const param = {
@@ -157,7 +261,7 @@ const AgencyContent = () => {
         try {
             await districtService.getAll(
                 param,
-                () => { }
+                setLoading
             ).then((res) => {
                 setListProvince(res);
             })
@@ -172,7 +276,7 @@ const AgencyContent = () => {
             try {
                 await districtService.getDetail(
                     String(provinceSelected).split('-')[0],
-                    () => { }
+                    setLoading
                 ).then((res) => {
                     setListDistrict(res.districts);
                 })
@@ -190,23 +294,6 @@ const AgencyContent = () => {
     useEffect(() => {
         onGetListDistrictAsync().then(_ => { });
     }, [provinceSelected]);
-
-    useLayoutEffect(() => {
-        setInitialLoading(false);
-    });
-
-    const onReset = () => {
-        setSearchText('');
-        setDistrictSelected('');
-        setProvinceSelected('');
-        setCategoryIdSelected('');
-        setCurrentPage(1);
-        router.replace(`${ROUTE_PATH.AGENCY}`,
-            {
-                scroll: false  // Không scroll lên đầu trang
-            }
-        );
-    }
 
     return (
         <ClientLayout>
@@ -281,103 +368,78 @@ const AgencyContent = () => {
                             <div className={styles.agencyMain}>
                                 <div className={styles.leftSide}>
                                     <div className={styles.leftSideContent}>
-                                        {
-                                            initialLoading || loading ? (
-                                                <AgencySkeleton />
-                                            ) :
-                                                listAgency.length > 0 ?
-                                                    listAgency.map((item, index) => (
-                                                        <div
-                                                            className={`${styles.agencyCard} ${selectedAgency?.id == item.id ? styles.active : null}`}
-                                                            key={index}
-                                                            onClick={() => onSelectAgency(item)}
-                                                        >
-                                                            <div className={styles.cardImage}>
-                                                                <div className={styles.imageOverlay}></div>
-                                                                <Image
-                                                                    src={configImageURL(item.image)}
-                                                                    alt={item.name}
-                                                                    width={300}
-                                                                    height={200}
-                                                                    className={styles.cardImageImg}
-                                                                />
-                                                                <div className={styles.cardRating}>
-                                                                    <svg className={styles.starIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                                                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                                                                    </svg>
-                                                                    <span className={styles.ratingText}>{item.star_rate}</span>
-                                                                </div>
+                                        {listAgency.map((item, index) => (
+                                            <div
+                                                className={`${styles.agencyCard} ${selectedAgency?.id == item.id ? styles.active : null}`}
+                                                key={index}
+                                                onClick={() => onSelectAgency(item)}
+                                            >
+                                                <div className={styles.cardImage}>
+                                                    <div className={styles.imageOverlay}></div>
+                                                    <Image
+                                                        src={configImageURL(item.image)}
+                                                        alt={item.name}
+                                                        width={300}
+                                                        height={200}
+                                                        className={styles.cardImageImg}
+                                                    />
+                                                    <div className={styles.cardRating}>
+                                                        <svg className={styles.starIcon} width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                                                        </svg>
+                                                        <span className={styles.ratingText}>5.0</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className={styles.cardContent}>
+                                                    <div className={styles.cardHeader}>
+                                                        <h3 className={styles.cardName}>{item.name}</h3>
+                                                        <div className={styles.cardStatus}>
+                                                            <span className={styles.statusDot}></span>
+                                                            <span className={styles.statusText}>Mở cửa</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className={styles.cardInfo}>
+                                                        <div className={styles.infoItem}>
+                                                            <div className={styles.infoIconWrapper}>
+                                                                <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                                                    <circle cx="12" cy="10" r="3"></circle>
+                                                                </svg>
                                                             </div>
-
-                                                            <div className={styles.cardContent}>
-                                                                <div className={styles.cardHeader}>
-                                                                    <h3 className={styles.cardName}>{item.name}</h3>
-                                                                </div>
-                                                                <div className={styles.cardInfo}>
-                                                                    <div className={styles.infoItem}>
-                                                                        <div className={styles.infoIconWrapper}>
-                                                                            <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                                                                <circle cx="12" cy="10" r="3"></circle>
-                                                                            </svg>
-                                                                        </div>
-                                                                        <div className={styles.infoContent}>
-                                                                            <p className={styles.cardAddress}>{item.address}</p>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className={styles.infoItem}>
-                                                                        <div className={styles.infoIconWrapper}>
-                                                                            <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                                                                            </svg>
-                                                                        </div>
-                                                                        <div className={styles.infoContent}>
-                                                                            <p className={styles.cardPhone}>{item.phone_number}</p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className={styles.cardFooter}>
-                                                                    <button className={styles.viewBtn}>
-                                                                        <span>Xem vị trí</span>
-                                                                        <svg className={styles.arrowIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                            <path d="M5 12h14"></path>
-                                                                            <path d="M12 5l7 7-7 7"></path>
-                                                                        </svg>
-                                                                    </button>
-                                                                </div>
+                                                            <div className={styles.infoContent}>
+                                                                <p className={styles.cardAddress}>{item.address}</p>
                                                             </div>
                                                         </div>
-                                                    ))
-                                                    : (
-                                                        <div className={styles.galleryContainer}>
-                                                            <div className={styles.noDataContainer}>
-                                                                <div className={styles.noDataIcon}>
-                                                                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                                        <circle cx="12" cy="12" r="10" />
-                                                                        <line x1="8" y1="8" x2="16" y2="16" />
-                                                                        <line x1="16" y1="8" x2="8" y2="16" />
-                                                                    </svg>
-                                                                </div>
-                                                                <h3 className={styles.noDataTitle}>Không tìm thấy đại lý</h3>
-                                                                <p className={styles.noDataDescription}>
-                                                                    Không có đại lý nào phù hợp với tìm kiếm của bạn.
-                                                                </p>
-                                                                <ButtonCommon
-                                                                    onClick={onReset}
-                                                                    title={'Xóa bộ lọc'}
-                                                                />
+
+                                                        <div className={styles.infoItem}>
+                                                            <div className={styles.infoIconWrapper}>
+                                                                <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                                </svg>
+                                                            </div>
+                                                            <div className={styles.infoContent}>
+                                                                <p className={styles.cardPhone}>{item.phone_number}</p>
                                                             </div>
                                                         </div>
-                                                    )}
+                                                    </div>
+
+                                                    <div className={styles.cardFooter}>
+                                                        <button className={styles.viewBtn}>
+                                                            <span>Xem vị trí</span>
+                                                            <svg className={styles.arrowIcon} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                <path d="M5 12h14"></path>
+                                                                <path d="M12 5l7 7-7 7"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                                 <div className={styles.rightSide}>
-                                    <GoogleMapView
-                                        agencies={listAgency}
-                                        selectedAgency={selectedAgency}
-                                    />
+                                    <div ref={mapContainerRef} style={{ position: "relative", width: "100%", height: '100%' }}></div>
                                 </div>
                             </div>
                         </div>

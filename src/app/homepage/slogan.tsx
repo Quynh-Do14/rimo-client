@@ -8,6 +8,9 @@ import categoryProductService from "@/infrastructure/repository/category/categor
 import { configImageURL } from "@/infrastructure/helper/helper";
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
+import videoService from "@/infrastructure/repository/video/video.service";
+import YouTubeThumbnail from "@/infrastructure/common/thumbnailYoutube/thumbnailYoutube";
+import { VideoInterface } from "@/infrastructure/interface/video/video.interface";
 
 const SloganSlider = () => {
     const settings = {
@@ -49,14 +52,14 @@ const SloganSlider = () => {
         ]
     };
 
-    const [listProductCategory, setListProductCategory] = useState<Array<any>>([])
+    const [listProductCategory, setListProductCategory] = useState<Array<VideoInterface>>([])
 
     const onGetListCategoryProductAsync = async () => {
         const param = {
             limit: 8,
         }
         try {
-            await categoryProductService.GetCategory(
+            await videoService.GetVideo(
                 param,
                 () => { }
             ).then((res) => {
@@ -86,7 +89,7 @@ const SloganSlider = () => {
             <div className="slider-wrapper">
                 <Slider {...settings}>
                     {listProductCategory.map((slide, index) => (
-                        <Link href={`${ROUTE_PATH.PRODUCT}?category_id=${slide.id}`} key={index} className="car-slide-item">
+                        <Link href={slide.link_url} target="_blank" key={index} className="car-slide-item">
                             <div
                                 className="car-slide-content"
                                 style={{
@@ -96,7 +99,7 @@ const SloganSlider = () => {
                             >
                                 <div className="car-slide-left">
                                     <div className="product-badge">
-                                        <span className="badge-text">DANH MỤC SẢN PHẨM</span>
+                                        <span className="badge-text">Video trải nghiệm</span>
                                     </div>
 
                                     <h2 className="car-slide-title">
@@ -108,7 +111,7 @@ const SloganSlider = () => {
 
                                 <div className="car-slide-right">
                                     <div className="car-image-container">
-                                        <div
+                                        {/* <div
                                             className="car-image-placeholder"
                                             style={{
                                                 backgroundImage: `url(${configImageURL(slide.image)})`,
@@ -117,6 +120,13 @@ const SloganSlider = () => {
                                                 backgroundRepeat: 'no-repeat'
                                             }}
                                         >
+                                        </div> */}
+                                        <YouTubeThumbnail name={slide.name} url={slide.link_url} />
+                                        <div className="play-icon">
+                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                                                <circle cx="40" cy="40" r="38" fill="white" fill-opacity="0.9" />
+                                                <path d="M32 24L56 40L32 56V24Z" fill="black" />
+                                            </svg>
                                         </div>
                                     </div>
                                 </div>
