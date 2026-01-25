@@ -7,6 +7,7 @@ import Image from 'next/image';
 import logo from '@/assets/images/logo.png'
 import { useRouter } from 'next/navigation';
 import authService from '@/infrastructure/repository/auth/auth.service';
+import { FullPageLoading } from '@/infrastructure/common/loading/loading';
 
 const ModernLogin = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false)
@@ -121,7 +122,7 @@ const ModernLogin = () => {
                         <form onSubmit={handleSubmit} className={styles.loginForm}>
                             {/* Email Field */}
                             <div className={styles.inputGroup}>
-                                <label className={styles.inputLabel}>
+                                <label htmlFor='email' className={styles.inputLabel}>
                                     <svg className={styles.labelIcon} width="16" height="16" viewBox="0 0 24 24" fill="none">
                                         <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
                                             stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -134,6 +135,7 @@ const ModernLogin = () => {
                                     <input
                                         type="email"
                                         name="email"
+                                        id='email'
                                         value={formData.email}
                                         onChange={handleInputChange}
                                         className={styles.textInput}
@@ -146,7 +148,7 @@ const ModernLogin = () => {
 
                             {/* Password Field */}
                             <div className={styles.inputGroup}>
-                                <label className={styles.inputLabel}>
+                                <label htmlFor='password' className={styles.inputLabel}>
                                     <svg className={styles.labelIcon} width="16" height="16" viewBox="0 0 24 24" fill="none">
                                         <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
                                             stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -161,6 +163,7 @@ const ModernLogin = () => {
                                     <input
                                         type={showPassword ? "text" : "password"}
                                         name="password"
+                                        id='password'
                                         value={formData.password}
                                         onChange={handleInputChange}
                                         className={styles.textInput}
@@ -266,6 +269,7 @@ const ModernLogin = () => {
                     </div>
                 </div>
             </div>
+            <FullPageLoading isLoading={loading} />
         </div>
     );
 };

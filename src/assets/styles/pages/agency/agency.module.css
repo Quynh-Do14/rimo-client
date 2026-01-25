@@ -13,8 +13,8 @@
   margin: 0 auto;
   max-width: 1600px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 1.25fr;
+  gap: 8px;
 }
 
 .leftSide {
@@ -28,7 +28,8 @@
 }
 .agencyCard {
   position: relative;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr;
   align-items: stretch;
   gap: 20px;
   background: white;
@@ -470,4 +471,41 @@
     padding: 10px 16px;
     font-size: 0.875rem;
   }
+}
+
+.noDataContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+}
+
+.noDataIcon {
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.noDataTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.noDataDescription {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 24px;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.resetButton:hover {
+  background: #4338ca;
 }
