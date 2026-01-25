@@ -17,6 +17,8 @@ import Hyundai from '@/assets/images/gioi-thieu/Huyndai.png'
 import AutoDaily from '@/assets/images/gioi-thieu/auto-daily-100x100.png'
 import Image from 'next/image'
 import TocClient from './tocClient'
+import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
+import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
 
 const IntroducePage = () => {
     const mediaLogos = [
@@ -36,6 +38,9 @@ const IntroducePage = () => {
 
     return (
         <ClientLayout>
+            <BannerCommon
+                bannerImg={banner}
+            />
             <div className={`${styles.introduceContainer} padding-common`}>
                 <BreadcrumbCommon
                     breadcrumb={"Giới thiệu"}

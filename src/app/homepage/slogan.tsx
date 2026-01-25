@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import "@/assets/styles/pages/home/slogan.css";
 import categoryProductService from "@/infrastructure/repository/category/categoryProduct.service";
 import { configImageURL } from "@/infrastructure/helper/helper";
+import Link from "next/link";
+import { ROUTE_PATH } from "@/core/common/appRouter";
 
 const SloganSlider = () => {
     const settings = {
@@ -83,12 +85,12 @@ const SloganSlider = () => {
 
             <div className="slider-wrapper">
                 <Slider {...settings}>
-                    {listProductCategory.map((slide) => (
-                        <div key={slide.id} className="car-slide-item">
+                    {listProductCategory.map((slide, index) => (
+                        <Link href={`${ROUTE_PATH.PRODUCT}?category_id=${slide.id}`} key={index} className="car-slide-item">
                             <div
                                 className="car-slide-content"
                                 style={{
-                                    background: "linear-gradient(135deg, #000000 0%, #1a1a1a 100%)",
+                                    background: "linear-gradient(180deg, #222222 0%, #333333 100%)",
                                     borderColor: "#FFD700"
                                 }}
                             >
@@ -119,7 +121,7 @@ const SloganSlider = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </Slider>
             </div>

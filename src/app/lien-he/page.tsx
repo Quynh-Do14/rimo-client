@@ -3,10 +3,15 @@ import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
 import React from 'react'
 import styles from '@/assets/styles/pages/contact.module.css'
 import { ROUTE_PATH } from '@/core/common/appRouter'
+import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
+import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
 
 const ContactPage = () => {
     return (
         <ClientLayout>
+            <BannerCommon
+                bannerImg={banner}
+            />
             <div className={`${styles.contactContainer} padding-common`}>
                 <BreadcrumbCommon
                     breadcrumb={"Liên hệ"}
