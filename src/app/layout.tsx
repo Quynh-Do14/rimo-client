@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
     images: [
       {
-        url: configImageURL('RIMO-logo.png'),
+        url: configImageURL('/uploads/RIMO-logo.png'),
         width: 1200,
         height: 630,
         alt: "Phim cách nhiệt Rimo",
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
     description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô",
-    images: [configImageURL('RIMO-logo.png')],
+    images: [configImageURL('/uploads/RIMO-logo.png')],
   },
   robots: {
     index: true,
