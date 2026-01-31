@@ -43,7 +43,8 @@ const BlogInProductSlug = () => {
                     <BlogSkeleton />
                     :
                     listBlog.map((article, index) => (
-                        <div key={index} className={styles.newsCard}>
+                        <Link
+                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} key={index} className={styles.newsCard}>
                             <div className={styles.cardImage}>
                                 <Image
                                     src={configImageURL(article.image)}
@@ -79,21 +80,8 @@ const BlogInProductSlug = () => {
                                         <span>{article.user_name}</span>
                                     </div>
                                 </div>
-                                <div className={styles.cardFooter}>
-                                    <Link
-                                        href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`}
-                                        className={styles.cardReadBtn}
-                                    >
-                                        <span className={styles.btnText}>Xem chi tiết</span>
-                                        <span className={styles.btnIcon}>
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg>
-                                        </span>
-                                    </Link>
-                                </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
             </div>
         </div>

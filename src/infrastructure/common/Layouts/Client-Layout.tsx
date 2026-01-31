@@ -16,7 +16,7 @@ const ClientLayout = ({ ...props }: any) => {
                 <a href="tel:19008113" className='social-item' data-tooltip="Gọi ngay 1900 8113">
                     <Image src={call} alt="Gọi ngay" />
                 </a>
-                <a href="https://www.facebook.com/Inmax-Vi%E1%BB%87t-Nam-109804934943900"
+                <a href="https://www.facebook.com/rimo.vietnam"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'

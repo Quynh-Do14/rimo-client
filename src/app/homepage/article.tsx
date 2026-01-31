@@ -141,7 +141,8 @@ const ArticleSection = () => {
                 {listBlog
                     // .filter(article => !article.featured && !article.highlight)
                     .map(article => (
-                        <div key={article.id} className="news-card">
+                        <Link
+                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} key={article.id} className="news-card">
                             <div className="card-image">
                                 <Image
                                     src={configImageURL(article.image)}
@@ -174,21 +175,12 @@ const ArticleSection = () => {
                                         <span>{article.user_name}</span>
                                     </div>
                                 </div>
-                                <Link
-                                    href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} className="card-footer">
-                                    <button className="card-read-btn">
-                                        <span className="btn-text">Xem chi tiết</span>
-                                        <span className="btn-icon">
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M5 12h14M12 5l7 7-7 7" />
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </Link>
+
                             </div>
-                        </div>
-                    ))}
-            </div>
+                        </Link>
+                    ))
+                }
+            </div >
 
             {/* Load More */}
             {/* <Link href={ROUTE_PATH.BLOG}>

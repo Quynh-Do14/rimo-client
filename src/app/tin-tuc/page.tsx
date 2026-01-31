@@ -138,7 +138,6 @@ const BlogContent = () => {
                             </h1>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 mb-8">
-                            {/* Search Input - 5/12 columns on desktop, full on mobile */}
                             <div className="sm:col-span-5">
                                 <InputSearchCommon
                                     placeholder={'Tìm kiếm tin tức'}
@@ -148,8 +147,7 @@ const BlogContent = () => {
                                 />
                             </div>
 
-                            {/* Category Select - 4/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-4">
+                            <div className="sm:col-span-5">
                                 <SelectSearchCommon
                                     listDataOfItem={categoryBlogState}
                                     onChange={onChangeCategory}
@@ -158,8 +156,7 @@ const BlogContent = () => {
                                 />
                             </div>
 
-                            {/* Search Button - 3/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-2">
                                 <ButtonCommon
                                     onClick={onSearchParam}
                                     title={'Tìm kiếm'}
@@ -173,7 +170,8 @@ const BlogContent = () => {
                                 <BlogSkeleton />
                                 :
                                 listBlog.map((article, index) => (
-                                    <div key={index} className={styles.newsCard}>
+                                    <Link
+                                        href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} key={index} className={styles.newsCard}>
                                         <div className={styles.cardImage}>
                                             <Image
                                                 src={configImageURL(article.image)}
@@ -209,22 +207,9 @@ const BlogContent = () => {
                                                     <span>{article.user_name}</span>
                                                 </div>
                                             </div>
-                                            <div className={styles.cardFooter}>
-                                                <Link
-                                                    href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`}
-                                                    className={styles.cardReadBtn}
-                                                >
-                                                    <span className={styles.btnText}>Xem chi tiết</span>
-                                                    <span className={styles.btnIcon}>
-                                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                            <path d="M5 12h14M12 5l7 7-7 7" />
-                                                        </svg>
-                                                    </span>
-                                                </Link>
-                                            </div>
                                         </div>
 
-                                    </div>
+                                    </Link>
                                 ))}
                         </div>
                         <PaginationNoSizeCommon

@@ -411,6 +411,14 @@
   }
 }
 
+@media (max-width: 600px) {
+  .agencyCard {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Mobile nhỏ (480px) */
 @media (max-width: 480px) {
   .agencyContainer {

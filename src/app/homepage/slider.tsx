@@ -1,23 +1,45 @@
 'use client'
-import React, { useEffect, useState } from "react";
-import Slider, { Settings } from "react-slick";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import '@/assets/styles/pages/home/fullWidthSlider.css'
 import bannerService from "@/infrastructure/repository/banner/banner.service";
 import { configImageURL } from "@/infrastructure/helper/helper";
 import { BannerInterface } from "@/infrastructure/interface/banner/banner.interface";
+import AnimatedNumber from "@/infrastructure/common/controls/AnimatedNumber";
+import dynamic from "next/dynamic";
+import { Settings } from "react-slick";
+import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
 
 interface Stat {
-    number: string;
+    number: number;
     label: string;
-    suffix: string;
+    symbol: string;
 }
+
+const stats: Stat[] = [
+    { number: 10, symbol: '+', label: "Năm kinh nghiệm", },
+    { number: 5000, label: "Khách hàng", symbol: "+" },
+    { number: 99, label: "Hài lòng", symbol: "%" },
+    { number: 24, label: "Hỗ trợ", symbol: "/7" }
+];
+
+const Slider = dynamic(() => import("react-slick"), {
+    ssr: false,
+    loading: () =>
+        <div className="slider-wrapper">
+            <div className="slide-item"></div>
+        </div>
+});
+
 
 const FullWidthSlider = () => {
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [listBanner, setListBanner] = useState<Array<string>>([]);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const [isAnimate, setIsAnimate] = useState<boolean>(false);
+    const textRef = useRef<HTMLDivElement>(null);
 
     const onGetListBannerAsync = async () => {
         try {
@@ -78,12 +100,30 @@ const FullWidthSlider = () => {
         ]
     };
 
-    const stats: Stat[] = [
-        { number: "10+", label: "Năm kinh nghiệm", suffix: "năm" },
-        { number: "5000+", label: "Khách hàng", suffix: "khách" },
-        { number: "99%", label: "Hài lòng", suffix: "hài lòng" },
-        { number: "24/7", label: "Hỗ trợ", suffix: "hỗ trợ" }
-    ];
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                // Chỉ set true một lần duy nhất
+                if (entry.isIntersecting && !isAnimate) {
+                    setIsAnimate(true);
+                }
+            },
+            {
+                threshold: 0.1
+            }
+        );
+
+        const currentSectionRef = textRef.current;
+        if (currentSectionRef) {
+            observer.observe(currentSectionRef);
+        }
+
+        return () => {
+            if (currentSectionRef) {
+                observer.unobserve(currentSectionRef);
+            }
+        };
+    }, [isAnimate]);
 
     return (
         <div className="modern-slider-container">
@@ -138,33 +178,44 @@ const FullWidthSlider = () => {
             }
             `}</style>
             {/* Main Slider */}
-            <div className="slider-wrapper">
-                <Slider {...settings}>
-                    {listBanner.map((slide: string, index: number) => (
-                        <div key={index} className="slide-item">
-                            {/* Background Image with Overlay */}
-                            <div
-                                className="slide-background"
-                                style={{
-                                    backgroundImage: `url(${configImageURL(slide)})`,
-                                    '--overlay-color': 'rgba(0, 0, 0, 0.4)'
-                                } as React.CSSProperties}
-                            >
-                            </div>
+            {
+                !loading ?
+                    <div className="slider-wrapper">
+                        <Slider {...settings}>
+                            {
 
-                        </div>
-                    ))}
-                </Slider>
-            </div>
+                                listBanner.map((slide: string, index: number) => (
+                                    <div key={index} className="slide-item">
+                                        {/* Background Image with Overlay */}
+                                        <div
+                                            className="slide-background"
+                                            style={{
+                                                backgroundImage: `url(${configImageURL(slide)})`,
+                                                '--overlay-color': 'rgba(0, 0, 0, 0.4)'
+                                            } as React.CSSProperties}
+                                        >
+                                        </div>
+
+                                    </div>
+                                ))
+
+                            }
+                        </Slider>
+                    </div>
+                    :
+                    <div className="slider-wrapper">
+                        <div className="slide-item"></div>
+                    </div>
+            }
+
 
             {/* Stats Bar */}
             <div className="stats-bar">
                 <div className="stats-container">
                     {stats.map((stat: Stat, index: number) => (
-                        <div key={index} className="stat-item">
-                            <div className="stat-number">{stat.number}</div>
-                            <div className="stat-label">{stat.label}</div>
-                            <div className="stat-suffix">{stat.suffix}</div>
+                        <div key={index} className="stat-item" >
+                            <div className="stat-number"><AnimatedNumber value={isAnimate ? stat.number : 0} />{stat.symbol} </div>
+                            <div ref={textRef} className="stat-label">{stat.label}</div>
                         </div>
                     ))}
                 </div>

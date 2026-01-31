@@ -11,8 +11,10 @@ import { ROUTE_PATH } from "@/core/common/appRouter";
 import videoService from "@/infrastructure/repository/video/video.service";
 import YouTubeThumbnail from "@/infrastructure/common/thumbnailYoutube/thumbnailYoutube";
 import { VideoInterface } from "@/infrastructure/interface/video/video.interface";
+import dynamic from "next/dynamic";
+import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
 
-const SloganSlider = () => {
+const SloganContent = () => {
     const settings = {
         dots: true,
         infinite: true,
@@ -138,5 +140,10 @@ const SloganSlider = () => {
         </div>
     );
 };
+
+const SloganSlider = dynamic(() => Promise.resolve(SloganContent), {
+    ssr: false,
+    loading: () => <PageLoading />
+});
 
 export default SloganSlider;

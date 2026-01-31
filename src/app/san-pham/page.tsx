@@ -15,6 +15,7 @@ import { CategoryProductState } from "@/core/common/atoms/category/categoryState
 import { useRouter, useSearchParams } from "next/navigation";
 import SkeletonProduct from "../tim-kiem/skeleton";
 import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
+import Image from "next/image";
 const ProductContent = () => {
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
@@ -144,7 +145,7 @@ const ProductContent = () => {
                             {/* Search Input */}
                             <div className="sm:col-span-5">
                                 <InputSearchCommon
-                                    placeholder={'Tìm kiếm tin tức'}
+                                    placeholder={'Tìm kiếm sản phẩm'}
                                     value={searchText}
                                     onChange={onChangeSearchText}
                                     disabled={false}
@@ -152,17 +153,19 @@ const ProductContent = () => {
                             </div>
 
                             {/* Category Select */}
-                            <div className="sm:col-span-4">
+                            <div className="sm:col-span-5">
                                 <SelectSearchCommon
                                     listDataOfItem={categoryProductState}
                                     onChange={onChangeCategory}
                                     label={"Danh mục sản phẩm"}
-                                    value={categoryId} 
-                                    />
+                                    value={categoryId}
+                                    labelName="nameSplit"
+                                    valueName="id"
+                                />
                             </div>
 
                             {/* Search Button */}
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-2">
                                 <ButtonCommon
                                     onClick={onSearchParam}
                                     title={'Tìm kiếm'}
@@ -186,10 +189,7 @@ const ProductContent = () => {
                                                 <div className={styles.itemMedia}>
                                                     <div className={styles.mediaContainer}>
                                                         <div className={styles.thumbnailWrapper}>
-                                                            <div
-                                                                className={styles.thumbnail}
-                                                                style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
-                                                            />
+                                                            <Image src={configImageURL(item.image)} alt={item.name} fill className="object-cover" />
                                                             <div className={styles.mediaOverlay}></div>
                                                         </div>
                                                     </div>

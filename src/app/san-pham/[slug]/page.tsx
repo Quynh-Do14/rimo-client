@@ -91,7 +91,7 @@ const ProductSlugPage = async ({ params }: Props) => {
     return (
         <ClientLayout>
             <div className={styles.productContainer}>
-                <div className='padding-common'>
+                <div className='padding-section'>
                     <BreadcrumbCommon
                         breadcrumb={"Sản phẩm"}
                         redirect={ROUTE_PATH.PRODUCT}
@@ -99,7 +99,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                         blackColor={true}
                     />
                 </div>
-                <div className={`${styles.content} padding-common`}>
+                <div className={`${styles.content} padding-section`}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                         {/* Column 1: Gallery */}
                         <div className="w-full">
@@ -146,7 +146,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                         overflow: 'hidden'
                     }}
                 >
-                    <div className={`${styles.content} padding-common`}>
+                    <div className={`${styles.content} padding-section`}>
                         <div className={styles.description}>
                             <h2>{dataDetail.short_description}</h2>
                         </div>
@@ -154,14 +154,14 @@ const ProductSlugPage = async ({ params }: Props) => {
                 </div>
 
 
-                {/* <div className={`${styles.content} padding-common`}>
+                {/* <div className={`${styles.content} padding-section`}>
                     <div className={styles.specificationHeader}>
                         <div className={styles.title}>Ưu điểm nổi bật</div>
                     </div>
                     <ProductAdvantageComponent product={dataDetail.productFigure} />
                 </div> */}
 
-                <div className={`${styles.content} padding-common`}>
+                <div className={`${styles.content} padding-section`}>
                     <div className={styles.specificationHeader}>
                         <div className={styles.title}>Mô tả sản phẩm</div>
                     </div>
@@ -170,13 +170,13 @@ const ProductSlugPage = async ({ params }: Props) => {
                         dangerouslySetInnerHTML={{ __html: dataDetail.description }}
                     />
                 </div>
-                <div className={`${styles.content} padding-common`}>
+                <div className={`${styles.content} padding-section`}>
                     <div className={styles.specificationHeader}>
                         <div className={styles.title}>Sản phẩm tương tự</div>
                     </div>
                     <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
                 </div>
-                <div className={`${styles.content} padding-common`}>
+                <div className={`${styles.content} padding-section`}>
                     <div className={styles.specificationHeader}>
                         <div className={styles.title}>Tin tức</div>
                     </div>

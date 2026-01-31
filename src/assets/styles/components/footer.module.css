@@ -17,6 +17,12 @@
   gap: 2.5rem;
 }
 
+.gridLink {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
 .footerSection {
   display: flex;
   flex-direction: column;
@@ -95,6 +101,12 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .gridLink {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
   .companyInfo {
     font-size: 0.85rem;
   }

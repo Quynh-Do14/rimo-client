@@ -3,6 +3,16 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import RecoilProvider from "./ClientProviders";
 import { configImageURL } from "@/infrastructure/helper/helper";
+import { Work_Sans } from 'next/font/google';
+
+const workSans = Work_Sans({
+  subsets: ['latin', 'vietnamese'], // Thêm vietnamese nếu cần
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-work-sans',
+  fallback: ['system-ui', 'Arial', 'sans-serif'],
+});
 
 // Danh sách keywords cho SEO
 const keywords = [
@@ -245,7 +255,7 @@ export default function RootLayout({
 
       </head>
 
-      <body>
+      <body className={workSans.className}>
         <RecoilProvider>
           <AntdRegistry>
             {children}

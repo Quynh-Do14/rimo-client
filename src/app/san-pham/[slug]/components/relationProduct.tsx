@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ROUTE_PATH } from '@/core/common/appRouter'
 import { configImageURL, convertSlug, formatCurrencyVND } from '@/infrastructure/helper/helper'
 import { ProductInterface } from '@/infrastructure/interface/product/product.interface'
+import Image from 'next/image'
 type Props = {
     listProduct: ProductInterface[]
 }
@@ -22,10 +23,7 @@ const RelationProductComponent = (props: Props) => {
                                 <div className={styles.mediaContainer}>
                                     {/* Thumbnail */}
                                     <div className={styles.thumbnailWrapper}>
-                                        <div
-                                            className={styles.thumbnail}
-                                            style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
-                                        />
+                                        <Image src={configImageURL(item.image)} alt={item.name} fill className="object-cover" />
                                         <div className={styles.mediaOverlay}></div>
                                     </div>
                                 </div>

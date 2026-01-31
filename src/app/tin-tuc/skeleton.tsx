@@ -27,16 +27,6 @@ const BlogSkeleton = () => {
                             <div className={`${styles.metaIconSkeleton} ${styles.skeleton}`}></div>
                             <span className={`${styles.metaTextSkeleton} ${styles.skeleton}`}></span>
                         </div>
-                        <div className={styles.metaItem}>
-                            <div className={`${styles.metaIconSkeleton} ${styles.skeleton}`}></div>
-                            <span className={`${styles.metaTextSkeleton} ${styles.skeleton}`}></span>
-                        </div>
-                    </div>
-
-                    <div className={styles.cardFooter}>
-                        <div className={`${styles.cardReadBtnSkeleton} ${styles.skeleton}`}>
-                            <span className={`${styles.btnTextSkeleton} ${styles.skeleton}`}></span>
-                        </div>
                     </div>
                 </div>
             </div>

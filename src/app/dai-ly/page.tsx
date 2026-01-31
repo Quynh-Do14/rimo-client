@@ -232,7 +232,7 @@ const AgencyContent = () => {
 
                         <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4 mb-8">
                             {/* Search Input - 5/12 columns on desktop, full on mobile */}
-                            <div className="sm:col-span-3">
+                            <div className="sm:col-span-2">
                                 <InputSearchCommon
                                     placeholder={'Tìm kiếm đại lý'}
                                     value={searchText}
@@ -240,7 +240,7 @@ const AgencyContent = () => {
                                     disabled={false}
                                 />
                             </div>
-                            <div className="sm:col-span-2">
+                            <div className="sm:col-span-3">
                                 <SelectSearchProvince
                                     listDataOfItem={listProvince}
                                     onChange={onChangeProvince}

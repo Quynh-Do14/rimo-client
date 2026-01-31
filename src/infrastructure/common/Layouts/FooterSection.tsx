@@ -8,32 +8,32 @@ const FooterSection = () => {
     const menuItems = [
         {
             id: "home",
-            label: "TRANG CHỦ",
+            label: "Trang chủ",
             href: ROUTE_PATH.HOME_PAGE,
         },
         {
             id: "introduce",
-            label: "GIỚI THIỆU",
+            label: "Giới thiệu",
             href: ROUTE_PATH.INTRODUCE,
         },
         {
             id: "products",
-            label: "SẢN PHẨM",
+            label: "Sản phẩm",
             href: ROUTE_PATH.PRODUCT,
         },
         {
             id: "agency",
-            label: "ĐẠI Lý",
+            label: "Đại lý",
             href: ROUTE_PATH.AGENCY,
         },
         {
             id: "blog",
-            label: "TIN TỨC",
+            label: "Tin tức",
             href: ROUTE_PATH.BLOG,
         },
         {
             id: "contact",
-            label: "LIÊN HỆ",
+            label: "Liên hệ",
             href: ROUTE_PATH.CONTACT,
         },
     ];
@@ -46,17 +46,17 @@ const FooterSection = () => {
         },
         {
             id: "privacy",
-            label: "CHÍNH SÁCH BẢO MẬT",
+            label: "Chính sách bảo mật",
             href: ROUTE_PATH.PRIVACY_POLICY,
         },
         {
             id: "purchase",
-            label: "CHÍNH SÁCH MUA HÀNG",
+            label: "Chính sách mua hàng",
             href: ROUTE_PATH.PURCHASE_POLICY,
         },
         {
             id: "warranty",
-            label: "CHÍNH SÁCH BẢO HÀNH - ĐỔI TRẢ",
+            label: "Chính sách bảo hành - đổi trả",
             href: ROUTE_PATH.WARRANTY_RETURN_POLICY,
         },
         {
@@ -116,73 +116,54 @@ const FooterSection = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className={styles.footerSection}>
-                    <div className={styles.sectionTitle}>
-                        LIÊN KẾT NHANH
-                    </div>
-                    <ul className={styles.linksList}>
-                        {
-                            menuItems.map((item, index) => (
-                                <li
-                                    className={styles.linkItem}
-                                    key={index}
-                                >
-                                    <Link
-                                        href={item.href}
-                                        className={styles.link}
+                <div className={styles.gridLink}>
+                    <div className={styles.footerSection}>
+                        <div className={styles.sectionTitle}>
+                            LIÊN KẾT NHANH
+                        </div>
+                        <ul className={styles.linksList}>
+                            {
+                                menuItems.map((item, index) => (
+                                    <li
+                                        className={styles.linkItem}
                                         key={index}
                                     >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                </div>
-
-                <div className={styles.footerSection}>
-                    <div className={styles.sectionTitle}>
-                        CHÍNH SÁCH
+                                        <Link
+                                            href={item.href}
+                                            className={styles.link}
+                                            key={index}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))
+                            }
+                        </ul>
                     </div>
-                    <ul className={styles.linksList}>
-                        {
-                            policy.map((item, index) => (
-                                <li className={styles.linkItem}
-                                    key={index}
-                                >
-                                    <Link
-                                        href={item.href}
-                                        className={styles.link}
+
+                    <div className={styles.footerSection}>
+                        <div className={styles.sectionTitle}>
+                            CHÍNH SÁCH
+                        </div>
+                        <ul className={styles.linksList}>
+                            {
+                                policy.map((item, index) => (
+                                    <li className={styles.linkItem}
                                         key={index}
                                     >
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))
-                        }
-                    </ul>
+                                        <Link
+                                            href={item.href}
+                                            className={styles.link}
+                                            key={index}
+                                        >
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))
+                            }
+                        </ul>
+                    </div>
                 </div>
-
-                {/* <div className={styles.footerSection}>
-                    <div className={styles.sectionTitle}>
-                        THEO DÕI CHÚNG TÔI
-                    </div>
-                    <div className={styles.socialLinks}>
-                        <a href="https://www.facebook.com/rimo.vietnam/" className={`${styles.socialIcon} ${styles.facebook}`} aria-label="Facebook">
-                            <FaFacebook />
-                        </a>
-                        <a href="#" className={`${styles.socialIcon} ${styles.zalo}`} aria-label="Zalo">
-                            <SiZalo />
-                        </a>
-                        <a href="#" className={`${styles.socialIcon} ${styles.youtube}`} aria-label="YouTube">
-                            <FaYoutube />
-                        </a>
-                        <a href="#" className={`${styles.socialIcon} ${styles.tiktok}`} aria-label="TikTok">
-                            <FaTiktok />
-                        </a>
-                    </div>
-                </div>*/}
             </div>
 
             <div className={styles.footerBottom}>

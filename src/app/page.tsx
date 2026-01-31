@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import HeaderSection from "@/infrastructure/common/Layouts/HeaderSection";
 import ArticleSection from "./homepage/article";
 import FullWidthSlider from "./homepage/slider";
@@ -6,21 +7,31 @@ import styles from '@/assets/styles/pages/home/home.module.css'
 import ProductSection from "./homepage/product";
 import SloganSlider from "./homepage/slogan";
 import IntroduceSection from "./homepage/introduce";
+import { PageLoading } from '@/infrastructure/common/loading/loadingPage';
+
+// Tạo wrapper component cho mỗi section có thể suspense
+function HomePageContent() {
+  return (
+    <div className={styles.homePageContainer}>
+      <FullWidthSlider />
+      <div className={styles.darkBackground}>
+        <SloganSlider />
+      </div>
+      <ProductSection />
+      <div className={styles.darkBackground}>
+        <IntroduceSection />
+      </div>
+      <ArticleSection />
+    </div>
+  );
+}
 
 export default function Home() {
   return (
     <ClientLayout>
-      <div className={styles.homePageContainer}>
-        <FullWidthSlider />
-        <div className={styles.darkBackground}>
-          <SloganSlider />
-        </div>
-        <ProductSection />
-        <div className={styles.darkBackground}>
-          <IntroduceSection />
-        </div>
-        <ArticleSection />
-      </div>
+      <Suspense fallback={<PageLoading />}>
+        <HomePageContent />
+      </Suspense>
     </ClientLayout>
   );
 }

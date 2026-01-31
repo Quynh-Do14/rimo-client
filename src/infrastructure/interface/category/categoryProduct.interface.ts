@@ -1,6 +1,7 @@
 export interface CategoryProductInterface {
     id?: number;
     name: string;
+    nameSplit: string;
     description: string;
     image: string;
 }

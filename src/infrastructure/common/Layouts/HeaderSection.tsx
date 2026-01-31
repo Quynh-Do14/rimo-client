@@ -57,13 +57,20 @@ const HeaderSection = () => {
                 {},
                 () => { }
             ).then((res) => {
+                const newArrr = res.data?.map((item: CategoryProductInterface) => {
+                    const result = {
+                        ...item,
+                        nameSplit: item.name.split('-')[0]
+                    }
+                    return result;
+                })
                 setCategoryProductState({
-                    data: res.data
+                    data: newArrr
                 })
                 const data = res.data?.map((item: CategoryProductInterface) => {
                     const result = {
                         href: `${ROUTE_PATH.PRODUCT}?category_id=${item.id}`,
-                        label: item.name,
+                        label: item.name.split('-')[0],
                     }
                     return result;
                 })

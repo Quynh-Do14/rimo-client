@@ -13,7 +13,7 @@ const YouTubeThumbnail = (props: Props) => {
     const {
         name,
         url,
-        quality = 'hqdefault'
+        quality = 'maxresdefault'
     } = props;
     const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
