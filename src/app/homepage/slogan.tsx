@@ -13,6 +13,8 @@ import YouTubeThumbnail from "@/infrastructure/common/thumbnailYoutube/thumbnail
 import { VideoInterface } from "@/infrastructure/interface/video/video.interface";
 import dynamic from "next/dynamic";
 import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
+import { Modal } from "antd";
+import YoutubeVideo from "@/infrastructure/common/thumbnailYoutube/youtube";
 
 const SloganContent = () => {
     const settings = {
@@ -55,6 +57,8 @@ const SloganContent = () => {
     };
 
     const [listProductCategory, setListProductCategory] = useState<Array<VideoInterface>>([])
+    const [selectedVideo, setSelectedVideo] = useState<string>('');
+    const [isOpenModalVideo, setIsOpenModalVide] = useState<boolean>(false);
 
     const onGetListCategoryProductAsync = async () => {
         const param = {
@@ -77,6 +81,11 @@ const SloganContent = () => {
         onGetListCategoryProductAsync().then(_ => { });
     }, []);
 
+    const onOpenModalVideo = (item: VideoInterface, videoId: string) => {
+        setSelectedVideo(videoId);
+        setIsOpenModalVide(true);
+    };
+
     return (
         <div className="car-tech-slider-container">
             <div className="slider-header">
@@ -90,30 +99,32 @@ const SloganContent = () => {
 
             <div className="slider-wrapper">
                 <Slider {...settings}>
-                    {listProductCategory.map((slide, index) => (
-                        <Link href={slide.link_url} target="_blank" key={index} className="car-slide-item">
-                            <div
-                                className="car-slide-content"
-                                style={{
-                                    background: "linear-gradient(180deg, #222222 0%, #333333 100%)",
-                                    borderColor: "#FFD700"
-                                }}
-                            >
-                                <div className="car-slide-left">
-                                    <div className="product-badge">
-                                        <span className="badge-text">Video trải nghiệm</span>
+                    {listProductCategory.map((slide, index) => {
+                        const videoId = slide.link_url.split('v=')[1];
+                        return (
+                            <div onClick={() => onOpenModalVideo(slide, videoId)} key={index} className="car-slide-item">
+                                <div
+                                    className="car-slide-content"
+                                    style={{
+                                        background: "linear-gradient(180deg, #222222 0%, #333333 100%)",
+                                        borderColor: "#FFD700"
+                                    }}
+                                >
+                                    <div className="car-slide-left">
+                                        <div className="product-badge">
+                                            <span className="badge-text">Video trải nghiệm</span>
+                                        </div>
+
+                                        <h2 className="car-slide-title">
+                                            <span className="title-text text-truncate-3">{slide.name}</span>
+                                        </h2>
+
+                                        <p className="car-slide-description text-truncate-4">{slide.description}</p>
                                     </div>
 
-                                    <h2 className="car-slide-title">
-                                        <span className="title-text">{slide.name}</span>
-                                    </h2>
-
-                                    <p className="car-slide-description text-truncate-4">{slide.description}</p>
-                                </div>
-
-                                <div className="car-slide-right">
-                                    <div className="car-image-container">
-                                        {/* <div
+                                    <div className="car-slide-right">
+                                        <div className="car-image-container">
+                                            {/* <div
                                             className="car-image-placeholder"
                                             style={{
                                                 backgroundImage: `url(${configImageURL(slide.image)})`,
@@ -123,19 +134,34 @@ const SloganContent = () => {
                                             }}
                                         >
                                         </div> */}
-                                        <YouTubeThumbnail name={slide.name} url={slide.link_url} />
-                                        <div className="play-icon">
-                                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                                                <circle cx="40" cy="40" r="38" fill="white" fill-opacity="0.9" />
-                                                <path d="M32 24L56 40L32 56V24Z" fill="black" />
-                                            </svg>
+                                            <YouTubeThumbnail name={slide.name} url={slide.link_url} />
+                                            <div className="play-icon">
+                                                <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                                                    <circle cx="40" cy="40" r="38" fill="white" fill-opacity="0.9" />
+                                                    <path d="M32 24L56 40L32 56V24Z" fill="black" />
+                                                </svg>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </Link>
-                    ))}
+                        )
+                    })}
                 </Slider>
+                <Modal
+                    key={"f-0"}
+                    open={isOpenModalVideo}
+                    width={"90%"}
+                    closable={true}
+                    onCancel={() => setIsOpenModalVide(false)}
+                    footer={null}
+                    centered
+                    destroyOnClose
+                >
+                    <YoutubeVideo
+                        videoId={selectedVideo}
+                    />
+                </Modal>
             </div>
         </div>
     );

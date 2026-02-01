@@ -100,7 +100,7 @@
   .car-tech-slider-container .car-slide-left,
   .car-tech-slider-container .car-slide-right {
     width: 100%;
-    min-height: 300px;
+    min-height: 220px;
   }
 
   .car-tech-slider-container .car-slide-left {
