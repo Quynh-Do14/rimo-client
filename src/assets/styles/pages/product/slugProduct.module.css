@@ -158,8 +158,11 @@
 }
 
 @media (max-width: 768px) {
+  .productContainer h1 {
+    font-size: 24px;
+  }
   .productContainer .productImg h1 {
-    font-size: 2.2rem;
+    font-size: 24px;
   }
 
   .productContainer .description {

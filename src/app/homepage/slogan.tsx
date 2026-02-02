@@ -156,7 +156,7 @@ const SloganContent = () => {
                     onCancel={() => setIsOpenModalVide(false)}
                     footer={null}
                     centered
-                    destroyOnClose
+                    destroyOnHidden
                 >
                     <YoutubeVideo
                         videoId={selectedVideo}

@@ -46,6 +46,8 @@ const HeaderSection = () => {
         if (pathname.startsWith(ROUTE_PATH.PRODUCT)) return "products";
         if (pathname.startsWith(ROUTE_PATH.BLOG)) return "blog";
         if (pathname.includes(ROUTE_PATH.AGENCY)) return "agency";
+        if (pathname.includes(ROUTE_PATH.INTRODUCE)) return "introduce";
+        if (pathname.includes(ROUTE_PATH.CONTACT)) return "contact";
         return "";
     };
 

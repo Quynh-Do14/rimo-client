@@ -36,6 +36,6 @@ export default function robots(): MetadataRoute.Robots {
                 allow: '/Register/RegisterGoogle',
             },
         ],
-        sitemap: 'https://fats.vn/sitemap.xml',
+        sitemap: 'https://rimo.vn/sitemap.xml',
     }
 }

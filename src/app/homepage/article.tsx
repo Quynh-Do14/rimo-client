@@ -8,8 +8,6 @@ import { ROUTE_PATH } from "@/core/common/appRouter";
 import Image from "next/image";
 
 const ArticleSection = () => {
-    const [highlightedArticle, setHighlightedArticle] = useState<any>({})
-    const [featuredArticle, setFeaturedArticle] = useState<any>({})
     const [listBlog, setListBlog] = useState<Array<any>>([])
 
     const [loading, setLoading] = useState<boolean>(false);

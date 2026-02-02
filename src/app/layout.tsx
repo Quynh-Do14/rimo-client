@@ -136,7 +136,7 @@ const localBusinessSchema = {
     "name": "Hà Nội"
   },
   "sameAs": [
-    "https://www.facebook.com/Inmax-Vi%E1%BB%87t-Nam-109804934943900",
+    "https://www.facebook.com/rimo.vietnam",
   ]
 };
 
@@ -149,7 +149,7 @@ const organizationSchema = {
   "logo": `${siteURL}/logo.png`,
   "description": "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối phim cách nhiệt Rimo chính hãng.",
   "sameAs": [
-    "https://www.facebook.com/Inmax-Vi%E1%BB%87t-Nam-109804934943900",
+    "https://www.facebook.com/rimo.vietnam",
   ],
   "contactPoint": {
     "@type": "ContactPoint",
