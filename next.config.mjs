@@ -14,12 +14,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'autofusion.vn',
+        hostname: 'rimo.vn',
         pathname: '/api/uploads/**'
       },
       {
         protocol: 'http',
-        hostname: 'autofusion.vn',
+        hostname: 'rimo.vn',
         pathname: '/api/uploads/**'
       },
       {
@@ -36,7 +36,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'api.autofusion.vn',
+        hostname: 'api.rimo.vn',
         pathname: '/api/uploads/**'
       },
       {
