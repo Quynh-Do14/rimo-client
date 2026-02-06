@@ -19,7 +19,7 @@ interface Stat {
 
 const stats: Stat[] = [
     { number: 10, symbol: '+', label: "Năm kinh nghiệm", },
-    { number: 5000, label: "Khách hàng", symbol: "+" },
+    { number: 10000, label: "Khách hàng", symbol: "+" },
     { number: 99, label: "Hài lòng", symbol: "%" },
     { number: 24, label: "Hỗ trợ", symbol: "/7" }
 ];

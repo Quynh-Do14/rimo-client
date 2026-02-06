@@ -319,7 +319,7 @@ const HeaderSection = () => {
                     <div className="header-actions">
                         {/* Search Box */}
                         <SearchBoxHeader />
-                        {
+                        {/* {
                             isTokenStoraged() ?
                                 <div className="avatar-container">
                                     <button
@@ -370,7 +370,7 @@ const HeaderSection = () => {
                                 <Link href={ROUTE_PATH.LOGIN} className="cta-btn">
                                     <span className="btn-text">Đăng nhập</span>
                                 </Link>
-                        }
+                        } */}
                     </div>
 
                     {/* Mobile Menu Toggle */}
@@ -481,7 +481,7 @@ const HeaderSection = () => {
                                 </li>
 
                             ))}
-                            <li>
+                            {/* <li>
                                 {
                                     isTokenStoraged()
                                         ?
@@ -503,9 +503,9 @@ const HeaderSection = () => {
                                         :
                                         null
                                 }
-                            </li>
+                            </li> */}
                         </ul>
-                        {
+                        {/* {
                             isTokenStoraged()
                                 ?
                                 <div className="avatar-container">
@@ -519,8 +519,14 @@ const HeaderSection = () => {
                                 <div className="mobile-actions">
                                     <ButtonCommon onClick={() => { }} title={"Đăng nhập"} />
                                 </div>
-                        }
-
+                        } */}
+                        <div className="avatar-container">
+                            <button
+                                className="avatar-btn"
+                                onClick={() => setShowDropdown(!showDropdown)}
+                            >
+                            </button>
+                        </div>
                     </div>
                 </div>
             </header >

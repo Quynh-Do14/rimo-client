@@ -70,7 +70,7 @@ const ProductContent = () => {
                                     key={item.id}
                                     className={styles.galleryItem}
                                 >
-                                    <div className={itemMediaCol}>
+                                    <div className={styles.itemMedia}>
                                         {/* Thumbnail */}
                                         <div className={styles.thumbnailWrapper}>
                                             <Image
@@ -79,29 +79,29 @@ const ProductContent = () => {
                                                 fill
                                                 className='object-cover'
                                             />
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.itemContent}>
-                                        <div className={styles.contentWrapper}>
-                                            <h3 className={styles.itemTitle}>{item.name}</h3>
-                                            <div className={styles.itemPrice}>
-                                                {item.price_sale ? (
-                                                    <>
-                                                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                            <span className={styles.salePrice}>
-                                                                {formatCurrencyVND(item.price_sale)}
+                                            {/* Overlay for text */}
+                                            <div className={styles.mediaOverlay}>
+                                                <div className={styles.contentOverlay}>
+                                                    <h3 className={styles.itemTitle}>{item.name}</h3>
+                                                    <div className={styles.itemPrice}>
+                                                        {item.price_sale ? (
+                                                            <>
+                                                                <div className={styles.priceContainer}>
+                                                                    <span className={styles.salePrice}>
+                                                                        {formatCurrencyVND(item.price_sale)}
+                                                                    </span>
+                                                                    <span className={styles.originalPrice}>
+                                                                        {formatCurrencyVND(item.price)}
+                                                                    </span>
+                                                                </div>
+                                                            </>
+                                                        ) : (
+                                                            <span className={styles.normalPrice}>
+                                                                {formatCurrencyVND(item.price)}
                                                             </span>
-                                                        </div>
-                                                        <span className={styles.originalPrice}>
-                                                            {formatCurrencyVND(item.price)}
-                                                        </span>
-                                                    </>
-                                                ) : (
-                                                    <span className={styles.normalPrice}>
-                                                        {formatCurrencyVND(item.price)}
-                                                    </span>
-                                                )}
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
