@@ -9,8 +9,6 @@ import { BannerInterface } from "@/infrastructure/interface/banner/banner.interf
 import AnimatedNumber from "@/infrastructure/common/controls/AnimatedNumber";
 import dynamic from "next/dynamic";
 import { Settings } from "react-slick";
-import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
-
 interface Stat {
     number: number;
     label: string;
@@ -44,7 +42,9 @@ const FullWidthSlider = () => {
     const onGetListBannerAsync = async () => {
         try {
             await bannerService.GetBanner(
-                {},
+                {
+                    type: "HOMEPAGE"
+                },
                 setLoading
             ).then((res) => {
                 const listImg = res.data.map((item: BannerInterface) => item.image)

@@ -298,7 +298,7 @@ const AgencyContent = () => {
     return (
         <ClientLayout>
             <BannerCommon
-                bannerImg={banner}
+                type={'INTRODUCE'}
             />
             <div className={styles.agencyContainer}>
                 <div className='padding-common'>
