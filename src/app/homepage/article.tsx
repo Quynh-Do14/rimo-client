@@ -14,7 +14,7 @@ const ArticleSection = () => {
 
     const onGetListBlogAsync = async () => {
         const param = {
-            limit: 6,
+            limit: 4,
         }
         try {
             await blogService.GetBlog(
@@ -145,13 +145,12 @@ const ArticleSection = () => {
                                 <Image
                                     src={configImageURL(article.image)}
                                     alt={article.title}
-                                    width={500}
-                                    height={300}
+                                    fill
                                     className="object-cover"
                                 />
-                                <div className="card-category">
+                                {/* <div className="card-category">
                                     <span className="category-text">{article.category_name}</span>
-                                </div>
+                                </div> */}
                                 <div className="card-overlay"></div>
                             </div>
                             <div className="card-content">

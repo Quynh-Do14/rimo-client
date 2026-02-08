@@ -432,7 +432,10 @@
 
 .news-article-container .card-image {
   position: relative;
-  height: 180px;
+  width: 100%;
+  height: auto;
+  max-height: 250px;
+  aspect-ratio: 283/189;
   overflow: hidden;
 }
 
@@ -821,10 +824,6 @@
   .news-article-container .news-grid {
     gap: 40px;
   }
-
-  .news-article-container .card-image {
-    height: 220px;
-  }
 }
 
 /* Ultra wide devices (4K, 1600px and up) */
@@ -851,95 +850,13 @@
   }
 }
 
-/* High DPI/Retina Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .news-article-container .news-card,
-  .news-article-container .featured-article,
-  .news-article-container .tech-highlight-card {
-    border-width: 0.5px;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .news-article-container {
-    background: white !important;
-    color: black !important;
-    padding: 20px !important;
-  }
-
-  .news-article-container .news-card,
-  .news-article-container .featured-article,
-  .news-article-container .tech-highlight-card {
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-    break-inside: avoid;
-  }
-
-  .news-article-container .view-all-btn,
-  .news-article-container .read-more-btn,
-  .news-article-container .load-more-btn,
-  .news-article-container .newsletter-btn,
-  .news-article-container .filter-btn,
-  .news-article-container .card-read-btn {
-    display: none !important;
-  }
-
-  .news-article-container .newsletter-article {
-    display: none !important;
-  }
-}
-
-/* Accessibility Improvements */
-@media (prefers-reduced-motion: reduce) {
-  .news-article-container .news-card,
-  .news-article-container .featured-article,
-  .news-article-container .view-all-btn,
-  .news-article-container .read-more-btn,
-  .news-article-container .load-more-btn,
-  .news-article-container .newsletter-btn,
-  .news-article-container .filter-btn,
-  .news-article-container .card-read-btn {
-    transition: none !important;
-  }
-
-  .news-article-container .featured-image img,
-  .news-article-container .card-image img {
-    transition: none !important;
-  }
-}
-
-/* Touch device optimizations */
-@media (hover: none) and (pointer: coarse) {
-  .news-article-container .view-all-btn,
-  .news-article-container .read-more-btn,
-  .news-article-container .load-more-btn,
-  .news-article-container .newsletter-btn,
-  .news-article-container .filter-btn,
-  .news-article-container .card-read-btn,
-  .news-article-container .tech-cta-btn {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  .news-article-container .newsletter-input {
-    min-height: 44px;
-  }
-
-  .news-article-container .news-grid {
-    gap: 20px;
-  }
-}
-
 /* Landscape mobile optimization */
 @media (max-height: 500px) and (orientation: landscape) {
   .news-article-container .featured-image {
     height: 200px;
   }
 
-  .news-article-container .card-image {
-    height: 150px;
-  }
+
 
   .news-article-container .news-grid {
     grid-template-columns: repeat(2, 1fr);
