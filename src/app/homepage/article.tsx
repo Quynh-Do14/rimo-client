@@ -145,7 +145,8 @@ const ArticleSection = () => {
                                 <Image
                                     src={configImageURL(article.image)}
                                     alt={article.title}
-                                    fill
+                                    width={900}
+                                    height={600}
                                     className="object-cover"
                                 />
                                 {/* <div className="card-category">

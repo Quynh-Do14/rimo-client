@@ -222,7 +222,9 @@
 
 .newsArticleContainer .cardImage {
   position: relative;
-  height: 180px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3/2;
   overflow: hidden;
 }
 
@@ -480,10 +482,6 @@
   .newsArticleContainer .newsGrid {
     gap: 40px;
   }
-
-  .newsArticleContainer .cardImage {
-    height: 220px;
-  }
 }
 
 /* Ultra wide devices (4K, 1600px and up) */
@@ -575,10 +573,6 @@
 
 /* Landscape mobile optimization */
 @media (max-height: 500px) and (orientation: landscape) {
-  .newsArticleContainer .cardImage {
-    height: 150px;
-  }
-
   .newsArticleContainer .newsGrid {
     grid-template-columns: repeat(2, 1fr);
   }

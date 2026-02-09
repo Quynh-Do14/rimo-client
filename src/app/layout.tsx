@@ -230,6 +230,18 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
 
+        {/* <!-- Trong layout hoặc head của Next.js --> */}
+        <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="googlebot-news" content="index, follow" />
+
+        {/* <!-- Chặn AI training từ OpenAI, Anthropic, etc. --> */}
+        <meta name="robots" content="noai, noimageai" />
+        <meta name="ai" content="noindex, nofollow, noarchive" />
+
+        {/* <!-- Hoặc cụ thể hơn --> */}
+        <meta name="google-extended" content="notranslate" />
+
         {/* Structured Data */}
         <script
           type="application/ld+json"

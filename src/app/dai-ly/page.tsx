@@ -11,7 +11,7 @@ import { configImageURL } from '@/infrastructure/helper/helper';
 import SelectSearchCommon from '@/infrastructure/common/input/select-search-common';
 import ButtonCommon from '@/infrastructure/common/button/button-common';
 import { useRecoilValue } from 'recoil';
-import { CategoryAgencyState } from '@/core/common/atoms/category/categoryState';
+import { CategoryAgencyState, CategoryProductState } from '@/core/common/atoms/category/categoryState';
 import districtService from '@/infrastructure/repository/district/district.service';
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
@@ -42,7 +42,7 @@ const AgencyContent = () => {
 
     const [listProvince, setListProvince] = useState<Array<any>>([])
     const [listDistrict, setListDistrict] = useState<Array<any>>([])
-    const categoryAgencyState = useRecoilValue(CategoryAgencyState).data;
+    const categoryPrductState = useRecoilValue(CategoryProductState).data;
 
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -52,8 +52,6 @@ const AgencyContent = () => {
     const province = searchParams?.get('province') || '';
     const district = searchParams?.get('district') || '';
     const categoryId = searchParams?.get('category_id') || '';
-
-    const mapContainerRef = useRef<any>(null);
 
     const onGetListAgencyAsync = async ({ name = searchText, limit = pageSize, page = currentPage, province = provinceSelected, district = districtSelected, category_id = categoryIdSelected }) => {
         const param: AgencyParams = {
@@ -262,7 +260,7 @@ const AgencyContent = () => {
                             </div>
                             <div className="sm:col-span-3">
                                 <SelectSearchCommon
-                                    listDataOfItem={categoryAgencyState}
+                                    listDataOfItem={categoryPrductState}
                                     onChange={onChangeCategory}
                                     valueName='id'
                                     labelName='name'
@@ -334,6 +332,16 @@ const AgencyContent = () => {
                                                                         </div>
                                                                         <div className={styles.infoContent}>
                                                                             <p className={styles.cardPhone}>{item.phone_number}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className={styles.infoItem}>
+                                                                        <div className={styles.infoIconWrapper}>
+                                                                            <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                                                            </svg>
+                                                                        </div>
+                                                                        <div className={styles.infoContent}>
+                                                                            <p className={styles.cardPhone}>{item.categories.map(item => item.category_name).join(',')}</p>
                                                                         </div>
                                                                     </div>
                                                                 </div>
