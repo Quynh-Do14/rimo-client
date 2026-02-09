@@ -1,5 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  source: '/robots.txt',
+  headers: [
+    {
+      key: 'Content-Signal',
+      value: ''
+    },
+    {
+      key: 'X-Robots-Tag',
+      value: 'all'
+    }
+  ],
   images: {
     remotePatterns: [
       {

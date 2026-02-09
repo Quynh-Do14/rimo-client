@@ -2,20 +2,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// middleware.js
 export function middleware(request: NextRequest) {
-    const response = NextResponse.next()
+    const response = NextResponse.next();
 
-    // Thêm X-Robots-Tag header
-    response.headers.set(
-        'X-Robots-Tag',
-        'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1'
-    )
+    // Xóa header nếu là robots.txt
+    if (request.nextUrl.pathname === '/robots.txt') {
+        response.headers.delete('Content-Signal');
+    }
 
-    // Thêm header điều khiển AI training
-    response.headers.set(
-        'X-Robots-Tag-AI',
-        'search=yes, ai-train=no'
-    )
-
-    return response
+    return response;
 }
