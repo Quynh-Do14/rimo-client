@@ -422,7 +422,7 @@
 }
 
 /* Tạo hiệu ứng border gradient */
-.productContainer .specificationTable::before {
+/* .productContainer .specificationTable::before {
   content: '';
   position: absolute;
   top: -1px;
@@ -432,7 +432,7 @@
   background: linear-gradient(45deg, #ffd700, #ffa500, #ffd700);
   border-radius: 9px;
   z-index: -1;
-}
+} */
 
 /* Variables */
 .productContainer .figureContainer {

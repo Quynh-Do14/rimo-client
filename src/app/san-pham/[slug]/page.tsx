@@ -139,7 +139,6 @@ const ProductSlugPage = async ({ params }: Props) => {
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
                         backgroundAttachment: 'fixed',
-                        position: 'relative',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
