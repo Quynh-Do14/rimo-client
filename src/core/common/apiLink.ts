@@ -97,4 +97,11 @@ export class Endpoint {
         static GetById = "/contact"
         static Add = "/contact"
     }
+    static Slogan = class {
+        static Get = "/slogan/private"
+        static GetById = "/slogan/private"
+        static Add = "/slogan"
+        static Update = "/slogan"
+        static Delete = "/slogan"
+    }
 }

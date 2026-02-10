@@ -1,4 +1,5 @@
-import React from 'react';
+'use client'
+import React, { useEffect, useState } from 'react';
 import introduce1 from '@/assets/images/introduce1.jpg';
 import introduce2 from '@/assets/images/introduce2.jpg';
 import introduce3 from '@/assets/images/introduce3.jpg';
@@ -6,6 +7,9 @@ import introduce4 from '@/assets/images/introduce4.jpg';
 import introduce5 from '@/assets/images/introduce5.jpg';
 import introduce6 from '@/assets/images/introduce6.jpg';
 import styles from '@/assets/styles/pages/home/introduce.module.css'
+import { SloganInterface } from '@/infrastructure/interface/slogan/slogan.interface';
+import sloganService from '@/infrastructure/repository/slogan/slogan.service';
+import { configImageURL } from '@/infrastructure/helper/helper';
 const data = [
     {
         image: introduce1,
@@ -39,6 +43,26 @@ const data = [
     },
 ]
 const IntroduceSection = () => {
+    const [listResponse, setListResponse] = useState<Array<SloganInterface>>([])
+    const onGetListAsync = async () => {
+        const param = {
+
+        }
+        try {
+            await sloganService.GetSlogan(
+                param,
+                () => { }
+            ).then((res) => {
+                setListResponse(res.data)
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetListAsync().then(_ => { });
+    }, [])
     return (
         <div className={styles.introduceContainer}>
             <div className={styles.pageHeader}>
@@ -50,17 +74,17 @@ const IntroduceSection = () => {
                 </p> */}
             </div>
             <div className={styles.introduceContent}>
-                {data.map((item, index) => (
+                {listResponse.map((item, index) => (
                     <div key={index} className={styles.card}>
                         <div
                             className={styles.imageContainer}
                             style={{
-                                backgroundImage: `url(${item.image.src})`,
+                                backgroundImage: `url(${configImageURL(item.image)})`,
                                 objectFit: 'cover'
                             }}
                         >
-                            <h3 className={styles.title}>{item.title}</h3>
-                            <h4 className={styles.content}>{item.content}</h4>
+                            <h3 className={styles.title}>{item.name}</h3>
+                            <h4 className={styles.content}>{item.description}</h4>
                         </div>
                     </div>
                 ))}
