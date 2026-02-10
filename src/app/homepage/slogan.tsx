@@ -90,10 +90,10 @@ const SloganContent = () => {
         <div className="car-tech-slider-container">
             <div className="slider-header">
                 <h1 className="main-title">
-                    ĐỘI NGŨ CHUYÊN GIA <span className="highlight">Ô TÔ</span>
+                    CÔNG NGHỆ <span className="highlight">MỚI</span>
                 </h1>
                 <p className="subtitle">
-                    Công nghệ bảo vệ & nâng cấp xe hơi chuyên nghiệp
+                    PCU cao cấp - Tự phục hồi vết xước ở 20 o C
                 </p>
             </div>
 

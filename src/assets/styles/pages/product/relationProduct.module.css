@@ -843,35 +843,3 @@
     margin: 3px 0;
   }
 }
-
-/* Reduced Motion */
-@media (prefers-reduced-motion: reduce) {
-  .galleryItem,
-  .thumbnail,
-  .playBtn,
-  .itemHoverEffect,
-  .viewAllBtn,
-  .ctaButton,
-  .filterBtn {
-    transition: none !important;
-    animation: none !important;
-  }
-
-  .galleryItem:hover {
-    transform: none;
-  }
-
-  .thumbnail {
-    transform: none !important;
-  }
-
-  .playBtn {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-
-  .galleryCta::before {
-    animation: none;
-    background: #ffd700;
-  }
-}

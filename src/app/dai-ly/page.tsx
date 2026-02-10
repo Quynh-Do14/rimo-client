@@ -334,17 +334,19 @@ const AgencyContent = () => {
                                                                             <p className={styles.cardPhone}>{item.phone_number}</p>
                                                                         </div>
                                                                     </div>
-                                                                    <div className={styles.infoItem}>
-                                                                        <div className={styles.infoIconWrapper}>
-                                                                            <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
-                                                                                <line x1="7" y1="7" x2="7.01" y2="7"></line>
-                                                                            </svg>
+                                                                    {item.categories.length > 0 && (
+                                                                        <div className={styles.infoItem}>
+                                                                            <div className={styles.infoIconWrapper}>
+                                                                                <svg className={styles.infoIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                                                                                    <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                                                                                </svg>
+                                                                            </div>
+                                                                            <div className={styles.infoContent}>
+                                                                                <p className={styles.cardPhone}>{item.categories?.map(c => c.category_name && c.category_name.split('-')[0]).join(', ')}</p>
+                                                                            </div>
                                                                         </div>
-                                                                        <div className={styles.infoContent}>
-                                                                            <p className={styles.cardPhone}>{item.categories?.map(c => c.category_name && c.category_name.split('-')[0]).join(', ')}</p>
-                                                                        </div>
-                                                                    </div>
+                                                                    )}
                                                                 </div>
 
                                                                 <div className={styles.cardFooter}>
