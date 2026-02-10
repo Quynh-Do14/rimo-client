@@ -49,9 +49,8 @@ const BlogInProductSlug = () => {
                                 <Image
                                     src={configImageURL(article.image)}
                                     alt={article.title}
-                                    width={500}
-                                    height={300}
-                                    className={styles.cardImage}
+                                    fill
+                                    className="object-cover"
                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 />
                                 <div className={styles.cardCategory}>
