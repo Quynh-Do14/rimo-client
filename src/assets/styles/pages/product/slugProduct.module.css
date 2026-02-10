@@ -1,10 +1,10 @@
 .productContainer {
-  /* background: #ffffff;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 20px;
-  padding: 20px 0; */
+  padding: 20px 0;
 }
 /* Style cho tiêu đề chính */
 .productContainer h1 {
