@@ -93,7 +93,7 @@ const SloganContent = () => {
                     CÔNG NGHỆ <span className="highlight">MỚI</span>
                 </h1>
                 <p className="subtitle">
-                    PCU cao cấp - Tự phục hồi vết xước ở 20 o C
+                    PCU cao cấp - Tự phục hồi vết xước ở 20°C
                 </p>
             </div>
 
