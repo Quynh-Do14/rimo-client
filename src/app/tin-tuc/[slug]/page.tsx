@@ -7,6 +7,8 @@ import styles from "@/assets/styles/pages/blog/slugBlog.module.css";
 import RelationBlogComponent from './components/relationBlog';
 import { Endpoint } from '@/core/common/apiLink';
 import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface';
+import TocBlog from './components/toc';
+import Image from 'next/image';
 
 type Props = {
     params: { slug: string };
@@ -39,10 +41,34 @@ const BlogSlugPage = async ({ params }: Props) => {
     const blog = dataDetail || {};
     const relatedBlogs = dataDetail?.related_blogs || []
 
+    let tocItems: { id: string; text: any; level: number; }[] = [];
+    let tocItemsLength: { id: string; text: any; level: number; }[] = [];
+
+    var initialLength = 0
+    const headings = String(blog.description).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
+    if (headings) {
+        const items = headings.map((heading, index) => {
+            const level = heading.match(/h([2-3])/)?.[1] ?? '2';
+            const text = heading.replace(/<\/?h[2-3][^>]*>/g, '');
+            const id = `heading-${index}`;
+            return { id, text, level: parseInt(level) };
+        });
+        initialLength = items.length
+        tocItems = items;
+    }
+
+    const updatedContent = String(blog.description).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match: any, tag: string[], text: any, _index: any) => {
+        const id = `heading-${tocItems.length}`;
+
+        tocItems.push({ id, text, level: parseInt(tag[1]) });
+        tocItemsLength = tocItems.filter((_it, index) => index >= initialLength)
+        return `<${tag} id="${id}">${text}</${tag}>`;
+    });
+
     return (
         <ClientLayout>
             <div className={`${styles.blogSlugContainer} padding-common`}>
-                <div className="flex flex-col lg:flex-row gap-5">
+                <div className="flex flex-col lg:flex-row gap-5 relative">
                     {/* Main content - chiếm 75% trên desktop, toàn bộ trên mobile */}
                     <div className="w-full lg:w-3/4">
                         <div className="space-y-6 flex flex-col gap-5">
@@ -60,17 +86,18 @@ const BlogSlugPage = async ({ params }: Props) => {
                             ></div> */}
 
                             <div className={styles.blogImg}>
-                                <img src={configImageURL(blog.image)} alt="Description" loading="lazy" />
+                                <Image src={configImageURL(blog.image)} fill alt="Description" loading="lazy" />
                             </div>
+                            <TocBlog tocItems={tocItemsLength} />
                             <article
                                 className="prose max-w-none"
-                                dangerouslySetInnerHTML={{ __html: blog.description }}
+                                dangerouslySetInnerHTML={{ __html: updatedContent }}
                             />
                         </div>
                     </div>
 
                     {/* Sidebar - chiếm 25% trên desktop, toàn bộ trên mobile */}
-                    <div className="w-full lg:w-1/4">
+                    <div className="w-full lg:w-1/4 lg:sticky lg:top-20 lg:self-start overflow-y-auto">
                         <RelationBlogComponent relatedBlogs={relatedBlogs} />
                     </div>
                 </div>

@@ -434,7 +434,7 @@
   position: relative;
   width: 100%;
   height: auto;
-  aspect-ratio: 3/2;
+  aspect-ratio: 34/19;
   overflow: hidden;
 }
 
@@ -854,8 +854,6 @@
   .news-article-container .featured-image {
     height: 200px;
   }
-
-
 
   .news-article-container .news-grid {
     grid-template-columns: repeat(2, 1fr);
