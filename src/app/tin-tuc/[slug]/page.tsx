@@ -9,6 +9,7 @@ import { Endpoint } from '@/core/common/apiLink';
 import { BlogInterface } from '@/infrastructure/interface/blog/blog.interface';
 import TocBlog from './components/toc';
 import Image from 'next/image';
+// import 'react-quill/dist/quill.snow.css';
 
 type Props = {
     params: { slug: string };
@@ -89,10 +90,12 @@ const BlogSlugPage = async ({ params }: Props) => {
                                 <Image src={configImageURL(blog.image)} fill alt="Description" loading="lazy" />
                             </div>
                             <TocBlog tocItems={tocItemsLength} />
-                            <article
-                                className="prose max-w-none"
-                                dangerouslySetInnerHTML={{ __html: updatedContent }}
-                            />
+                            <div className="quill-content">
+                                <article
+                                    className="ql-editor prose max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: updatedContent }}
+                                />
+                            </div>
                         </div>
                     </div>
 
