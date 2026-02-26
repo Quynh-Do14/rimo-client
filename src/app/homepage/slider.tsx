@@ -9,6 +9,8 @@ import { BannerInterface } from "@/infrastructure/interface/banner/banner.interf
 import AnimatedNumber from "@/infrastructure/common/controls/AnimatedNumber";
 import dynamic from "next/dynamic";
 import { Settings } from "react-slick";
+import Link from "next/link";
+import { ROUTE_PATH } from "@/core/common/appRouter";
 interface Stat {
     number: number;
     label: string;
@@ -180,7 +182,7 @@ const FullWidthSlider = () => {
             {/* Main Slider */}
             {
                 !loading ?
-                    <div className="slider-wrapper">
+                    <Link href={ROUTE_PATH.PRODUCT} className="slider-wrapper">
                         <Slider {...settings}>
                             {
 
@@ -201,7 +203,7 @@ const FullWidthSlider = () => {
 
                             }
                         </Slider>
-                    </div>
+                    </Link>
                     :
                     <div className="slider-wrapper">
                         <div className="slide-item"></div>
