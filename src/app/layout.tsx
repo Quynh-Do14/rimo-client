@@ -5,6 +5,7 @@ import RecoilProvider from "./ClientProviders";
 import { configImageURL } from "@/infrastructure/helper/helper";
 import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/editor-common.css"
+import Script from "next/script";
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'], // Thêm vietnamese nếu cần
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -194,7 +195,7 @@ const productSchema = {
     "offerCount": "5"
   }
 };
-
+const GA_TRACKING_ID = 'G-SKGSGMG46V';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -254,7 +255,18 @@ export default function RootLayout({
             ])
           }}
         />
-
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', '${GA_TRACKING_ID}');
+        `}
+        </Script>
         {/* Thêm meta tags bổ sung cho SEO */}
         <meta name="geo.region" content="VN-HN" />
         <meta name="geo.placename" content="Hà Nội" />
