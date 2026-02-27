@@ -15,6 +15,12 @@ const workSans = Work_Sans({
   fallback: ['system-ui', 'Arial', 'sans-serif'],
 });
 
+const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL || '';
+const companyName = "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh";
+const brandName = "Rimo";
+const mainTitle = "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô";
+const mainDescription = "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.";
+
 // Danh sách keywords cho SEO
 const keywords = [
   "phim cách nhiệt ô tô",
@@ -60,10 +66,10 @@ export const metadata: Metadata = {
         url: configImageURL('/uploads/RIMO-logo.png'),
         width: 1200,
         height: 630,
-        alt: "Phim cách nhiệt Rimo",
+        alt: "Phim cách nhiệt & Phim PPF Rimo",
       },
     ],
-    siteName: "Phim cách nhiệt Rimo",
+    siteName: "Phim cách nhiệt & Phim PPF Rimo",
   },
   twitter: {
     card: "summary_large_image",
@@ -90,21 +96,20 @@ export const metadata: Metadata = {
   // },
 };
 
-const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
-
 // Schema cho Local Business (quan trọng cho doanh nghiệp địa phương)
 const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "AutomotiveBusiness",
   "@id": `${siteURL}/#localbusiness`,
   "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
-  "image": `${siteURL}/logo.png`,
+  "image": configImageURL('/uploads/RIMO-logo.png'),
   "description": "Chuyên cung cấp và lắp đặt phim cách nhiệt ô tô, phim PPF bảo vệ sơn Rimo chính hãng",
   "url": siteURL,
-  "telephone": "19008113",
+  "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
+  "telephone": "+84-19008113",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Số 31 ngách 178/52 Tam Trinh, Phường Yên Sở",
+    "streetAddress": "Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội",
     "addressLocality": "Hà Nội",
     "addressRegion": "Hà Nội",
     "postalCode": "100000",
@@ -147,7 +152,7 @@ const organizationSchema = {
   "@id": `${siteURL}/#organization`,
   "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
   "url": siteURL,
-  "logo": `${siteURL}/logo.png`,
+  "logo": configImageURL('/uploads/RIMO-logo.png'),
   "description": "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối phim cách nhiệt Rimo chính hãng.",
   "sameAs": [
     "https://www.facebook.com/rimo.vietnam",
@@ -182,6 +187,7 @@ const productSchema = {
   "@id": `${siteURL}/#product`,
   "name": "Phim cách nhiệt Rimo",
   "description": "Phim cách nhiệt ô tô Rimo cao cấp với công nghệ Nano Ceramic, chống tia UV 99%, cách nhiệt hiệu quả, bảo vệ sơn xe toàn diện",
+  "image": configImageURL('/uploads/RIMO-logo.png'),
   "brand": {
     "@type": "Brand",
     "name": "Rimo"
@@ -212,11 +218,6 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
-        {/* Fonts */}
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -276,6 +277,11 @@ export default function RootLayout({
         {/* Thẻ cho mạng xã hội */}
         <meta property="og:locale" content="vi_VN" />
         <meta property="og:type" content="website" />
+
+        {/* Schema Markup cho body */}
+        <meta itemProp="name" content={mainTitle} />
+        <meta itemProp="description" content={mainDescription} />
+        <meta itemProp="image" content={configImageURL('/uploads/POTECH-logo.png')} />
 
       </head>
 
