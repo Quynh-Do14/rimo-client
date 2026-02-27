@@ -64,8 +64,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: configImageURL('/uploads/RIMO-logo.png'),
-        width: 1200,
-        height: 630,
         alt: "Phim cách nhiệt & Phim PPF Rimo",
       },
     ],

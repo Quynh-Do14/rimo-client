@@ -9,6 +9,7 @@ export interface BlogInterface {
     category_name: string;
     user_name: string;
     created_at: string;
+    updated_at: string;
     related_blogs: BlogInterface[]
 }
 

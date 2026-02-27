@@ -23,6 +23,14 @@ export async function generateMetadata
     }).then((res) => res.json());
     const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${params.slug}`;
 
+    const keywords = [
+        product.name,
+        product.category_name,
+        "phim cách nhiệt Rimo",
+        "phim ppf Rimo",
+        product.brand_name,
+    ].filter(Boolean).join(", ");
+
     const productSchema = {
         "@context": "https://schema.org",
         "@type": "Product",
@@ -31,14 +39,18 @@ export async function generateMetadata
         "name": product.name,
         "description": product.short_description || product.description,
         "image": configImageURL(product.image),
+        "category": product.category_name,
         "offers": {
             "@type": "Offer",
             "url": productUrl, // ✅ Nhất quán
             "priceCurrency": "VND",
             "price": product.price?.toString(),
             "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            // ❓ "availability": "https://schema.org/InStock", // Xem phần 2
-            // ❓ "itemCondition": "https://schema.org/NewCondition" // Xem phần 3
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+                "@type": "Organization",
+                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
+            }
         },
     };
 
@@ -70,13 +82,42 @@ export async function generateMetadata
     return {
         title: product.name,
         description: product.short_description,
+        keywords: keywords,
         openGraph: {
             title: product.name,
             description: product.short_description,
-            images: configImageURL(product.image),
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name, // ✅ THÊM ALT
+            }],
+            type: 'website',
+            url: productUrl,
+            siteName: publicURL,
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: product.name,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name, // ✅ THÊM ALT
+            }],
+        },
+
+        alternates: {
+            canonical: productUrl, // ✅ THÊM CANONICAL
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
         },
         other: {
-            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema])
+            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema]),
+            'product:price:amount': product.price?.toString(),
+            'product:price:currency': 'VND',
         }
     };
 }
