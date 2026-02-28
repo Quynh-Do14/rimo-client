@@ -241,21 +241,27 @@
 
   .tiny-style h1 {
     font-size: 1.75rem; /* 2rem * 0.875 */
+    margin: 0 0 0.75rem 0;
   }
   .tiny-style h2 {
     font-size: 1.35rem; /* 1.5rem * 0.9 */
+    margin: 0 0 0.75rem 0;
   }
   .tiny-style h3 {
     font-size: 1.15rem; /* 1.25rem * 0.92 */
+    margin: 0 0 0.75rem 0;
   }
   .tiny-style h4 {
     font-size: 1rem; /* 1.125rem * 0.89 */
+    margin: 0 0 0.75rem 0;
   }
   .tiny-style h5 {
     font-size: 0.9rem; /* 1rem * 0.9 */
+    margin: 0 0 0.75rem 0;
   }
   .tiny-style h6 {
     font-size: 0.8rem; /* 0.875rem * 0.91 */
+    margin: 0 0 0.75rem 0;
   }
 
   .tiny-style table {
