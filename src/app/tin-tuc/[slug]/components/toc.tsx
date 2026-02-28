@@ -33,7 +33,7 @@ const TocBlog = ({ tocItems }: Props) => {
     };
 
     return (
-        <div className={styles.newsGrid}>
+        <div className={styles.newsTOC}>
             <p className={styles.title}>Mục lục bài viết</p>
             <ul>
                 {(() => {
