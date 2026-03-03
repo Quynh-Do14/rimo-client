@@ -21,7 +21,29 @@ const workSans = Work_Sans({
 const keywords = [
   "RIMO",
   "phim cách nhiệt Rimo",
-  // ... rest of your keywords
+  "phim ppf Rimo",
+  "phim bảo vệ sơn Rimo",
+  "dán phim cách nhiệt Rimo",
+  "dán ppf Rimo",
+  "phim ceramic Rimo",
+  "phim cách nhiệt nano ceramic Rimo",
+  "phim cách nhiệt cao cấp Rimo",
+  "phim cách nhiệt chính hãng Rimo",
+  "cách nhiệt ô tô Hà Nội",
+  "cửa hàng dán phim cách nhiệt",
+  "đại lý phim cách nhiệt",
+  "phim cách nhiệt giá tốt",
+  "phim cách nhiệt ô tô giá rẻ",
+  "bảo vệ sơn xe hơi",
+  "phim bảo vệ sơn xe",
+  "PPF bảo vệ sơn",
+  "Paint Protection Film",
+  "phim cách nhiệt chống tia UV",
+  "phim cách nhiệt cách âm",
+  "dịch vụ dán phim ô tô",
+  "lắp đặt phim cách nhiệt",
+  "phim cách nhiệt ô tô toàn quốc",
+  "địa chỉ dán phim cách nhiệt uy tín"
 ];
 
 // Default metadata (fallback)
@@ -242,6 +264,10 @@ export default function RootLayout({
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+          rel="stylesheet"
         />
 
         {/* Preconnect */}
