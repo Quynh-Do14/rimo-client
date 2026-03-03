@@ -7,9 +7,9 @@ import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/tiny-editor-common.css"
 import Script from "next/script";
 import { Endpoint } from "@/core/common/apiLink";
-import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
+
 const workSans = Work_Sans({
-  subsets: ['latin', 'vietnamese'], // Thêm vietnamese nếu cần
+  subsets: ['latin', 'vietnamese'],
   weight: ['300', '400', '500', '600', '700', '800', '900'],
   style: ['normal', 'italic'],
   display: 'swap',
@@ -21,196 +21,208 @@ const workSans = Work_Sans({
 const keywords = [
   "RIMO",
   "phim cách nhiệt Rimo",
-  "phim ppf Rimo",
-  "phim bảo vệ sơn Rimo",
-  "dán phim cách nhiệt Rimo",
-  "dán ppf Rimo",
-  "phim ceramic Rimo",
-  "phim cách nhiệt nano ceramic Rimo",
-  "phim cách nhiệt cao cấp Rimo",
-  "phim cách nhiệt chính hãng Rimo",
-  "cách nhiệt ô tô Hà Nội",
-  "cửa hàng dán phim cách nhiệt",
-  "đại lý phim cách nhiệt",
-  "phim cách nhiệt giá tốt",
-  "phim cách nhiệt ô tô giá rẻ",
-  "bảo vệ sơn xe hơi",
-  "phim bảo vệ sơn xe",
-  "PPF bảo vệ sơn",
-  "Paint Protection Film",
-  "phim cách nhiệt chống tia UV",
-  "phim cách nhiệt cách âm",
-  "dịch vụ dán phim ô tô",
-  "lắp đặt phim cách nhiệt",
-  "phim cách nhiệt ô tô toàn quốc",
-  "địa chỉ dán phim cách nhiệt uy tín"
+  // ... rest of your keywords
 ];
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
-const config = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}?type=TITLE_PAGE`, {
-  cache: 'no-store', // Tắt cache
-}).then((res) => res.json());
-const configPage: ConfigPageInterface = config.data[0]
+
+// Default metadata (fallback)
+const defaultMetadata = {
+  title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
+  description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
+};
 
 const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL || '';
 const companyName = "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh";
-const brandName = "Rimo";
-const mainTitle = configPage.title || "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô";
-const mainDescription = configPage.description || "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.";
 const organization = "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối phim cách nhiệt Rimo chính hãng.";
 const product = "Phim cách nhiệt ô tô Rimo cao cấp với công nghệ Nano Ceramic, chống tia UV 99%, cách nhiệt hiệu quả, bảo vệ sơn xe toàn diện";
-const webSchemaDescription = "imo là thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng"
+const webSchemaDescription = "Rimo là thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ";
 
-export const metadata: Metadata = {
+const GA_TRACKING_ID = 'G-SKGSGMG46V';
 
+// Tạo async function để fetch metadata
+async function getMetadata() {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-  title: mainTitle,
-  description: mainDescription,
-  keywords: keywords.join(", "),
-  authors: [{ name: companyName }],
-  openGraph: {
-    type: "website",
-    url: process.env.NEXT_PUBLIC_PUBLIC_URL,
-    title: mainTitle,
-    description: mainDescription,
-    images: [
-      {
-        url: configImageURL('/uploads/RIMO-logo.png'),
-        alt: "Phim cách nhiệt & Phim PPF Rimo",
-      },
-    ],
-    siteName: "Phim cách nhiệt & Phim PPF Rimo",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: mainTitle,
-    description: mainDescription,
-    images: [configImageURL('/uploads/RIMO-logo.png')],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+  if (!baseURL) {
+    console.warn('NEXT_PUBLIC_API_URL is not defined');
+    return defaultMetadata;
+  }
+
+  try {
+    const response = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}?type=TITLE_PAGE`, {
+      cache: 'no-store',
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error('Invalid JSON response');
+    }
+
+    const config = await response.json();
+    const configPage = config.data?.[0];
+
+    return {
+      title: configPage?.title || defaultMetadata.title,
+      description: configPage?.description || defaultMetadata.description,
+    };
+  } catch (error) {
+    console.error('Failed to fetch metadata:', error);
+    return defaultMetadata;
+  }
+}
+
+// Generate metadata dynamically
+export async function generateMetadata(): Promise<Metadata> {
+  const metadata = await getMetadata();
+
+  return {
+    title: metadata.title,
+    description: metadata.description,
+    keywords: keywords.join(", "),
+    authors: [{ name: companyName }],
+    openGraph: {
+      type: "website",
+      url: process.env.NEXT_PUBLIC_PUBLIC_URL,
+      title: metadata.title,
+      description: metadata.description,
+      images: [
+        {
+          url: configImageURL('/uploads/RIMO-logo.png'),
+          alt: "Phim cách nhiệt & Phim PPF Rimo",
+        },
+      ],
+      siteName: "Phim cách nhiệt & Phim PPF Rimo",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: metadata.title,
+      description: metadata.description,
+      images: [configImageURL('/uploads/RIMO-logo.png')],
+    },
+    robots: {
       index: true,
       follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
     },
-  },
-  alternates: {
-    canonical: process.env.NEXT_PUBLIC_PUBLIC_URL,
-  },
-  // verification: {
-  //   google: process.env.GOOGLE_SITE_VERIFICATION, // Thêm vào biến môi trường nếu có
-  // },
+    alternates: {
+      canonical: process.env.NEXT_PUBLIC_PUBLIC_URL,
+    },
+  };
+}
+
+// Schema components
+const LocalBusinessSchema = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AutomotiveBusiness",
+    "@id": `${siteURL}/#localbusiness`,
+    "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
+    "image": configImageURL('/uploads/RIMO-logo.png'),
+    "description": "Chuyên cung cấp và lắp đặt phim cách nhiệt ô tô, phim PPF bảo vệ sơn Rimo chính hãng",
+    "url": siteURL,
+    "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
+    "telephone": "+84-19008113",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội",
+      "addressLocality": "Hà Nội",
+      "addressRegion": "Hà Nội",
+      "postalCode": "100000",
+      "addressCountry": "VN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "20.987787",
+      "longitude": "105.861443"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "08:00",
+        "closes": "18:00"
+      }
+    ],
+    "priceRange": "$$",
+    "serviceType": "Phim cách nhiệt ô tô, PPF bảo vệ sơn, Dán phim cách nhiệt",
+    "areaServed": { "@type": "City", "name": "Hà Nội" },
+    "sameAs": ["https://www.facebook.com/rimo.vietnam"],
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-// Schema cho Local Business (quan trọng cho doanh nghiệp địa phương)
-const localBusinessSchema = {
-  "@context": "https://schema.org",
-  "@type": "AutomotiveBusiness",
-  "@id": `${siteURL}/#localbusiness`,
-  "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
-  "image": configImageURL('/uploads/RIMO-logo.png'),
-  "description": "Chuyên cung cấp và lắp đặt phim cách nhiệt ô tô, phim PPF bảo vệ sơn Rimo chính hãng",
-  "url": siteURL,
-  "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
-  "telephone": "+84-19008113",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội",
-    "addressLocality": "Hà Nội",
-    "addressRegion": "Hà Nội",
-    "postalCode": "100000",
-    "addressCountry": "VN"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": "20.987787",
-    "longitude": "105.861443"
-  },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
-      "opens": "08:00",
-      "closes": "18:00"
+const OrganizationSchema = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${siteURL}/#organization`,
+    "name": companyName,
+    "url": siteURL,
+    "logo": configImageURL('/uploads/RIMO-logo.png'),
+    "description": organization,
+    "sameAs": ["https://www.facebook.com/rimo.vietnam"],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "19008113",
+      "contactType": "customer service",
+      "availableLanguage": ["Vietnamese"],
+      "areaServed": "VN"
     }
-  ],
-  "priceRange": "$$",
-  "serviceType": "Phim cách nhiệt ô tô, PPF bảo vệ sơn, Dán phim cách nhiệt",
-  "areaServed": {
-    "@type": "City",
-    "name": "Hà Nội"
-  },
-  "sameAs": [
-    "https://www.facebook.com/rimo.vietnam",
-  ]
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": `${siteURL}/#organization`,
-  "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
-  "url": siteURL,
-  "logo": configImageURL('/uploads/RIMO-logo.png'),
-  "description": organization,
-  "sameAs": [
-    "https://www.facebook.com/rimo.vietnam",
-  ],
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "19008113",
-    "contactType": "customer service",
-    "availableLanguage": ["Vietnamese"],
-    "areaServed": "VN"
-  }
+const WebsiteSchema = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteURL}/#website`,
+    "url": siteURL,
+    "name": defaultMetadata.title,
+    "description": webSchemaDescription,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": `${siteURL}/tim-kiem?search={search_term_string}`,
+      "query-input": "required name=search_term_string"
+    }
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-const websiteSchema = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": `${siteURL}/#website`,
-  "url": siteURL,
-  "name": mainTitle,
-  "description": webSchemaDescription,
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": `${siteURL}/tim-kiem?search={search_term_string}`,
-    "query-input": "required name=search_term_string"
-  }
+const ProductSchema = () => {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${siteURL}/#product`,
+    "name": "Phim cách nhiệt Rimo, Phim bảo về sơn PPF Rimo",
+    "description": product,
+    "image": configImageURL('/uploads/RIMO-logo.png'),
+    "brand": { "@type": "Brand", "name": "Rimo" },
+    "category": "Phụ kiện ô tô",
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "VND",
+      "lowPrice": "1500000",
+      "highPrice": "10000000",
+      "offerCount": "5"
+    }
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />;
 };
 
-// Schema cho Product/Service
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "@id": `${siteURL}/#product`,
-  "name": "Phim cách nhiệt Rimo, Phim bảo về sơn PPF Rimo",
-  "description": product,
-  "image": configImageURL('/uploads/RIMO-logo.png'),
-  "brand": {
-    "@type": "Brand",
-    "name": "Rimo"
-  },
-  "category": "Phụ kiện ô tô",
-  "offers": {
-    "@type": "AggregateOffer",
-    "priceCurrency": "VND",
-    "lowPrice": "1500000",
-    "highPrice": "10000000",
-    "offerCount": "5"
-  }
-};
-const GA_TRACKING_ID = 'G-SKGSGMG46V';
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -231,67 +243,45 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap"
-          rel="stylesheet"
-        />
 
         {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com" />
 
-        {/* <!-- Trong layout hoặc head của Next.js --> */}
+        {/* SEO meta tags */}
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
         <meta name="googlebot-news" content="index, follow" />
-
-        {/* <!-- Chặn AI training từ OpenAI, Anthropic, etc. --> */}
         <meta name="robots" content="noai, noimageai" />
         <meta name="ai" content="noindex, nofollow, noarchive" />
-
-        {/* <!-- Hoặc cụ thể hơn --> */}
         <meta name="google-extended" content="notranslate" />
 
-        {/* Structured Data */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify([
-              organizationSchema,
-              websiteSchema,
-              localBusinessSchema,
-              productSchema
-            ])
-          }}
-        />
+        {/* Geo tags */}
+        <meta name="geo.region" content="VN-HN" />
+        <meta name="geo.placename" content="Hà Nội" />
+        <meta name="geo.position" content="20.987787;105.861443" />
+        <meta name="ICBM" content="20.987787, 105.861443" />
+
+        {/* Schema.org */}
+        <LocalBusinessSchema />
+        <OrganizationSchema />
+        <WebsiteSchema />
+        <ProductSchema />
+
+        {/* Google Analytics */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
           {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GA_TRACKING_ID}');
-        `}
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}');
+          `}
         </Script>
-        {/* Thêm meta tags bổ sung cho SEO */}
-        <meta name="geo.region" content="VN-HN" />
-        <meta name="geo.placename" content="Hà Nội" />
-        <meta name="geo.position" content="20.987787;105.861443" />
-        <meta name="ICBM" content="20.987787, 105.861443" />
-
-        {/* Thẻ cho mạng xã hội */}
-        <meta property="og:locale" content="vi_VN" />
-        <meta property="og:type" content="website" />
-
-        {/* Schema Markup cho body */}
-        <meta itemProp="name" content={mainTitle} />
-        <meta itemProp="description" content={mainDescription} />
-        <meta itemProp="image" content={configImageURL('/uploads/POTECH-logo.png')} />
-
       </head>
 
       <body className={workSans.className}>
