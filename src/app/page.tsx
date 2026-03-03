@@ -15,7 +15,7 @@ const baseURL = process.env.NEXT_PUBLIC_API_URL;
 // Tạo wrapper component cho mỗi section có thể suspense
 const HomePageContent = async () => {
   const config = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}`, {
-    next: { revalidate: 3600 },
+    cache: 'no-store', // Tắt cache
   }).then((res) => res.json());
   const configPage: ConfigPageInterface[] = config.data
 

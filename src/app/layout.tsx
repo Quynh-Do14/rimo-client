@@ -7,6 +7,7 @@ import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/tiny-editor-common.css"
 import Script from "next/script";
 import { Endpoint } from "@/core/common/apiLink";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
 
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'],
@@ -47,7 +48,7 @@ const keywords = [
 ];
 
 // Default metadata (fallback)
-const defaultMetadata = {
+let defaultMetadata = {
   title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
   description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
 };
@@ -84,8 +85,9 @@ async function getMetadata() {
     }
 
     const config = await response.json();
-    const configPage = config.data?.[0];
-
+    const configPage: ConfigPageInterface = config.data?.[0];
+    defaultMetadata.title = configPage.title
+    defaultMetadata.description = configPage.description
     return {
       title: configPage?.title || defaultMetadata.title,
       description: configPage?.description || defaultMetadata.description,

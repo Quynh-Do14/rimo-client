@@ -18,19 +18,6 @@ type Props = {
     type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
 }
 
-interface Stat {
-    number: number;
-    label: string;
-    symbol: string;
-}
-
-const stats: Stat[] = [
-    { number: 10, symbol: '+', label: "Năm kinh nghiệm", },
-    { number: 10000, label: "Khách hàng", symbol: "+" },
-    { number: 99, label: "Hài lòng", symbol: "%" },
-    { number: 24, label: "Hỗ trợ", symbol: "/7" }
-];
-
 const Slider = dynamic(() => import("react-slick"), {
     ssr: false,
     loading: () =>
