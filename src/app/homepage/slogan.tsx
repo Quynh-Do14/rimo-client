@@ -15,8 +15,20 @@ import dynamic from "next/dynamic";
 import { PageLoading } from "@/infrastructure/common/loading/loadingPage";
 import { Modal } from "antd";
 import YoutubeVideo from "@/infrastructure/common/thumbnailYoutube/youtube";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
 
-const SloganContent = () => {
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
+
+const SloganContent = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent = configPage.find(item => item.type == type);
+
     const settings = {
         dots: true,
         infinite: true,
@@ -88,15 +100,34 @@ const SloganContent = () => {
 
     return (
         <div className="car-tech-slider-container">
-            <div className="slider-header">
-                <h1 className="main-title">
-                    CÔNG NGHỆ <span className="highlight">MỚI</span>
-                </h1>
+            <div className="section-header dark">
+                {
+                    configContent?.box_content
+                        ?
+                        < div className="header-badge">
+                            <span className="badge-text">{configContent?.box_content}</span>
+                        </div>
+                        : null
+                }
+                {
+                    configContent?.title
+                        ?
+                        <h1 className="main-title-custom">
+
+                            <article
+                                dangerouslySetInnerHTML={{ __html: configContent?.title }}
+                            />
+                        </h1>
+                        :
+                        <h1 className="main-title">
+                            CÔNG NGHỆ <span className="highlight">MỚI</span>
+                        </h1>
+                }
+
                 <p className="subtitle">
-                    PCU cao cấp - Tự phục hồi vết xước ở 20°C
+                    {configContent?.description ? configContent?.description : "PCU cao cấp - Tự phục hồi vết xước ở 20°C"}
                 </p>
             </div>
-
             <div className="slider-wrapper">
                 <Slider {...settings}>
                     {listProductCategory.map((slide, index) => {

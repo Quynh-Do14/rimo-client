@@ -11,6 +11,13 @@ import dynamic from "next/dynamic";
 import { Settings } from "react-slick";
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
+
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
+
 interface Stat {
     number: number;
     label: string;
@@ -33,7 +40,12 @@ const Slider = dynamic(() => import("react-slick"), {
 });
 
 
-const FullWidthSlider = () => {
+const FullWidthSlider = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent: ConfigPageInterface[] = configPage.filter(item => item.type == type);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
     const [listBanner, setListBanner] = useState<Array<string>>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -214,10 +226,15 @@ const FullWidthSlider = () => {
             {/* Stats Bar */}
             <div className="stats-bar">
                 <div className="stats-container">
-                    {stats.map((stat: Stat, index: number) => (
+                    {configContent.map((stat: ConfigPageInterface, index: number) => (
                         <div key={index} className="stat-item" >
-                            <div className="stat-number"><AnimatedNumber value={isAnimate ? stat.number : 0} />{stat.symbol} </div>
-                            <div ref={textRef} className="stat-label">{stat.label}</div>
+
+                            <div className="stat-number">
+                                <article
+                                    dangerouslySetInnerHTML={{ __html: stat.title }}
+                                />
+                            </div>
+                            <div ref={textRef} className="stat-label">{stat.description}</div>
                         </div>
                     ))}
                 </div>

@@ -1,17 +1,23 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import introduce1 from '@/assets/images/introduce1.jpg';
-import introduce2 from '@/assets/images/introduce2.jpg';
-import introduce3 from '@/assets/images/introduce3.jpg';
-import introduce4 from '@/assets/images/introduce4.jpg';
-import introduce5 from '@/assets/images/introduce5.jpg';
-import introduce6 from '@/assets/images/introduce6.jpg';
 import styles from '@/assets/styles/pages/home/introduce.module.css'
 import { SloganInterface } from '@/infrastructure/interface/slogan/slogan.interface';
 import sloganService from '@/infrastructure/repository/slogan/slogan.service';
 import { configImageURL } from '@/infrastructure/helper/helper';
+import { ConfigPageInterface } from '@/infrastructure/interface/configPage/configPage.interface';
 
-const IntroduceSection = () => {
+type Props = {
+    configPage: ConfigPageInterface[]
+    type: 'TITLE_PAGE' | 'SECTION_1' | 'SECTION_2' | 'SECTION_3' | 'SECTION_4' | 'ACHIEVEMENT';
+}
+
+const IntroduceSection = (props: Props) => {
+    const {
+        configPage,
+        type
+    } = props;
+    const configContent = configPage.find(item => item.type == type);
+
     const [listResponse, setListResponse] = useState<Array<SloganInterface>>([])
     const onGetListAsync = async () => {
         const param = {
@@ -34,13 +40,38 @@ const IntroduceSection = () => {
     }, [])
     return (
         <div className={styles.introduceContainer}>
-            <div className={styles.pageHeader}>
-                <h2 className={styles.mainTitle}>
-                    Công nghệ vượt trội giúp  <span className={styles.highlight}>bảo vệ xe tối đa</span>
-                </h2>
-                {/* <p className={styles.subtTitle}>
-                    Công nghệ bảo vệ & nâng cấp xe hơi chuyên nghiệp
-                </p> */}
+            <div className="section-header dark">
+                {
+                    configContent?.box_content
+                        ?
+                        < div className="header-badge">
+                            <span className="badge-text">{configContent?.box_content}</span>
+                        </div>
+                        : null
+                }
+                {
+                    configContent?.title
+                        ?
+                        <h2 className="main-title-custom">
+
+                            <article
+                                dangerouslySetInnerHTML={{ __html: configContent?.title }}
+                            />
+                        </h2>
+                        :
+                        <h2 className="main-title">
+                            Công nghệ vượt trội giúp <span className="highlight">bảo vệ xe tối đa</span>
+                        </h2>
+                }
+
+                {configContent?.description
+                    ?
+                    <p className="subtitle">
+                        {configContent?.description}
+                    </p>
+                    :
+                    null
+                }
             </div>
             <div className={styles.introduceContent}>
                 {listResponse.map((item, index) => (
