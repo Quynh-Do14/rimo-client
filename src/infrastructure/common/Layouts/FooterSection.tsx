@@ -1,10 +1,18 @@
 import styles from '@/assets/styles/components/footer.module.css';
+import { Endpoint } from '@/core/common/apiLink';
 import { ROUTE_PATH } from '@/core/common/appRouter';
+import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface';
 import Link from 'next/link';
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaCar, FaShieldAlt, FaFileContract, FaWrench, FaFacebook, FaYoutube, FaTiktok } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const FooterSection = async () => {
+    const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=FOOTER`, {
+        cache: 'no-store', // Tắt cache
+    }).then((res) => res.json());
+    const contentPage: ContentPageInterface[] = config.data
+    const content = contentPage[0].content ? contentPage[0].content : ""
 
-const FooterSection = () => {
     const menuItems = [
         {
             id: "home",
@@ -78,7 +86,7 @@ const FooterSection = () => {
                     <div className={styles.sectionTitle}>
                         Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh
                     </div>
-                    <div className={styles.contactInfo}>
+                    {/* <div className={styles.contactInfo}>
                         <div className={styles.companyInfo}>
                             GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017
                         </div>
@@ -111,6 +119,12 @@ const FooterSection = () => {
                                 </span>
                             </div>
                         </div>
+                    </div> */}
+                    <div className="tiny-style">
+                        <article
+                            className="prose max-w-none"
+                            dangerouslySetInnerHTML={{ __html: content }}
+                        />
                     </div>
                 </div>
                 <div className={styles.gridLink}>

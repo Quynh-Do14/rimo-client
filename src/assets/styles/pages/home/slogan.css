@@ -6,39 +6,6 @@
   overflow: hidden;
 }
 
-/* Header Styles */
-.car-tech-slider-container .slider-header {
-  text-align: center;
-  margin-bottom: 30px;
-  position: relative;
-  padding: 0 10px;
-}
-
-.car-tech-slider-container .main-title {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.car-tech-slider-container .main-title .highlight {
-  color: #ffd700;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-  display: inline-block;
-}
-
-.car-tech-slider-container .subtitle {
-  font-size: 1rem;
-  color: #aaa;
-  font-weight: 300;
-  letter-spacing: 0.8px;
-  margin: 0;
-  line-height: 1.4;
-}
-
 /* Slider Wrapper */
 .car-tech-slider-container .slider-wrapper {
   position: relative;
@@ -187,7 +154,7 @@
 .car-tech-slider-container .car-image-container .play-icon {
   position: absolute;
 }
-.car-tech-slider-container .car-image-container .play-icon:hover{
+.car-tech-slider-container .car-image-container .play-icon:hover {
   transform: scale(1.1);
   transition-duration: 0.2s;
 }

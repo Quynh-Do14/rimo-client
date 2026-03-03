@@ -6,6 +6,8 @@ import { configImageURL } from "@/infrastructure/helper/helper";
 import { Work_Sans } from 'next/font/google';
 import "@/assets/styles/common/tiny-editor-common.css"
 import Script from "next/script";
+import { Endpoint } from "@/core/common/apiLink";
+import { ConfigPageInterface } from "@/infrastructure/interface/configPage/configPage.interface";
 const workSans = Work_Sans({
   subsets: ['latin', 'vietnamese'], // Thêm vietnamese nếu cần
   weight: ['300', '400', '500', '600', '700', '800', '900'],
@@ -15,25 +17,18 @@ const workSans = Work_Sans({
   fallback: ['system-ui', 'Arial', 'sans-serif'],
 });
 
-const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL || '';
-const companyName = "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh";
-const brandName = "Rimo";
-const mainTitle = "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô";
-const mainDescription = "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.";
-
 // Danh sách keywords cho SEO
 const keywords = [
-  "phim cách nhiệt ô tô",
-  "phim ppf ô tô",
+  "RIMO",
   "phim cách nhiệt Rimo",
   "phim ppf Rimo",
-  "phim bảo vệ sơn ô tô",
-  "dán phim cách nhiệt ô tô",
-  "dán ppf ô tô",
-  "phim ceramic ô tô",
-  "phim cách nhiệt nano ceramic",
-  "phim cách nhiệt cao cấp",
-  "phim cách nhiệt chính hãng",
+  "phim bảo vệ sơn Rimo",
+  "dán phim cách nhiệt Rimo",
+  "dán ppf Rimo",
+  "phim ceramic Rimo",
+  "phim cách nhiệt nano ceramic Rimo",
+  "phim cách nhiệt cao cấp Rimo",
+  "phim cách nhiệt chính hãng Rimo",
   "cách nhiệt ô tô Hà Nội",
   "cửa hàng dán phim cách nhiệt",
   "đại lý phim cách nhiệt",
@@ -50,17 +45,33 @@ const keywords = [
   "phim cách nhiệt ô tô toàn quốc",
   "địa chỉ dán phim cách nhiệt uy tín"
 ];
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const config = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}?type=TITLE_PAGE`, {
+  cache: 'no-store', // Tắt cache
+}).then((res) => res.json());
+const configPage: ConfigPageInterface = config.data[0]
+
+const siteURL = process.env.NEXT_PUBLIC_PUBLIC_URL || '';
+const companyName = "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh";
+const brandName = "Rimo";
+const mainTitle = configPage.title || "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô";
+const mainDescription = configPage.description || "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.";
+const organization = "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối phim cách nhiệt Rimo chính hãng.";
+const product = "Phim cách nhiệt ô tô Rimo cao cấp với công nghệ Nano Ceramic, chống tia UV 99%, cách nhiệt hiệu quả, bảo vệ sơn xe toàn diện";
+const webSchemaDescription = "imo là thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng"
 
 export const metadata: Metadata = {
-  title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
-  description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.",
+
+
+  title: mainTitle,
+  description: mainDescription,
   keywords: keywords.join(", "),
-  authors: [{ name: "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh" }],
+  authors: [{ name: companyName }],
   openGraph: {
     type: "website",
     url: process.env.NEXT_PUBLIC_PUBLIC_URL,
-    title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
-    description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
+    title: mainTitle,
+    description: mainDescription,
     images: [
       {
         url: configImageURL('/uploads/RIMO-logo.png'),
@@ -71,8 +82,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
-    description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô",
+    title: mainTitle,
+    description: mainDescription,
     images: [configImageURL('/uploads/RIMO-logo.png')],
   },
   robots: {
@@ -151,7 +162,7 @@ const organizationSchema = {
   "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
   "url": siteURL,
   "logo": configImageURL('/uploads/RIMO-logo.png'),
-  "description": "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp ngày 12/04/2017. Chuyên nhập khẩu và phân phối phim cách nhiệt Rimo chính hãng.",
+  "description": organization,
   "sameAs": [
     "https://www.facebook.com/rimo.vietnam",
   ],
@@ -169,8 +180,8 @@ const websiteSchema = {
   "@type": "WebSite",
   "@id": `${siteURL}/#website`,
   "url": siteURL,
-  "name": "Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
-  "description": "Rimo là thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng",
+  "name": mainTitle,
+  "description": webSchemaDescription,
   "potentialAction": {
     "@type": "SearchAction",
     "target": `${siteURL}/tim-kiem?search={search_term_string}`,
@@ -183,8 +194,8 @@ const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
   "@id": `${siteURL}/#product`,
-  "name": "Phim cách nhiệt Rimo",
-  "description": "Phim cách nhiệt ô tô Rimo cao cấp với công nghệ Nano Ceramic, chống tia UV 99%, cách nhiệt hiệu quả, bảo vệ sơn xe toàn diện",
+  "name": "Phim cách nhiệt Rimo, Phim bảo về sơn PPF Rimo",
+  "description": product,
   "image": configImageURL('/uploads/RIMO-logo.png'),
   "brand": {
     "@type": "Brand",

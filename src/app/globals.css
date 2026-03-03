@@ -326,3 +326,98 @@
   overflow: hidden;
   position: relative;
 }
+/* Section Header */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+  margin-bottom: 30px;
+  position: relative;
+  padding: 0 10px;
+}
+.section-header strong {
+  font-weight: 800;
+}
+.section-header .header-badge {
+  display: inline-block;
+  background: linear-gradient(90deg, #ffd700, #ffa500);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.section-header .badge-text {
+  color: #000;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.section-header .main-title-custom {
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.section-header .main-title {
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  line-height: 1.2;
+}
+
+.section-header .main-title .highlight {
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+  display: inline-block;
+}
+.section-header.dark .subtitle {
+  color: #aaa;
+}
+.section-header.light .subtitle {
+  color: #666;
+}
+.section-header .subtitle {
+  line-height: 1.5;
+  margin: 0;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Responsive Font Sizes */
+@media (max-width: 768px) {
+  .section-header .main-title-custom,
+  .section-header .main-title {
+    font-size: 1.5rem;
+  }
+
+  .section-header .subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-header .main-title-custom,
+  .section-header .main-title {
+    font-size: 1.2rem;
+  }
+
+  .section-header .subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+/* Tùy chọn: Responsive cho màn hình lớn hơn */
+@media (min-width: 1200px) {
+  .section-header .main-title-custom,
+  .section-header .main-title {
+    font-size: 2rem;
+  }
+
+  .section-header .subtitle {
+    font-size: 1.1rem;
+  }
+}

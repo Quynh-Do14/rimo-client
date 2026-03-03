@@ -4,37 +4,6 @@
   max-width: 1400px;
   margin: 0 auto;
 }
-.introduceContainer .pageHeader {
-  text-align: center;
-  margin-bottom: 30px;
-  position: relative;
-  padding: 0 10px;
-}
-
-.introduceContainer .mainTitle {
-  font-size: 1.8rem;
-  font-weight: 800;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin: 0 0 8px 0;
-  line-height: 1.2;
-}
-
-.introduceContainer .mainTitle .highlight {
-  color: #ffd700;
-  text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
-  display: inline-block;
-}
-
-.introduceContainer .subtTitle {
-  font-size: 1rem;
-  color: #aaa;
-  font-weight: 300;
-  letter-spacing: 0.8px;
-  margin: 0;
-  line-height: 1.4;
-}
 
 .introduceContainer .introduceContent {
   display: grid;

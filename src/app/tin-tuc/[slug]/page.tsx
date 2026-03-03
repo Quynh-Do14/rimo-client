@@ -217,10 +217,6 @@ const BlogSlugPage = async ({ params }: Props) => {
                             <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
                                 {blog.title}
                             </h1>
-                            {/* <div className={styles.blogImg}
-                                style={{ backgroundImage: `url(${configImageURL(blog.image)})` }}
-                            ></div> */}
-
                             <div className={styles.blogImg}>
                                 <Image src={configImageURL(blog.image)} fill alt="Description" loading="lazy" />
                             </div>

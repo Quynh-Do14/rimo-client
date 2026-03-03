@@ -10,7 +10,6 @@ import ProductAdvantageComponent from './components/advantage';
 import RelationProductComponent from './components/relationProduct';
 import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
 import BlogInProductSlug from './components/blogRandom';
-// import 'react-quill/dist/quill.snow.css';
 type Props = {
     params: { slug: string };
 };
@@ -80,15 +79,15 @@ export async function generateMetadata
     };
 
     return {
-        title: product.name,
+        title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
         description: product.short_description,
         keywords: keywords,
         openGraph: {
-            title: product.name,
+            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
             description: product.short_description,
             images: [{
                 url: configImageURL(product.image),
-                alt: product.name, // ✅ THÊM ALT
+                alt: product.name,
             }],
             type: 'website',
             url: productUrl,
@@ -96,16 +95,16 @@ export async function generateMetadata
         },
         twitter: {
             card: 'summary_large_image',
-            title: product.name,
+            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
             description: product.short_description,
             images: [{
                 url: configImageURL(product.image),
-                alt: product.name, // ✅ THÊM ALT
+                alt: product.name,
             }],
         },
 
         alternates: {
-            canonical: productUrl, // ✅ THÊM CANONICAL
+            canonical: productUrl,
         },
 
         robots: {
@@ -118,6 +117,10 @@ export async function generateMetadata
             'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema]),
             'product:price:amount': product.price?.toString(),
             'product:price:currency': 'VND',
+            'product:original_price': product.price_sale?.toString() || '',
+            'product:sale_price': product.price?.toString() || '',
+            'product:brand': 'Rimo',
+            'og:updated_time': new Date().toISOString(),
         }
     };
 }
