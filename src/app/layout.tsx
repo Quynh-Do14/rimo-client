@@ -71,7 +71,7 @@ async function getMetadata() {
 
   try {
     const response = await fetch(`${baseURL}${Endpoint.ConfigPage.Get}?type=TITLE_PAGE`, {
-      cache: 'no-store',
+      next: { revalidate: 3600 }
     });
 
     if (!response.ok) {

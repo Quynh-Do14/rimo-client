@@ -1,17 +1,35 @@
+'use client'
 import styles from '@/assets/styles/components/footer.module.css';
 import { Endpoint } from '@/core/common/apiLink';
 import { ROUTE_PATH } from '@/core/common/appRouter';
-import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface';
+import { ContentPageInterface, ContentPageParams } from '@/infrastructure/interface/contentPage/contentPage.interface';
+import contentPageService from '@/infrastructure/repository/contentPage/contentPage.service';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaCar, FaShieldAlt, FaFileContract, FaWrench, FaFacebook, FaYoutube, FaTiktok } from 'react-icons/fa';
 import { SiZalo } from 'react-icons/si';
-const baseURL = process.env.NEXT_PUBLIC_API_URL;
-const FooterSection = async () => {
-    const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=FOOTER`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) => res.json());
-    const contentPage: ContentPageInterface[] = config.data
-    const content = contentPage[0].content ? contentPage[0].content : ""
+const FooterSection = () => {
+    const [content, setContent] = useState<Array<ContentPageInterface>>([])
+
+    const onGetListProductAsync = async () => {
+        const param: ContentPageParams = {
+            type: 'FOOTER'
+        }
+        try {
+            await contentPageService.GetContentPage(
+                param,
+                () => { }
+            ).then((res) => {
+                setContent(res.data?.[0]?.content);
+            })
+        }
+        catch (error) {
+            console.error(error)
+        }
+    }
+    useEffect(() => {
+        onGetListProductAsync().then(_ => { })
+    }, []);
 
     const menuItems = [
         {
