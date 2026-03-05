@@ -131,7 +131,8 @@ const SloganContent = (props: Props) => {
             <div className="slider-wrapper">
                 <Slider {...settings}>
                     {listProductCategory.map((slide, index) => {
-                        const videoId = slide.link_url.split('v=')[1];
+                        const videoSplit = slide.link_url.split('v=')[1];
+                        const videoId = videoSplit.split('&')[0] || ""
                         return (
                             <div onClick={() => onOpenModalVideo(slide, videoId)} key={index} className="car-slide-item">
                                 <div
