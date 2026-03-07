@@ -1,16 +1,35 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  source: '/robots.txt',
-  headers: [
-    {
-      key: 'Content-Signal',
-      value: ''
-    },
-    {
-      key: 'X-Robots-Tag',
-      value: 'all'
-    }
-  ],
+  // Cấu hình headers riêng
+  async headers () {
+    return [
+      {
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Content-Signal',
+            value: 'search=yes, ai-train=no' // Giá trị bạn muốn
+          },
+          {
+            key: 'X-Robots-Tag',
+            value: 'all'
+          }
+        ]
+      },
+      // Có thể thêm các headers cho paths khác
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Robots-Tag',
+            value: 'all'
+          }
+        ]
+      }
+    ]
+  },
+
+  // Cấu hình images
   images: {
     remotePatterns: [
       {
