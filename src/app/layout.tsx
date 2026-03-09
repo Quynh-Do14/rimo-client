@@ -59,7 +59,7 @@ const organization = "GPKD số 0107801299 do Sở KH và ĐT TP Hà Nội cấp
 const product = "Phim cách nhiệt ô tô Rimo cao cấp với công nghệ Nano Ceramic, chống tia UV 99%, cách nhiệt hiệu quả, bảo vệ sơn xe toàn diện";
 const webSchemaDescription = "Rimo là thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ";
 
-const GA_TRACKING_ID = 'G-SKGSGMG46V';
+const GA_TRACKING_ID = 'G-XXT0LB3M51';
 
 // Tạo async function để fetch metadata
 async function getMetadata() {
