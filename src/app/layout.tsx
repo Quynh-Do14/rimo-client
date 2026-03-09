@@ -290,7 +290,8 @@ export default function RootLayout({
         <meta name="geo.placename" content="Hà Nội" />
         <meta name="geo.position" content="20.987787;105.861443" />
         <meta name="ICBM" content="20.987787, 105.861443" />
-        <meta name="google-site-verification" content="gd5S1-HkR2XIm6GugYGU241BTwelQ_4Xdkp3Rw8m8Ik" />
+        {/* <meta name="google-site-verification" content="gd5S1-HkR2XIm6GugYGU241BTwelQ_4Xdkp3Rw8m8Ik" /> */}
+        <meta name="google-site-verification" content="dQdpGMpP2bNN9axquorwXBuKE2UWz2yXqqFvXyDKDEU" />
         {/* Schema.org */}
         <LocalBusinessSchema />
         <OrganizationSchema />
