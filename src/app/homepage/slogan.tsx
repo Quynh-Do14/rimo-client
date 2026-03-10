@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "@/assets/styles/pages/home/slogan.css";
 import categoryProductService from "@/infrastructure/repository/category/categoryProduct.service";
-import { configImageURL } from "@/infrastructure/helper/helper";
+import { configImageURL, getYoutubeId } from "@/infrastructure/helper/helper";
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import videoService from "@/infrastructure/repository/video/video.service";
@@ -131,10 +131,9 @@ const SloganContent = (props: Props) => {
             <div className="slider-wrapper">
                 <Slider {...settings}>
                     {listProductCategory.map((slide, index) => {
-                        const videoSplit = slide.link_url.split('v=')[1];
-                        const videoId = videoSplit.split('&')[0] || ""
+                        const videoId = getYoutubeId(slide.link_url)
                         return (
-                            <div onClick={() => onOpenModalVideo(slide, videoId)} key={index} className="car-slide-item">
+                            <div onClick={() => onOpenModalVideo(slide, videoId || "")} key={index} className="car-slide-item">
                                 <div
                                     className="car-slide-content"
                                     style={{

@@ -183,8 +183,8 @@ const HeaderSection = () => {
         onGetListCategoryAsync().then(_ => { });
         onGetListBlogCategoryAsync().then(_ => { });
         // onGetListBrandAsync().then(_ => { });
-        onGetListProductAsync().then(_ => { });
-        onGetListAgencyCategoryAsync().then(_ => { });
+        // onGetListProductAsync().then(_ => { });
+        // onGetListAgencyCategoryAsync().then(_ => { });
     }, []);
 
     useEffect(() => {
