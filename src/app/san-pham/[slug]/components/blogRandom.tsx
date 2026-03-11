@@ -44,7 +44,7 @@ const BlogInProductSlug = () => {
                     :
                     listBlog.map((article, index) => (
                         <Link
-                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} key={index} className={styles.newsCard}>
+                            href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`} key={index} className={styles.newsCard}>
                             <div className={styles.cardImage}>
                                 <Image
                                     src={configImageURL(article.image)}
