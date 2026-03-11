@@ -11,6 +11,8 @@ export interface BlogInterface {
     created_at: string;
     updated_at: string;
     related_blogs: BlogInterface[]
+    slug: string
+    keyword: BlogKeyword[]
 }
 
 export interface BlogParams {
@@ -24,3 +26,9 @@ export interface BlogHref {
     href: string
     label: string
 }
+
+export interface BlogKeyword {
+    blog_id: string
+    keyword: string
+}
+

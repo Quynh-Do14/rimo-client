@@ -14,7 +14,7 @@ const RelationBlogComponent = (props: Props) => {
         <div className={styles.newsGrid}>
             <p className={styles.title}>Bài viết tương tự</p>
             {relatedBlogs.map(article => (
-                <Link href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`}  key={article.id} className={styles.newsCard}>
+                <Link href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`} key={article.id} className={styles.newsCard}>
                     <div className={styles.cardImage}>
                         <Image
                             src={configImageURL(article.image)}

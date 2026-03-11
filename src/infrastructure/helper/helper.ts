@@ -103,9 +103,10 @@ export const convertRouteWithSlug = (routhPath: string, str: string, id: string)
 export const splitTakeId = (route: string) => {
     if (route) {
         const word1 = route.split(".html");
-        const word2 = word1[0].split("-");
-        const wordResult = word2[word2.length - 1];
-        return wordResult
+        // const word2 = word1[0].split("-");
+        // const wordResult = word2[word2.length - 1];
+        // return wordResult
+        return word1[0]
     }
     return "";
 }

@@ -24,7 +24,6 @@ type ParamsType = {
 };
 
 const ProductContent = () => {
-    const params: ParamsType = useParams();
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -37,14 +36,14 @@ const ProductContent = () => {
     const [categoryId, setCategoryId] = useState<string>("");
     const [categoryName, setCategoryName] = useState<string>("");
 
-    const router = useRouter(); // Từ next/navigation
-    const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
+    const params: ParamsType = useParams();
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
     // Lấy các query parameters
     const search = searchParams?.get('search') || '';
     const page = searchParams?.get('page') || '1';
     const limit = searchParams?.get('limit') || '10';
-    // const category_id = searchParams?.get('category_id') || '';
 
     const categoryProductState = useRecoilValue(CategoryProductState).data
 
@@ -72,23 +71,25 @@ const ProductContent = () => {
     }
 
     const onSearch = async (name = searchText, limit = pageSize, page = 1, category_id = categoryId) => {
-        await onGetListProductAsync({ name: name, limit: limit, page: page, category_id: category_id }).then(_ => { });
+        await onGetListProductAsync({ name: name, limit: limit, page: page, category_id: category_id });
     };
-
 
     const onSearchParam = async () => {
         // Tạo URL mới với search params
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('search', searchText);
-        params.set('page', '1');
-        if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${convertSlug(categoryName)}-${categoryId}?${params.toString()}`);
-        }
-        else {
-            router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
+        const newParams = new URLSearchParams(searchParams?.toString() || '');
+        newParams.set('search', searchText);
+        newParams.set('page', '1');
 
+        // Xóa category_id cũ nếu có
+        newParams.delete('category_id');
+
+        // Chỉ gọi router.push, không gọi API trực tiếp
+        // API sẽ được gọi trong useEffect khi URL thay đổi
+        if (categoryId) {
+            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${newParams.toString()}`);
+        } else {
+            router.push(`${ROUTE_PATH.PRODUCT}?${newParams.toString()}`);
         }
-        await onSearch(searchText, pageSize, 1, categoryId).then(_ => { });
     }
 
     const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,46 +100,86 @@ const ProductContent = () => {
         const value = e.target.value || ""
         setCategoryId(value);
         const result = categoryProductState.find(item => String(item.id) === String(value))
-        setCategoryName(String(result?.name))
+        setCategoryName(String(result?.slug))
     };
 
     const onChangePage = async (page: number) => {
         setCurrentPage(page);
 
         // Cập nhật params với page mới
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('page', page.toString());
-        router.push(`${ROUTE_PATH.PRODUCT}?${params.toString()}`);
+        const newParams = new URLSearchParams(searchParams?.toString() || '');
+        newParams.set('page', page.toString());
 
-        await onSearch(searchText, pageSize, page, categoryId).then(_ => { });
+        // Chỉ gọi router.push, API sẽ được gọi trong useEffect
+        if (categoryId) {
+            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${newParams.toString()}`);
+        } else {
+            router.push(`${ROUTE_PATH.PRODUCT}?${newParams.toString()}`);
+        }
     }
 
-
+    // Effect để đồng bộ state với URL và gọi API
     useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
-        const parsedSearch = search || "";
-        // const parsedCategory = category_id || "";
-        const parsedCategory = splitTakeId(params.slug)
-        const categoryName = categoryProductState.find(item => String(item.id) === String(parsedCategory))
+        if (!categoryProductState || categoryProductState.length === 0) return;
 
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        setCategoryId(parsedCategory);
-        setCategoryName(String(categoryName?.name))
-        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory);
-    }, [search, page, limit]); // Theo dõi các giá trị từ searchParams
+        const fetchData = async () => {
+            const parsedPage = parseInt(page) || 1;
+            const parsedLimit = parseInt(limit) || 10;
+            const parsedSearch = search || "";
+
+            // Tìm category dựa trên slug từ URL
+            let currentCategoryId = categoryId;
+            let currentCategoryName = categoryName;
+
+            // Nếu đang ở trang category detail
+            if (params.slug) {
+                const categoryRes = categoryProductState.find(
+                    item => String(item.slug) === String(params.slug)
+                );
+
+                if (categoryRes) {
+                    currentCategoryId = String(categoryRes.id);
+                    currentCategoryName = String(categoryRes.slug);
+                    setCategoryId(currentCategoryId);
+                    setCategoryName(currentCategoryName);
+                }
+            }
+
+            // Cập nhật state từ URL
+            setSearchText(parsedSearch);
+            setCurrentPage(parsedPage);
+            setPageSize(parsedLimit);
+
+            // Gọi API
+            await onSearch(
+                parsedSearch,
+                parsedLimit,
+                parsedPage,
+                currentCategoryId
+            );
+        };
+
+        fetchData();
+    }, [
+        search,
+        page,
+        limit,
+        params.slug,
+        categoryProductState,
+        // Chỉ chạy lại khi URL hoặc categoryProductState thay đổi
+    ]);
 
     const onReset = () => {
         setSearchText('');
         setCurrentPage(1);
+        setCategoryId('');
+        setCategoryName('');
         router.push(`${ROUTE_PATH.PRODUCT}`);
     }
 
     useLayoutEffect(() => {
         setInitialLoading(false);
-    });
+    }, []);
 
     return (
         <ClientLayout>
@@ -199,7 +240,7 @@ const ProductContent = () => {
                                 <div className={styles.galleryContainer}>
                                     <div className={styles.galleryGrid}>
                                         {listProduct.map(item => (
-                                            <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                            <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                                 key={item.id}
                                                 className={styles.galleryItem}
                                             >

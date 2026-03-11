@@ -38,14 +38,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         const imageUrl = configImageURL(blog.image);
         const imageAlt = `${blog.title} - Phim cách nhiệt Rimo`;
 
-        const keywords = [
+        const keywordConvert = blog && blog.keyword.map(item => item.keyword)
+        const keywords: string[] = [
             blog.title,
             blog.category_name,
-            "phim cách nhiệt Rimo",
-            "phim ppf Rimo",
-            "tin tức Rimo",
-            "kiến thức phim cách nhiệt",
-        ].filter(Boolean).join(", ");
+        ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
 
         // ✅ ĐÚNG: Dùng Article/BlogPosting Schema
         const articleSchema = {

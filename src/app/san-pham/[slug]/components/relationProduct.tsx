@@ -15,7 +15,7 @@ const RelationProductComponent = (props: Props) => {
             <div className={styles.galleryContainer}>
                 <div className={styles.galleryGrid}>
                     {listProduct.map(item => (
-                        <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                        <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                             key={item.id}
                             className={styles.galleryItem}
                         >

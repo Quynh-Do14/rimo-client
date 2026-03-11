@@ -78,7 +78,7 @@ const ArticleSection = (props: Props) => {
                     // .filter(article => !article.featured && !article.highlight)
                     .map(article => (
                         <Link
-                            href={`${ROUTE_PATH.BLOG}/${convertSlug(article?.title)}-${article?.id}.html`} key={article.id} className="news-card">
+                            href={`${ROUTE_PATH.BLOG}/${article?.slug}.html`} key={article.id} className="news-card">
                             <div className="card-image">
                                 <Image
                                     src={configImageURL(article.image)}

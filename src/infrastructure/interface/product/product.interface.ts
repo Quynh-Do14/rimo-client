@@ -16,6 +16,8 @@ export interface ProductInterface {
     images: string[];
     productFigure: ProductFigure[]
     sameCategoryProducts: ProductInterface[]
+    keyword: ProductKeyword[]
+    slug: string
 }
 
 export interface ProductFigure {
@@ -32,4 +34,9 @@ export interface ProductParams {
 export interface ProductHref {
     href: string
     label: string
+}
+
+export interface ProductKeyword {
+    product_id: string
+    keyword: string
 }

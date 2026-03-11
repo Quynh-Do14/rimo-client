@@ -4,6 +4,7 @@ export interface CategoryProductInterface {
     nameSplit: string;
     description: string;
     image: string;
+    slug: string
 }
 
 export interface CategoryProductParams {

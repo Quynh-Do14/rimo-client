@@ -65,8 +65,7 @@ const ProductContent = () => {
                         {/* Gallery Grid */}
                         <div className={gridStyle}>
                             {productFromCategory.slice(0, 4).map((item) => (
-                                <Link
-                                    href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                     key={item.id}
                                     className={styles.galleryItem}
                                 >
