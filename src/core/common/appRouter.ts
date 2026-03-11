@@ -12,6 +12,7 @@ export const ROUTE_PATH = {
     ///Client
     HOME_PAGE: `${PREFIX}/`,
     PRODUCT: `${PREFIX}/san-pham`,
+    CATEGORY: `${PREFIX}/danh-muc`,
     BLOG: `${PREFIX}/tin-tuc`,
     AGENCY: `${PREFIX}/dai-ly`,
     SEARCH: `${PREFIX}/tim-kiem`,

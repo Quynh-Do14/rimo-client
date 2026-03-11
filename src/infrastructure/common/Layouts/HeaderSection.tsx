@@ -71,7 +71,7 @@ const HeaderSection = () => {
                 })
                 const data = res.data?.map((item: CategoryProductInterface) => {
                     const result = {
-                        href: `${ROUTE_PATH.PRODUCT}?category_id=${item.id}`,
+                        href: `${ROUTE_PATH.CATEGORY}/${convertSlug(item.name)}-${item.id}`,
                         label: item.name.split('-')[0],
                     }
                     return result;

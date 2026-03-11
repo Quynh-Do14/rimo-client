@@ -16,10 +16,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
 import Image from "next/image";
 import SkeletonProduct from "@/app/tim-kiem/skeleton";
+import { useParams } from 'next/navigation';
 import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/PaginationNoSize";
 
+type ParamsType = {
+    slug: string
+};
 
 const ProductContent = () => {
+    const params: ParamsType = useParams();
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -114,11 +119,15 @@ const ProductContent = () => {
         const parsedLimit = parseInt(limit) || 10;
         const parsedSearch = search || "";
         // const parsedCategory = category_id || "";
+        const parsedCategory = splitTakeId(params.slug)
+        const categoryName = categoryProductState.find(item => String(item.id) === String(parsedCategory))
 
         setSearchText(parsedSearch);
         setCurrentPage(parsedPage);
         setPageSize(parsedLimit);
-        onSearch(parsedSearch, parsedLimit, parsedPage);
+        setCategoryId(parsedCategory);
+        setCategoryName(String(categoryName?.name))
+        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory);
     }, [search, page, limit]); // Theo dõi các giá trị từ searchParams
 
     const onReset = () => {

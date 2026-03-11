@@ -5,11 +5,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: 'https://rimo.vn/',
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'weekly',
       priority: 1,
     },
     {
       url: 'https://rimo.vn/san-pham',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://rimo.vn/danh-muc',
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -23,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: 'https://rimo.vn/tin-tuc',
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
     {

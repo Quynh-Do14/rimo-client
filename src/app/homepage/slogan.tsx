@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "@/assets/styles/pages/home/slogan.css";
 import categoryProductService from "@/infrastructure/repository/category/categoryProduct.service";
-import { configImageURL, getYoutubeId } from "@/infrastructure/helper/helper";
+import { getYoutubeId } from "@/infrastructure/helper/helper";
 import Link from "next/link";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import videoService from "@/infrastructure/repository/video/video.service";
