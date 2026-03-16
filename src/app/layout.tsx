@@ -154,7 +154,7 @@ const LocalBusinessSchema = () => {
     "description": "Chuyên cung cấp và lắp đặt phim cách nhiệt ô tô, phim PPF bảo vệ sơn Rimo chính hãng",
     "url": siteURL,
     "hasMap": `https://maps.app.goo.gl/GNH8zFY4UT5svvrq8`,
-    "telephone": "+84-19008113",
+    "telephone": "+84-02462926666",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội",
@@ -197,7 +197,7 @@ const OrganizationSchema = () => {
     "sameAs": ["https://www.facebook.com/rimo.vietnam"],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "19008113",
+      "telephone": "02462926666",
       "contactType": "customer service",
       "availableLanguage": ["Vietnamese"],
       "areaServed": "VN"

@@ -96,7 +96,7 @@ const aboutPageSchema = {
         },
         "contactPoint": {
             "@type": "ContactPoint",
-            "telephone": "19008113",
+            "telephone": "02462926666",
             "contactType": "customer service"
         }
     },
@@ -131,7 +131,7 @@ const organizationSchema = {
     ],
     "contactPoint": {
         "@type": "ContactPoint",
-        "telephone": "19008113",
+        "telephone": "02462926666",
         "contactType": "customer service",
         "areaServed": "VN",
         "availableLanguage": "Vietnamese"
@@ -214,7 +214,7 @@ export const metadata: Metadata = {
         'business:contact_data:street': 'Số 12 Ngõ 44 Tư Đình – Tổ 5 – Phường Long Biên – Thành phố Hà Nội',
         'business:contact_data:locality': 'Hà Nội',
         'business:contact_data:country': 'VN',
-        'business:contact_data:phone': '19008113',
+        'business:contact_data:phone': '02462926666',
     }
 };
 
