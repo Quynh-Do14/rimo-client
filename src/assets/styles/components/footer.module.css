@@ -10,7 +10,7 @@
 
 .footerContainer {
   max-width: 1600px;
-  padding: 0 2rem;
+  padding: 0px 60px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
