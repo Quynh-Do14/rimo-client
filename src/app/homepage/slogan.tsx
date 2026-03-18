@@ -132,7 +132,6 @@ const SloganContent = (props: Props) => {
                 <Slider {...settings}>
                     {listProductCategory.map((slide, index) => {
                         const videoId = getYoutubeId(slide.link_url)
-                        console.log('videoId', videoId);
                         return (
                             <div onClick={() => onOpenModalVideo(slide, videoId || "")} key={index} className="car-slide-item">
                                 <div
