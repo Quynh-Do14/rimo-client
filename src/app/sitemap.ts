@@ -11,14 +11,14 @@ const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products
   const productsRes = await fetch(`${baseURL}${Endpoint.Product.Get}`, {
-    cache: 'no-store', // Cache 1 giờ
+    next: { revalidate: 3600 }
   })
   const productsRaw = await productsRes.json()
   const products: ProductInterface[] = productsRaw.data
 
   // Fetch blogs
   const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}`, {
-    cache: 'no-store',
+    next: { revalidate: 3600 }
   })
   const blogsRaw = await blogsRes.json()
   const blogs: BlogInterface[] = blogsRaw.data
@@ -70,7 +70,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }))
-  console.log('productUrls', productUrls);
 
   // Dynamic blog URLs
   const blogUrls = blogs && blogs.length && blogs.map((blog) => ({
@@ -79,7 +78,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: 'weekly' as const,
     priority: 0.6,
   }))
-  console.log('blogUrls', blogUrls);
 
   return [...staticUrls, ...productUrls || [], ...blogUrls || []]
 }

@@ -18,9 +18,10 @@ const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 export async function generateMetadata
     ({ params }: Props): Promise<Metadata> {
     const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
-        cache: 'no-store', // Tắt cache
+        // cache: 'no-store', 
+        next: { revalidate: 3600 },
     }).then((res) => res.json());
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
+    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${product.slug}`;
     const keywordConvert = product && product.keyword.map(item => item.keyword)
     const keywords: string[] = [
         product.name,
