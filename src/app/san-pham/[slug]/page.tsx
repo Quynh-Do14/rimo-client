@@ -20,7 +20,7 @@ export async function generateMetadata
     const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
         cache: 'no-store', // Tắt cache
     }).then((res) => res.json());
-    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${params.slug}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
     const keywordConvert = product && product.keyword.map(item => item.keyword)
     const keywords: string[] = [
         product.name,

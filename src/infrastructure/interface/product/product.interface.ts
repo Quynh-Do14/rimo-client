@@ -8,7 +8,8 @@ export interface ProductInterface {
     warranty?: string | null;
     image: string;
     category_id?: number;
-    created_at?: string;
+    created_at: string;
+    updated_at?: string;
     brand_id?: number | null;
     short_description: string;
     category_name?: string;
