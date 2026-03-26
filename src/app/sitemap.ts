@@ -11,13 +11,13 @@ const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products
   const productsRes = await fetch(`${baseURL}${Endpoint.Product.Get}`, {
-    next: { revalidate: 3600 } // Cache 1 giờ
+    cache: 'no-store', // Cache 1 giờ
   })
   const products: ProductInterface[] = await productsRes.json()
 
   // Fetch blogs
   const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}`, {
-    next: { revalidate: 3600 }
+    cache: 'no-store',
   })
   const blogs: BlogInterface[] = await blogsRes.json()
 
