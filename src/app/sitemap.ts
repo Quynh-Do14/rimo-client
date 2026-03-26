@@ -38,12 +38,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: 'https://rimo.vn/danh-muc',
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    },
-    {
       url: 'https://rimo.vn/dai-ly',
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
@@ -60,6 +54,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.6,
+    },
+    {
+      url: 'https://rimo.vn/gioi-thieu',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.7,
+    },
+    // Chính sách pages
+    {
+      url: 'https://rimo.vn/chinh-sach/chinh-sach-bao-hanh-doi-tra-hang',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://rimo.vn/chinh-sach/chinh-sach-bao-mat',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://rimo.vn/chinh-sach/chinh-sach-giao-hang',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://rimo.vn/chinh-sach/chinh-sach-mua-hang',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://rimo.vn/chinh-sach/chinh-sach-thanh-toan',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    },
+    {
+      url: 'https://rimo.vn/chinh-sach/thong-tin-ve-dieu-kien-giao-dich-chung',
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
     },
   ]
 

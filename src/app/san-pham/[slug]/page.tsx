@@ -1,8 +1,9 @@
+// app/san-pham/[slug]/page.tsx
 import { ROUTE_PATH } from '@/core/common/appRouter';
 import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb';
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout';
 import styles from '@/assets/styles/pages/product/slugProduct.module.css'
-import { configImageURL, formatCurrency, splitTakeId } from '@/infrastructure/helper/helper';
+import { configImageURL, formatCurrency } from '@/infrastructure/helper/helper';
 import { Metadata } from 'next';
 import GalleryComponent from './components/gallery';
 import { Endpoint } from '@/core/common/apiLink';
@@ -10,41 +11,99 @@ import ProductAdvantageComponent from './components/advantage';
 import RelationProductComponent from './components/relationProduct';
 import { ProductInterface } from '@/infrastructure/interface/product/product.interface';
 import BlogInProductSlug from './components/blogRandom';
+
 type Props = {
     params: { slug: string };
 };
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
-export async function generateMetadata
-    ({ params }: Props): Promise<Metadata> {
-    const product: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
-        // cache: 'no-store', 
+
+// ✅ Hàm fetch product - tái sử dụng
+async function getProduct(slug: string): Promise<ProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.Product.GetById}/${slug}`, {
         next: { revalidate: 3600 },
-    }).then((res) => res.json());
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to fetch product');
+    }
+
+    return response.json();
+}
+
+// ✅ Metadata - chỉ chứa metadata, không có schema
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const product = await getProduct(params.slug);
     const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${product.slug}`;
-    const keywordConvert = product && product.keyword.map(item => item.keyword)
+
+    const keywordConvert = product?.keyword?.map(item => item.keyword) || [];
     const keywords: string[] = [
         product.name,
         product.category_name,
         product.brand_name,
-    ].filter((item): item is string => Boolean(item)).concat(keywordConvert)
+    ].filter((item): item is string => Boolean(item)).concat(keywordConvert);
 
+    return {
+        title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
+        description: product.short_description,
+        keywords: keywords,
+        openGraph: {
+            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+            type: 'website',
+            url: productUrl,
+            siteName: publicURL || 'https://rimo.vn',
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
+            description: product.short_description,
+            images: [{
+                url: configImageURL(product.image),
+                alt: product.name,
+            }],
+        },
+        alternates: {
+            canonical: productUrl,
+        },
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+        },
+    };
+}
+
+// ✅ Component chính - nơi tạo và hiển thị JSON-LD
+const ProductSlugPage = async ({ params }: Props) => {
+    // Fetch dữ liệu trực tiếp trong component
+    const dataDetail = await getProduct(params.slug);
+    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${dataDetail.slug}`;
+
+    // ✅ Tạo schema ngay trong component với dữ liệu đã fetch
     const productSchema = {
         "@context": "https://schema.org",
         "@type": "Product",
-        "@id": productUrl,    // ✅ Nhất quán
-        "url": productUrl,    // ✅ Nhất quán
-        "name": product.name,
-        "description": product.short_description || product.description,
-        "image": configImageURL(product.image),
-        "category": product.category_name,
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.name,
+        "description": dataDetail.short_description || dataDetail.description,
+        "image": configImageURL(dataDetail.image),
+        "category": dataDetail.category_name,
         "offers": {
             "@type": "Offer",
-            "url": productUrl, // ✅ Nhất quán
+            "url": productUrl,
             "priceCurrency": "VND",
-            "price": product.price?.toString(),
+            "price": dataDetail.price?.toString(),
             "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             "itemCondition": "https://schema.org/NewCondition",
+            "availability": "https://schema.org/InStock",
             "seller": {
                 "@type": "Organization",
                 "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
@@ -66,169 +125,122 @@ export async function generateMetadata
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Sản phẩm",
-                "item": `${publicURL}/${ROUTE_PATH.PRODUCT}` // ✅ Nhất quán
+                "item": `${publicURL}/${ROUTE_PATH.PRODUCT}`
             },
             {
                 "@type": "ListItem",
                 "position": 3,
-                "name": product.name,
-                "item": productUrl // ✅ Nhất quán
+                "name": dataDetail.name,
+                "item": productUrl
             }
         ]
     };
 
-    return {
-        title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
-        description: product.short_description,
-        keywords: keywords,
-        openGraph: {
-            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
-            description: product.short_description,
-            images: [{
-                url: configImageURL(product.image),
-                alt: product.name,
-            }],
-            type: 'website',
-            url: productUrl,
-            siteName: publicURL,
-        },
-        twitter: {
-            card: 'summary_large_image',
-            title: `${product.name} - Phim Cách Nhiệt Rimo Chính Hãng`,
-            description: product.short_description,
-            images: [{
-                url: configImageURL(product.image),
-                alt: product.name,
-            }],
-        },
-
-        alternates: {
-            canonical: productUrl,
-        },
-
-        robots: {
-            index: true,
-            follow: true,
-            'max-image-preview': 'large',
-            'max-snippet': -1,
-        },
-        other: {
-            'application/ld+json': JSON.stringify([productSchema, breadcrumbSchema]),
-            'product:price:amount': product.price?.toString(),
-            'product:price:currency': 'VND',
-            'product:original_price': product.price_sale?.toString() || '',
-            'product:sale_price': product.price?.toString() || '',
-            'product:brand': 'Rimo',
-            'og:updated_time': new Date().toISOString(),
-        }
-    };
-}
-
-const ProductSlugPage = async ({ params }: Props) => {
-    const dataDetail: ProductInterface = await fetch(`${baseURL}${Endpoint.Product.GetById}/${params.slug}`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) =>
-        res.json()
-    );
-
     return (
-        <ClientLayout>
-            <div className={styles.productContainer}>
-                <div className='padding-section'>
-                    <BreadcrumbCommon
-                        breadcrumb={"Sản phẩm"}
-                        redirect={ROUTE_PATH.PRODUCT}
-                        title={dataDetail.name}
-                        blackColor={true}
-                    />
-                </div>
-                <div className={`${styles.content} padding-section`}>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
-                        {/* Column 1: Gallery */}
-                        <div className="w-full">
-                            <GalleryComponent slides={dataDetail.images} />
-                        </div>
+        <>
+            {/* ✅ JSON-LD được tạo từ dữ liệu trong component */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(productSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(breadcrumbSchema)
+                }}
+            />
 
-                        {/* Column 2: Product Info */}
-                        <div className={styles.productInfo}>
-                            <h1>{dataDetail.name}</h1>
-                            <div className="space-y-4">
-                                {/* Giá sản phẩm */}
-                                <div className="flex items-center gap-2">
-                                    <span className="text-2xl font-bold text-red-600">
-                                        {formatCurrency(dataDetail.price)}đ
-                                    </span>
-                                    {dataDetail.price_sale ? (
-                                        <span className="text-lg text-gray-500 line-through">
-                                            {formatCurrency(dataDetail.price_sale)}đ
-                                        </span>
-                                    ) : null}
-                                </div>
-                            </div>
-                            <div className="flex">
-                                <div className={styles.categoryTag}>
-                                    {dataDetail.category_name}
-                                </div>
-                            </div>
-                            <ProductAdvantageComponent product={dataDetail.productFigure} />
-                        </div>
-                    </div>
-                </div>
-                <div
-                    className={styles.productImg}
-                    style={{
-                        backgroundImage: `url(${configImageURL(dataDetail.image)})`,
-                        backgroundPosition: 'center center',
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        backgroundAttachment: 'fixed',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        overflow: 'hidden'
-                    }}
-                >
-                    <div className={`${styles.content} padding-section`}>
-                        <div className={styles.description}>
-                            <h2>{dataDetail.short_description}</h2>
-                        </div>
-                    </div>
-                </div>
-
-
-                {/* <div className={`${styles.content} padding-section`}>
-                    <div className={styles.specificationHeader}>
-                        <div className={styles.title}>Ưu điểm nổi bật</div>
-                    </div>
-                    <ProductAdvantageComponent product={dataDetail.productFigure} />
-                </div> */}
-
-                <div className={`${styles.content} padding-section`}>
-                    <div className={styles.specificationHeader}>
-                        <div className={styles.title}>Mô tả sản phẩm</div>
-                    </div>
-                    <div className="tiny-style">
-                        <article
-                            className="prose max-w-none"
-                            dangerouslySetInnerHTML={{ __html: dataDetail.description }}
+            <ClientLayout>
+                <div className={styles.productContainer}>
+                    <div className='padding-section'>
+                        <BreadcrumbCommon
+                            breadcrumb={"Sản phẩm"}
+                            redirect={ROUTE_PATH.PRODUCT}
+                            title={dataDetail.name}
+                            blackColor={true}
                         />
                     </div>
-                </div>
-                <div className={`${styles.content} padding-section`}>
-                    <div className={styles.specificationHeader}>
-                        <div className={styles.title}>Sản phẩm tương tự</div>
+                    <div className={`${styles.content} padding-section`}>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
+                            <div className="w-full">
+                                <GalleryComponent slides={dataDetail.images} />
+                            </div>
+                            <div className={styles.productInfo}>
+                                <h1>{dataDetail.name}</h1>
+                                <div className="space-y-4">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-2xl font-bold text-red-600">
+                                            {formatCurrency(dataDetail.price)}đ
+                                        </span>
+                                        {dataDetail.price_sale ? (
+                                            <span className="text-lg text-gray-500 line-through">
+                                                {formatCurrency(dataDetail.price_sale)}đ
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                                <div className="flex">
+                                    <div className={styles.categoryTag}>
+                                        {dataDetail.category_name}
+                                    </div>
+                                </div>
+                                <ProductAdvantageComponent product={dataDetail.productFigure} />
+                            </div>
+                        </div>
                     </div>
-                    <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
-                </div>
-                <div className={`${styles.content} padding-section`}>
-                    <div className={styles.specificationHeader}>
-                        <div className={styles.title}>Tin tức</div>
+
+                    <div
+                        className={styles.productImg}
+                        style={{
+                            backgroundImage: `url(${configImageURL(dataDetail.image)})`,
+                            backgroundPosition: 'center center',
+                            backgroundSize: 'cover',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundAttachment: 'fixed',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <div className={`${styles.content} padding-section`}>
+                            <div className={styles.description}>
+                                <h2>{dataDetail.short_description}</h2>
+                            </div>
+                        </div>
                     </div>
-                    <BlogInProductSlug />
+
+                    <div className={`${styles.content} padding-section`}>
+                        <div className={styles.specificationHeader}>
+                            <div className={styles.title}>Mô tả sản phẩm</div>
+                        </div>
+                        <div className="tiny-style">
+                            <article
+                                className="prose max-w-none"
+                                dangerouslySetInnerHTML={{ __html: dataDetail.description }}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={`${styles.content} padding-section`}>
+                        <div className={styles.specificationHeader}>
+                            <div className={styles.title}>Sản phẩm tương tự</div>
+                        </div>
+                        <RelationProductComponent listProduct={dataDetail.sameCategoryProducts} />
+                    </div>
+
+                    <div className={`${styles.content} padding-section`}>
+                        <div className={styles.specificationHeader}>
+                            <div className={styles.title}>Tin tức</div>
+                        </div>
+                        <BlogInProductSlug />
+                    </div>
                 </div>
-            </div>
-        </ClientLayout>
-    )
+            </ClientLayout>
+        </>
+    );
 }
 
-export default ProductSlugPage
+export default ProductSlugPage;
