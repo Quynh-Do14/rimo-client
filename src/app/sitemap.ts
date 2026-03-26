@@ -62,20 +62,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Dynamic product URLs
-  const productUrls = products.map((product) => ({
-    url: `${publicURL}/san-pham/${product.slug}`,
+  const productUrls = products && products.length && products.map((product) => ({
+    url: `${publicURL}san-pham/${product.slug}`,
     lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }))
 
   // Dynamic blog URLs
-  const blogUrls = blogs.map((blog) => ({
-    url: `${publicURL}/tin-tuc/${blog.slug}`,
+  const blogUrls = blogs && blogs.length && blogs.map((blog) => ({
+    url: `${publicURL}tin-tuc/${blog.slug}`,
     lastModified: blog.updated_at ? new Date(blog.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
   }))
 
-  return [...staticUrls, ...productUrls, ...blogUrls]
+  return [...staticUrls, ...productUrls || [], ...blogUrls || []]
 }
