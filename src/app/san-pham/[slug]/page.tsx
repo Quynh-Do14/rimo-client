@@ -35,8 +35,9 @@ async function getProduct(slug: string): Promise<ProductInterface> {
 // ✅ Metadata - chỉ chứa metadata, không có schema
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
-    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${product.slug}`;
-
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
+    console.log('productUrl',productUrl);
+    
     const keywordConvert = product?.keyword?.map(item => item.keyword) || [];
     const keywords: string[] = [
         product.name,
