@@ -3,28 +3,16 @@ import BreadcrumbCommon from '@/infrastructure/common/Layouts/Breadcumb'
 import ClientLayout from '@/infrastructure/common/Layouts/Client-Layout'
 import React from 'react'
 import styles from '@/assets/styles/pages/introduce.module.css'
-import VTV from '@/assets/images/gioi-thieu/VTV.png'
-import HTV from '@/assets/images/gioi-thieu/HTV.png'
-import VOV from '@/assets/images/gioi-thieu/VOV.png'
-import VTC from '@/assets/images/gioi-thieu/VTC.png'
-import TipCar from '@/assets/images/gioi-thieu/tip-car.png'
-import XeHay from '@/assets/images/gioi-thieu/xe-hay.png'
-import XeCung from '@/assets/images/gioi-thieu/xe-cung.png'
-import TinhT from '@/assets/images/gioi-thieu/tinh-t.png'
-import Toyota from '@/assets/images/gioi-thieu/TOYOTA.png'
-import Mitsubishi from '@/assets/images/gioi-thieu/Mitshubishi.png'
-import Hyundai from '@/assets/images/gioi-thieu/Huyndai.png'
-import AutoDaily from '@/assets/images/gioi-thieu/auto-daily-100x100.png'
-import Image from 'next/image'
 import TocClient from './tocClient'
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon'
 import { Metadata } from 'next'
 import { configImageURL } from '@/infrastructure/helper/helper'
 import { Endpoint } from '@/core/common/apiLink'
 import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface'
+
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
-const blogUrl = `${publicURL}/${ROUTE_PATH.INTRODUCE}`;
+const introduceUrl = `${publicURL}${ROUTE_PATH.INTRODUCE}`;
 
 const keywords = [
     "CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH",
@@ -69,20 +57,19 @@ const breadcrumbSchema = {
             "@type": "ListItem",
             "position": 2,
             "name": "Giới thiệu",
-            "item": `${publicURL}/${ROUTE_PATH.INTRODUCE}`
+            "item": introduceUrl
         },
     ]
 };
 
-// ✅ ĐÃ SỬA: AboutPage thay vì BlogPosting
 const aboutPageSchema = {
     "@context": "https://schema.org",
-    "@type": "AboutPage",  // ✅ Đã sửa
-    "@id": `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
-    "url": `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
+    "@type": "AboutPage",
+    "@id": introduceUrl,
+    "url": introduceUrl,
     "name": "Giới thiệu - Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
     "description": "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.",
-    "mainEntity": {  // ✅ Thêm mainEntity để mô tả công ty
+    "mainEntity": {
         "@type": "Organization",
         "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
         "description": "Nhà nhập khẩu và phân phối chính hãng phim cách nhiệt Rimo tại Việt Nam",
@@ -100,7 +87,7 @@ const aboutPageSchema = {
             "contactType": "customer service"
         }
     },
-    "primaryImageOfPage": {  // ✅ Thêm ảnh đại diện
+    "primaryImageOfPage": {
         "@type": "ImageObject",
         "url": configImageURL('/uploads/RIMO-logo.png'),
         "caption": "Phim cách nhiệt & Phim PPF Rimo"
@@ -109,17 +96,16 @@ const aboutPageSchema = {
         "@type": "BreadcrumbList",
         "itemListElement": breadcrumbSchema.itemListElement
     },
-    "significantLinks": [  // ✅ Thêm các link quan trọng
-        `${publicURL}/${ROUTE_PATH.PRODUCT}`,
-        `${publicURL}/${ROUTE_PATH.BLOG}`
+    "significantLinks": [
+        `${publicURL}${ROUTE_PATH.PRODUCT}`,
+        `${publicURL}${ROUTE_PATH.BLOG}`
     ]
 };
 
-// ✅ THÊM Organization Schema chi tiết
 const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "@id": `${publicURL}/#organization`,
+    "@id": `${publicURL}#organization`,
     "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh",
     "alternateName": "Rimo Việt Nam",
     "url": publicURL,
@@ -127,7 +113,6 @@ const organizationSchema = {
     "description": "Nhà nhập khẩu và phân phối chính hãng phim cách nhiệt Rimo tại Việt Nam",
     "sameAs": [
         "https://www.facebook.com/potech.vietnam",
-        // Thêm các social media khác nếu có
     ],
     "contactPoint": {
         "@type": "ContactPoint",
@@ -138,11 +123,10 @@ const organizationSchema = {
     }
 };
 
-// ✅ THÊM WebSite Schema
 const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "@id": `${publicURL}/#website`,
+    "@id": `${publicURL}#website`,
     "url": publicURL,
     "name": "Phim cách nhiệt & Phim PPF Rimo",
     "description": "Phim cách nhiệt và PPF Rimo chính hãng - Công ty Quang Minh",
@@ -153,6 +137,9 @@ const websiteSchema = {
     }
 };
 
+// ✅ Gộp tất cả schema vào một mảng để dễ quản lý
+const allSchemas = [aboutPageSchema, organizationSchema, websiteSchema, breadcrumbSchema];
+
 export const metadata: Metadata = {
     title: "Giới thiệu - Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
     description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.",
@@ -161,7 +148,7 @@ export const metadata: Metadata = {
 
     openGraph: {
         type: "website",
-        url: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,  // ✅ Sửa URL cụ thể cho trang
+        url: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
         title: "Giới thiệu - Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
         description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
         images: [
@@ -193,21 +180,10 @@ export const metadata: Metadata = {
     },
 
     alternates: {
-        canonical: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,  // ✅ Canonical cho trang cụ thể
+        canonical: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
     },
 
-    // ✅ Thêm verification nếu có
-    // verification: {
-    //     google: "your-google-verification-code",
-    // },
-
     other: {
-        'application/ld+json': JSON.stringify([
-            aboutPageSchema,      // ✅ AboutPage schema
-            organizationSchema,   // ✅ Organization schema
-            websiteSchema,        // ✅ Website schema
-            breadcrumbSchema      // ✅ Breadcrumb schema
-        ]),
         'og:image:alt': 'Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô',
         'twitter:image:alt': 'Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô',
         'og:locale': 'vi_VN',
@@ -218,57 +194,99 @@ export const metadata: Metadata = {
     }
 };
 
-const IntroducePage = async () => {
-    const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=INTRODUCE`, {
-        cache: 'no-store', // Tắt cache
-    }).then((res) => res.json());
-    const contentPage: ContentPageInterface[] = config.data
-    const content = contentPage[0].content ? contentPage[0].content : ""
+// ✅ Helper function để extract headings an toàn
+const extractHeadings = (htmlContent: string) => {
+    const headings: { id: string; text: any; level: number }[] = [];
+    const headingMatches = String(htmlContent).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
 
-    let tocItems: { id: string; text: any; level: number; }[] = [];
-    let tocItemsLength: { id: string; text: any; level: number; }[] = [];
-
-    var initialLength = 0
-    const headings = String(content).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
-    if (headings) {
-        const items = headings.map((heading, index) => {
+    if (headingMatches) {
+        headingMatches.forEach((heading, index) => {
             const level = heading.match(/h([2-3])/)?.[1] ?? '2';
             const text = heading.replace(/<\/?h[2-3][^>]*>/g, '');
             const id = `heading-${index}`;
-            return { id, text, level: parseInt(level) };
+            headings.push({ id, text, level: parseInt(level) });
         });
-        initialLength = items.length
-        tocItems = items;
     }
 
-    const updatedContent = String(content).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match: any, tag: string[], text: any, _index: any) => {
-        const id = `heading-${tocItems.length}`;
+    return headings;
+};
 
-        tocItems.push({ id, text, level: parseInt(tag[1]) });
-        tocItemsLength = tocItems.filter((_it, index) => index >= initialLength)
+// ✅ Helper function để thêm id vào headings
+const addIdsToHeadings = (htmlContent: string, existingHeadings: { id: string; text: any; level: number }[]) => {
+    let index = 0;
+    return String(htmlContent).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match, tag, text) => {
+        const id = existingHeadings[index]?.id || `heading-${index}`;
+        index++;
         return `<${tag} id="${id}">${text}</${tag}>`;
     });
+};
+
+const IntroducePage = async () => {
+    // ✅ Thêm error handling cho fetch
+    let content = "";
+    try {
+        const response = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=INTRODUCE`, {
+            cache: 'no-store',
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const config = await response.json();
+        const contentPage: ContentPageInterface[] = config?.data || [];
+
+        if (contentPage.length > 0 && contentPage[0]?.content) {
+            content = contentPage[0].content;
+        }
+    } catch (error) {
+        console.error("Failed to fetch introduce content:", error);
+        content = "<p>Nội dung đang được cập nhật...</p>";
+    }
+
+    // ✅ Extract headings từ content
+    const allHeadings = extractHeadings(content);
+
+    // ✅ Tách headings cho TOC (chỉ lấy h2 và h3)
+    const tocItems = allHeadings.filter(item => item.level === 2 || item.level === 3);
+
+    // ✅ Thêm id vào headings
+    const updatedContent = addIdsToHeadings(content, allHeadings);
+
     return (
-        <ClientLayout>
-            <BannerCommon
-                type={'INTRODUCE'}
-            />
-            <div className={`${styles.introduceContainer} padding-common`}>
-                <BreadcrumbCommon
-                    breadcrumb={"Giới thiệu"}
-                    redirect={ROUTE_PATH.INTRODUCE}
-                    title={'CÔNG TY TNHH THƯƠNG MẠI XNK NỘI THẤT Ô TÔ QUANG MINH'}
-                    blackColor={true}
+        <>
+            {/* ✅ Render tất cả schema trong một map để tránh duplicate */}
+            {allSchemas.map((schema, index) => (
+                <script
+                    key={index}
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(schema)
+                    }}
                 />
-                <TocClient tocItems={tocItemsLength} />
-                <div className="tiny-style">
-                    <article
-                        className="prose max-w-none"
-                        dangerouslySetInnerHTML={{ __html: updatedContent }}
+            ))}
+
+            <ClientLayout>
+                <BannerCommon
+                    type={'INTRODUCE'}
+                />
+                <div className={`${styles.introduceContainer} padding-common`}>
+                    <BreadcrumbCommon
+                        breadcrumb={"Giới thiệu"}
+                        redirect={ROUTE_PATH.INTRODUCE}
+                        title={'CÔNG TY TNHH THƯƠNG MẠI XNK NỘI THẤT Ô TÔ QUANG MINH'}
+                        blackColor={true}
                     />
+                    <TocClient tocItems={tocItems} />
+                    <div className="tiny-style">
+                        <article
+                            className="prose max-w-none"
+                            dangerouslySetInnerHTML={{ __html: updatedContent }}
+                        />
+                    </div>
                 </div>
-            </div>
-        </ClientLayout>
+            </ClientLayout>
+        </>
     )
 }
 
