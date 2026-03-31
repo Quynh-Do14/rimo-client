@@ -15,16 +15,6 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'giphy.com',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
-        hostname: 'media.giphy.com',
-        pathname: '/**'
-      },
-      {
-        protocol: 'https',
         hostname: 'rimo.vn',
         pathname: '/api/uploads/**'
       },

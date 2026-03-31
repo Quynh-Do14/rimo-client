@@ -110,7 +110,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Dynamic blog URLs
   const blogUrls = blogs && blogs.length && blogs.map((blog) => ({
-    url: `${publicURL}/tin-tuc/${blog.slug}`,
+    url: `${publicURL}/tin-tuc/${blog.slug}.html`,
     lastModified: blog.updated_at ? new Date(blog.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,

@@ -36,7 +36,7 @@ async function getProduct(slug: string): Promise<ProductInterface> {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
-    
+
     const keywordConvert = product?.keyword?.map(item => item.keyword) || [];
     const keywords: string[] = [
         product.name,
@@ -136,9 +136,31 @@ const ProductSlugPage = async ({ params }: Props) => {
         ]
     };
 
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.name,
+        "description": dataDetail.short_description,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": 'Rimo'
+        },
+        "breadcrumb": {
+            "@id": `${productUrl}#breadcrumb`
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": configImageURL(dataDetail.image),
+            "caption": dataDetail.name,
+        }
+    };
+
     return (
         <>
-            {/* ✅ JSON-LD được tạo từ dữ liệu trong component */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -151,6 +173,12 @@ const ProductSlugPage = async ({ params }: Props) => {
                     __html: JSON.stringify(breadcrumbSchema)
                 }}
             />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(webpageSchema)
+                }}
+            />
 
             <ClientLayout>
                 <div className={styles.productContainer}>
@@ -159,6 +187,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                             breadcrumb={"Sản phẩm"}
                             redirect={ROUTE_PATH.PRODUCT}
                             title={dataDetail.name}
+                            currentURL={productUrl}
                             blackColor={true}
                         />
                     </div>
