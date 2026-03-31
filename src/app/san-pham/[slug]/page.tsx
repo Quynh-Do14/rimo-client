@@ -149,9 +149,6 @@ const ProductSlugPage = async ({ params }: Props) => {
             "url": publicURL,
             "name": 'Rimo'
         },
-        "breadcrumb": {
-            "@id": `${productUrl}#breadcrumb`
-        },
         "primaryImageOfPage": {
             "@type": "ImageObject",
             "url": configImageURL(dataDetail.image),

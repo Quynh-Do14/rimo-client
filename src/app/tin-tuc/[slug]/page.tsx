@@ -213,9 +213,6 @@ const BlogSlugPage = async ({ params }: Props) => {
             "url": publicURL,
             "name": 'Rimo Việt Nam'
         },
-        "breadcrumb": {
-            "@id": `${blogUrl}#breadcrumb`
-        },
         "primaryImageOfPage": {
             "@type": "ImageObject",
             "url": imageUrl,
