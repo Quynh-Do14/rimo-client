@@ -38,7 +38,7 @@ const ProductContent = () => {
     // Lấy các query parameters
     const search = searchParams?.get('search') || '';
     const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '10';
+    const limit = searchParams?.get('limit') || '8';
 
     const categoryProductState = useRecoilValue(CategoryProductState).data
 
@@ -116,7 +116,7 @@ const ProductContent = () => {
     // Effect để đồng bộ state với URL và gọi API
     useEffect(() => {
         const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 10;
+        const parsedLimit = parseInt(limit) || 8;
         const parsedSearch = search || "";
         // const parsedCategory = category_id || "";
 
