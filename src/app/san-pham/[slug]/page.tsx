@@ -36,7 +36,6 @@ async function getProduct(slug: string): Promise<ProductInterface> {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${product.slug}`;
-    console.log('productUrl',productUrl);
     
     const keywordConvert = product?.keyword?.map(item => item.keyword) || [];
     const keywords: string[] = [
@@ -85,7 +84,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 const ProductSlugPage = async ({ params }: Props) => {
     // Fetch dữ liệu trực tiếp trong component
     const dataDetail = await getProduct(params.slug);
-    const productUrl = `${publicURL}/${ROUTE_PATH.PRODUCT}/${dataDetail.slug}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${dataDetail.slug}`;
 
     // ✅ Tạo schema ngay trong component với dữ liệu đã fetch
     const productSchema = {
@@ -126,7 +125,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Sản phẩm",
-                "item": `${publicURL}/${ROUTE_PATH.PRODUCT}`
+                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
             },
             {
                 "@type": "ListItem",
