@@ -16,6 +16,7 @@ const introduceUrl = `${publicURL}${ROUTE_PATH.INTRODUCE}`;
 const keywords = [
     "CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH",
     "Công ty TNHH Thương Mại Xuất nhập khẩu Nội thất ô tô Quang Minh",
+    "RIMO",
     "phim cách nhiệt Rimo",
     "phim ppf Rimo",
     "phim bảo vệ sơn ô tô",
