@@ -170,7 +170,7 @@ const BlogSlugPage = async ({ params }: Props) => {
             "@type": "WebPage",
             "@id": blogUrl
         },
-        "articleSection": blog.category_name || "Tin tức", // ✅ Thêm chuyên mục
+        "articleSection": "Tin tức", // ✅ Thêm chuyên mục
         "wordCount": blog.short_description?.length || 0, // ✅ Đếm số từ
         "timeRequired": `PT${Math.ceil((blog.short_description?.length || 0) / 300)}M` // ✅ Thời gian đọc
     };
@@ -188,7 +188,7 @@ const BlogSlugPage = async ({ params }: Props) => {
             {
                 "@type": "ListItem",
                 "position": 2,
-                "name": blog.category_name || "Tin tức",
+                "name": "Tin tức",
                 "item": `${publicURL}${ROUTE_PATH.BLOG}`
             },
             {
