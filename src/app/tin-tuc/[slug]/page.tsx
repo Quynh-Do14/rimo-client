@@ -112,7 +112,7 @@ const BlogSlugPage = async ({ params }: Props) => {
     const relatedBlogs = dataDetail?.related_blogs || []
     const blogUrl = `${publicURL}${ROUTE_PATH.BLOG}/${params.slug}`;
     const imageUrl = configImageURL(blog.image);
-    const imageAlt = `${blog.title} - Phim cách nhiệt Rimo`;
+    const imageAlt = blog.title;
 
     let tocItems: { id: string; text: any; level: number; }[] = [];
     let tocItemsLength: { id: string; text: any; level: number; }[] = [];
@@ -219,7 +219,6 @@ const BlogSlugPage = async ({ params }: Props) => {
             "caption": imageAlt
         }
     };
-
 
     return (
         <>

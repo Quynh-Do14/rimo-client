@@ -9,7 +9,6 @@ import { Metadata } from 'next'
 import { configImageURL } from '@/infrastructure/helper/helper'
 import { Endpoint } from '@/core/common/apiLink'
 import { ContentPageInterface } from '@/infrastructure/interface/contentPage/contentPage.interface'
-
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 const introduceUrl = `${publicURL}${ROUTE_PATH.INTRODUCE}`;
@@ -112,7 +111,7 @@ const organizationSchema = {
     "logo": configImageURL('/uploads/RIMO-logo.png'),
     "description": "Nhà nhập khẩu và phân phối chính hãng phim cách nhiệt Rimo tại Việt Nam",
     "sameAs": [
-        "https://www.facebook.com/potech.vietnam",
+        "https://www.facebook.com/rimo.vietnam",
     ],
     "contactPoint": {
         "@type": "ContactPoint",
@@ -137,9 +136,6 @@ const websiteSchema = {
     }
 };
 
-// ✅ Gộp tất cả schema vào một mảng để dễ quản lý
-const allSchemas = [aboutPageSchema, organizationSchema, websiteSchema, breadcrumbSchema];
-
 export const metadata: Metadata = {
     title: "Giới thiệu - Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
     description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại. Chứng nhận COCQ đầy đủ, Công ty Quang Minh nhập khẩu và phân phối chính hãng tại Việt Nam.",
@@ -148,7 +144,7 @@ export const metadata: Metadata = {
 
     openGraph: {
         type: "website",
-        url: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
+        url: `${publicURL}${ROUTE_PATH.INTRODUCE}`,
         title: "Giới thiệu - Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô",
         description: "Rimo - Thương hiệu Phim cách nhiệt và PPF cao cấp dành cho ô tô. Công nghệ Nano Ceramic & Phún xạ kim loại.",
         images: [
@@ -184,6 +180,12 @@ export const metadata: Metadata = {
     },
 
     other: {
+        'application/ld+json': JSON.stringify([
+            aboutPageSchema,      // ✅ AboutPage schema
+            organizationSchema,   // ✅ Organization schema
+            websiteSchema,        // ✅ Website schema
+            breadcrumbSchema      // ✅ Breadcrumb schema
+        ]),
         'og:image:alt': 'Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô',
         'twitter:image:alt': 'Phim PPF và Cách nhiệt Rimo cao cấp dành ô tô',
         'og:locale': 'vi_VN',
@@ -194,77 +196,62 @@ export const metadata: Metadata = {
     }
 };
 
-// ✅ Helper function để extract headings an toàn
-const extractHeadings = (htmlContent: string) => {
-    const headings: { id: string; text: any; level: number }[] = [];
-    const headingMatches = String(htmlContent).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
+const IntroducePage = async () => {
+    const config = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=INTRODUCE`, {
+        cache: 'no-store', // Tắt cache
+    }).then((res) => res.json());
+    const contentPage: ContentPageInterface[] = config.data
+    const content = contentPage[0].content ? contentPage[0].content : ""
 
-    if (headingMatches) {
-        headingMatches.forEach((heading, index) => {
+    let tocItems: { id: string; text: any; level: number; }[] = [];
+    let tocItemsLength: { id: string; text: any; level: number; }[] = [];
+
+    var initialLength = 0
+    const headings = String(content).match(/<(h[2-3])[^>]*>(.*?)<\/\1>/g);
+    if (headings) {
+        const items = headings.map((heading, index) => {
             const level = heading.match(/h([2-3])/)?.[1] ?? '2';
             const text = heading.replace(/<\/?h[2-3][^>]*>/g, '');
             const id = `heading-${index}`;
-            headings.push({ id, text, level: parseInt(level) });
+            return { id, text, level: parseInt(level) };
         });
+        initialLength = items.length
+        tocItems = items;
     }
 
-    return headings;
-};
+    const updatedContent = String(content).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match: any, tag: string[], text: any, _index: any) => {
+        const id = `heading-${tocItems.length}`;
 
-// ✅ Helper function để thêm id vào headings
-const addIdsToHeadings = (htmlContent: string, existingHeadings: { id: string; text: any; level: number }[]) => {
-    let index = 0;
-    return String(htmlContent).replace(/<(h[2-3])[^>]*>(.*?)<\/\1>/g, (_match, tag, text) => {
-        const id = existingHeadings[index]?.id || `heading-${index}`;
-        index++;
+        tocItems.push({ id, text, level: parseInt(tag[1]) });
+        tocItemsLength = tocItems.filter((_it, index) => index >= initialLength)
         return `<${tag} id="${id}">${text}</${tag}>`;
     });
-};
-
-const IntroducePage = async () => {
-    // ✅ Thêm error handling cho fetch
-    let content = "";
-    try {
-        const response = await fetch(`${baseURL}${Endpoint.ContentPage.Get}?type=INTRODUCE`, {
-            cache: 'no-store',
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const config = await response.json();
-        const contentPage: ContentPageInterface[] = config?.data || [];
-
-        if (contentPage.length > 0 && contentPage[0]?.content) {
-            content = contentPage[0].content;
-        }
-    } catch (error) {
-        console.error("Failed to fetch introduce content:", error);
-        content = "<p>Nội dung đang được cập nhật...</p>";
-    }
-
-    // ✅ Extract headings từ content
-    const allHeadings = extractHeadings(content);
-
-    // ✅ Tách headings cho TOC (chỉ lấy h2 và h3)
-    const tocItems = allHeadings.filter(item => item.level === 2 || item.level === 3);
-
-    // ✅ Thêm id vào headings
-    const updatedContent = addIdsToHeadings(content, allHeadings);
-
     return (
         <>
-            {/* ✅ Render tất cả schema trong một map để tránh duplicate */}
-            {allSchemas.map((schema, index) => (
-                <script
-                    key={index}
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(schema)
-                    }}
-                />
-            ))}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(aboutPageSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(organizationSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(websiteSchema)
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(websiteSchema)
+                }}
+            />
 
             <ClientLayout>
                 <BannerCommon
@@ -277,7 +264,7 @@ const IntroducePage = async () => {
                         title={'CÔNG TY TNHH THƯƠNG MẠI XNK NỘI THẤT Ô TÔ QUANG MINH'}
                         blackColor={true}
                     />
-                    <TocClient tocItems={tocItems} />
+                    <TocClient tocItems={tocItemsLength} />
                     <div className="tiny-style">
                         <article
                             className="prose max-w-none"
