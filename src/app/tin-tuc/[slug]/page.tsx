@@ -269,7 +269,7 @@ const BlogSlugPage = async ({ params }: Props) => {
                         </div>
 
                         {/* Sidebar - chiếm 25% trên desktop, toàn bộ trên mobile */}
-                        <div className="w-full lg:w-1/4 lg:sticky lg:top-20 lg:self-start overflow-y-auto">
+                        <div className="w-full lg:w-1/4">
                             <RelationBlogComponent relatedBlogs={relatedBlogs} />
                         </div>
                     </div>
