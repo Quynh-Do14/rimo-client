@@ -45,6 +45,7 @@ const PolicyPage = async () => {
         <ClientLayout>
             <BannerCommon
                 type={'POLICY'}
+                alt={'CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH'}
             />
             <div className={`${styles.policyContainer} padding-common`}>
                 <BreadcrumbCommon

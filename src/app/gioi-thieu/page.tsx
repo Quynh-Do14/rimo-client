@@ -257,6 +257,7 @@ const IntroducePage = async () => {
             <ClientLayout>
                 <BannerCommon
                     type={'INTRODUCE'}
+                    alt={'CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH'}
                 />
                 <div className={`${styles.introduceContainer} padding-common`}>
                     <BreadcrumbCommon

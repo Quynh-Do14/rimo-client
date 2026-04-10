@@ -16,8 +16,8 @@ import districtService from '@/infrastructure/repository/district/district.servi
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
 import { AgencyInterface, AgencyParams } from '@/infrastructure/interface/agency/agency.interface';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+// import mapboxgl from 'mapbox-gl';
+// import 'mapbox-gl/dist/mapbox-gl.css';
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon';
 import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
 import GoogleMapView from './ggmap';
@@ -210,6 +210,7 @@ const AgencyContent = () => {
         <ClientLayout>
             <BannerCommon
                 type={'AGENCY'}
+                alt={'ĐẠI LÝ CỦA CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH'}
             />
             <div className={styles.agencyContainer}>
                 <div className='padding-common'>

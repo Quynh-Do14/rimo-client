@@ -18,11 +18,8 @@ import InputSearchCommon from '@/infrastructure/common/input/input-search-common
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';
 import { AgencyInterface, AgencyParams } from '@/infrastructure/interface/agency/agency.interface';
 import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import BannerCommon from '@/infrastructure/common/banner/BannerCommon';
 import banner from '@/assets/images/banner/Banner-Menu-GIoi-thieu.jpg';
-
-mapboxgl.accessToken = 'pk.eyJ1IjoibnRkMTAxMDIwMDAiLCJhIjoiY2tvbzJ4anl1MDZjMzJwbzNpcnA5NXZpcCJ9.dePfFDv0RlCLnWoDq1zHlw';
 
 const AgencyContent = () => {
     const [listAgency, setListAgency] = useState<Array<AgencyInterface>>([])
@@ -298,7 +295,8 @@ const AgencyContent = () => {
     return (
         <ClientLayout>
             <BannerCommon
-                type={'INTRODUCE'}
+                type={'AGENCY'}
+                alt={'CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH'}
             />
             <div className={styles.agencyContainer}>
                 <div className='padding-common'>

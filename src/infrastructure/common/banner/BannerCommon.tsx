@@ -8,9 +8,10 @@ import { configImageURL } from '@/infrastructure/helper/helper';
 
 type Props = {
     type: "HOMEPAGE" | "INTRODUCE" | "AGENCY" | "CONTACT" | "POLICY";
+    alt: string
 }
 const BannerCommon = (props: Props) => {
-    const { type } = props;
+    const { type, alt } = props;
     const [banner, setBanner] = useState<string>("");
 
     const onGetBannerAsync = async () => {
@@ -38,7 +39,7 @@ const BannerCommon = (props: Props) => {
         <div className={styles.bannerContainer}>
             <Image
                 src={configImageURL(banner)}
-                alt="Banner quảng cáo dòng sản phẩm RIMO PREMIUM"
+                alt={alt}
                 className={styles.bannerImage}
                 width={1920}
                 height={600}

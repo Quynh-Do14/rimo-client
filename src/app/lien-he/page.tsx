@@ -67,6 +67,7 @@ const ContactPage = () => {
         <ClientLayout>
             <BannerCommon
                 type={'CONTACT'}
+                alt={'CÔNG TY TNHH TM XNK NỘI THẤT Ô TÔ QUANG MINH'}
             />
             <div className={`${styles.contactContainer} padding-common`}>
                 <BreadcrumbCommon
