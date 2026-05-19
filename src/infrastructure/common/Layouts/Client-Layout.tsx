@@ -25,7 +25,7 @@ const ClientLayout = ({ ...props }: any) => {
                     data-tooltip="Facebook RIMO">
                     <Image src={facebook} alt='RIMO' />
                 </a>
-                <a href="https://m.me/109804934943900"
+                <a href="https://m.me/rimo.vietnam"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
