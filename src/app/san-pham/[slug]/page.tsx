@@ -191,7 +191,11 @@ const ProductSlugPage = async ({ params }: Props) => {
                     <div className={`${styles.content} padding-section`}>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                             <div className="w-full">
-                                <GalleryComponent slides={dataDetail.images} />
+                                <GalleryComponent
+                                    productName={dataDetail.name}
+                                    slides={dataDetail.images}
+                                    avatarImage={dataDetail.image}
+                                />
                             </div>
                             <div className={styles.productInfo}>
                                 <h1>{dataDetail.name}</h1>
