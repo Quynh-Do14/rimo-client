@@ -170,7 +170,7 @@ const SearchContent = () => {
                                 {listProduct.length > 0 ? (
                                     <div className={styles.galleryGrid}>
                                         {listProduct.map(item => (
-                                            <Link href={`${ROUTE_PATH.PRODUCT}/${convertSlug(item.name)}-${item.id}.html`}
+                                            <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
                                                 key={item.id}
                                                 className={styles.galleryItem}
                                             >
@@ -208,22 +208,24 @@ const SearchContent = () => {
                                     </div>
                                 ) : (
                                     /* No Data State */
-                                    <div className={styles.noDataContainer}>
-                                        <div className={styles.noDataIcon}>
-                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <circle cx="12" cy="12" r="10" />
-                                                <line x1="8" y1="8" x2="16" y2="16" />
-                                                <line x1="16" y1="8" x2="8" y2="16" />
-                                            </svg>
+                                    <div className={styles.galleryContainer}>
+                                        <div className={styles.noDataContainer}>
+                                            <div className={styles.noDataIcon}>
+                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <line x1="8" y1="8" x2="16" y2="16" />
+                                                    <line x1="16" y1="8" x2="8" y2="16" />
+                                                </svg>
+                                            </div>
+                                            <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
+                                            <p className={styles.noDataDescription}>
+                                                Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
+                                            </p>
+                                            <ButtonCommon
+                                                onClick={onReset}
+                                                title={'Xóa bộ lọc'}
+                                            />
                                         </div>
-                                        <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                        <p className={styles.noDataDescription}>
-                                            Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                        </p>
-                                        <ButtonCommon
-                                            onClick={onReset}
-                                            title={'Xóa bộ lọc'}
-                                        />
                                     </div>
                                 )}
                             </div>
@@ -239,7 +241,7 @@ const SearchContent = () => {
 
 const SearchPage = () => {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<SkeletonProduct />}>
             <SearchContent />
         </Suspense>
     );
