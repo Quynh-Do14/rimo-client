@@ -1,276 +1,256 @@
-'use client'
-import React, { useState, useEffect, Suspense, useLayoutEffect } from "react";
-import productService from "@/infrastructure/repository/product/product.service";
-import { configImageURL, convertSlug, formatCurrencyVND, splitTakeId } from "@/infrastructure/helper/helper";
-import Link from "next/link";
-import { ROUTE_PATH } from "@/core/common/appRouter";
-import styles from "@/assets/styles/pages/product/product.module.css"
+import React from "react";
+import styles from "@/assets/styles/pages/product/product.module.css";
 import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
-import BreadcrumbCommon from "@/infrastructure/common/Layouts/Breadcumb";
-import InputSearchCommon from "@/infrastructure/common/input/input-search-common";
-import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
-import ButtonCommon from "@/infrastructure/common/button/button-common";
-import { useRecoilValue } from "recoil";
-import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
-import { useRouter, useSearchParams } from "next/navigation";
-import { ProductInterface, ProductParams } from "@/infrastructure/interface/product/product.interface";
-import Image from "next/image";
-import SkeletonProduct from "@/app/tim-kiem/skeleton";
-import { useParams } from 'next/navigation';
-import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/PaginationNoSize";
+import ProductList from "./components/product-list";
+import { Metadata } from "next";
+import { ROUTE_PATH } from "@/core/common/appRouter";
+import { Endpoint } from "@/core/common/apiLink";
+import { SEOProductInterface } from "@/infrastructure/interface/seo-product/seoProduct.interface";
+import { configImageURL } from "@/infrastructure/helper/helper";
 
-const ProductContent = () => {
-    const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
-    const [searchText, setSearchText] = useState<string>("");
-    const [totalPage, setTotalPage] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalElement, setTotalElement] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(8);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [initialLoading, setInitialLoading] = useState<boolean>(true);
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [categoryName, setCategoryName] = useState<string>("");
+type Props = {
+    params: { slug: string };
+};
 
-    const router = useRouter();
-    const searchParams = useSearchParams();
+const baseURL = process.env.NEXT_PUBLIC_API_URL;
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
-    // Lấy các query parameters
-    const search = searchParams?.get('search') || '';
-    const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '8';
+// Cache product data để tái sử dụng
+let cachedProduct: SEOProductInterface | null = null;
 
-    const categoryProductState = useRecoilValue(CategoryProductState).data
-
-    const onGetListProductAsync = async ({ name = searchText, limit = pageSize, page = currentPage, category_id = categoryId }) => {
-        const param: ProductParams = {
-            page: page,
-            limit: limit,
-            search: name,
-            category_id: category_id
-        }
-        try {
-            await productService.GetProduct(
-                param,
-                setLoading
-            ).then((res) => {
-                setListProduct(res.data);
-                setTotalElement(res.limit);
-                setTotalPage(res.totalPages);
-                setTotal(res.total);
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
+async function getProduct(slug: string): Promise<SEOProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
+        cache: 'no-store', // Tắt cache
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch product');
     }
 
-    const onSearch = async (name = searchText, limit = pageSize, page = 1, category_id = categoryId) => {
-        await onGetListProductAsync({ name: name, limit: limit, page: page, category_id: category_id });
+    const data = await response.json();
+    cachedProduct = data;
+    return data;
+}
+
+// ✅ Metadata tối ưu
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const product = await getProduct("san-pham");
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+
+    const description = "Sản phẩm RIMO chính hãng"
+
+    // const keywords = [
+    //     `Sản phẩm RIMO`,
+    //     product.category_name,
+    //     product.brand_name,
+    //     ...(product.keyword?.map(item => item.keyword) || [])
+    // ].filter(Boolean).join(', ');
+
+    return {
+        title: `Sản phẩm RIMO`,
+        description: description,
+        keywords: `Sản phẩm RIMO`,
+
+        openGraph: {
+            title: `Sản phẩm RIMO`,
+            description: description,
+            images: [
+                {
+                    url: configImageURL('/uploads/RIMO-logo.png'),
+                    width: 1200,
+                    height: 630,
+                    alt: `Sản phẩm RIMO`,
+                }
+            ],
+            type: 'website',
+            url: productUrl,
+            siteName: `Sản phẩm RIMO`,
+            locale: 'vi_VN',
+        },
+
+        twitter: {
+            card: 'summary_large_image',
+            title: `${`Sản phẩm RIMO`}`,
+            description: `Sản phẩm RIMO`,
+            images: [
+                {
+                    url: configImageURL('/uploads/RIMO-logo.png'),
+                    alt: `Sản phẩm RIMO`,
+                }
+            ],
+        },
+
+        alternates: {
+            canonical: productUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        },
+
+        verification: {
+            google: process.env.GOOGLE_VERIFICATION,
+        },
+
+        category: 'Sản phẩm của RIMO',
+
+        // Thêm author nếu có
+        authors: [{ name: 'RIMO' }],
+    };
+}
+
+// Component ProductPage với Schema.org và Article schema
+const ProductPage = async ({ params }: Props) => {
+    const dataDetail = await getProduct("san-pham");
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+
+    const imageUrl = configImageURL('/uploads/RIMO-logo.png');
+
+    // ✅ Schema Product - chi tiết hơn
+    const productSchema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.title,
+        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "image": imageUrl,
+        "sku": params.slug,
+        "brand": {
+            "@type": "Brand",
+            "name": "RIMO"
+        },
+        "category": "Sản phẩm của RIMO",
+        "offers": {
+            "@type": "Offer",
+            "url": productUrl,
+            "priceCurrency": "VND",
+            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+                "@type": "Organization",
+                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
+            }
+        },
+
     };
 
-    const onSearchParam = async () => {
-        // Tạo URL mới với search params
-        const newParams = new URLSearchParams(searchParams?.toString() || '');
-        newParams.set('search', searchText);
-        newParams.set('page', '1');
-
-        // Xóa category_id cũ nếu có
-        newParams.delete('category_id');
-
-        // Chỉ gọi router.push, không gọi API trực tiếp
-        // API sẽ được gọi trong useEffect khi URL thay đổi
-        if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${newParams.toString()}`);
-        } else {
-            router.push(`${ROUTE_PATH.PRODUCT}?${newParams.toString()}`);
-        }
-    }
-
-    const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchText(e.target.value);
+    // ✅ Schema Breadcrumb
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Sản phẩm",
+                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
+            },
+        ]
     };
 
-    const onChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value || ""
-        setCategoryId(value);
-        const result = categoryProductState.find(item => String(item.id) === String(value))
-        setCategoryName(String(result?.slug))
+    // ✅ Schema WebPage
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": productUrl,
+        "url": productUrl,
+        "name": dataDetail.title,
+        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "Sản phẩm của RIMO"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": dataDetail.title,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Phụ kiện ô tô"
+        }
     };
 
-    const onChangePage = async (page: number) => {
-        setCurrentPage(page);
-
-        // Cập nhật params với page mới
-        const newParams = new URLSearchParams(searchParams?.toString() || '');
-        newParams.set('page', page.toString());
-
-        // Chỉ gọi router.push, API sẽ được gọi trong useEffect
-        if (categoryId) {
-            router.push(`${ROUTE_PATH.CATEGORY}/${categoryName}?${newParams.toString()}`);
-        } else {
-            router.push(`${ROUTE_PATH.PRODUCT}?${newParams.toString()}`);
-        }
-    }
-
-    // Effect để đồng bộ state với URL và gọi API
-    useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 8;
-        const parsedSearch = search || "";
-        // const parsedCategory = category_id || "";
-
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        onSearch(parsedSearch, parsedLimit, parsedPage);
-    }, [search, page, limit]);
-
-    const onReset = () => {
-        setSearchText('');
-        setCurrentPage(1);
-        setCategoryId('');
-        setCategoryName('');
-        router.push(`${ROUTE_PATH.PRODUCT}`);
-    }
-
-    useLayoutEffect(() => {
-        setInitialLoading(false);
-    }, []);
+    // ✅ Schema Article - quan trọng cho bài viết giới thiệu sản phẩm
+    const articleSchema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${productUrl}#article`,
+        "url": productUrl,
+        "headline": `${dataDetail.title}`,
+        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "image": imageUrl,
+        "author": {
+            "@type": "Organization",
+            "name": "RIMO"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": dataDetail.title,
+            "logo": {
+                "@type": "ImageObject",
+                "url": configImageURL('/uploads/RIMO-logo.png')
+            }
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": productUrl
+        },
+        "articleBody": dataDetail.title,
+        "keywords": dataDetail.title
+    };
 
     return (
         <ClientLayout>
+            {/* JSON-LD Schemas */}
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+            />
+
             <div className={styles.productSection}>
-                <div className={`padding-common`}>
-                    <BreadcrumbCommon
-                        breadcrumb={"Sản phẩm"}
-                        redirect={ROUTE_PATH.PRODUCT}
-                        title={"Danh sách sản phẩm"}
-                    />
-                    <div className={styles.productContent}>
-                        <div className="pageHeader">
-                            <div className="badge">
-                                <span className="badgeText">Sản phẩm</span>
-                            </div>
-                            <h1 className="headerTitle">
-                                <span className="highlight">Danh Sách</span> Sản Phẩm
-                            </h1>
-                        </div>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
-                            {/* Search Input */}
-                            <div className="sm:col-span-5">
-                                <InputSearchCommon
-                                    placeholder={'Tìm kiếm sản phẩm'}
-                                    value={searchText}
-                                    onChange={onChangeSearchText}
-                                    disabled={false}
-                                />
-                            </div>
-
-                            {/* Category Select */}
-                            <div className="sm:col-span-5">
-                                <SelectSearchCommon
-                                    listDataOfItem={categoryProductState}
-                                    onChange={onChangeCategory}
-                                    label={"Danh mục sản phẩm"}
-                                    value={categoryId}
-                                    labelName="nameSplit"
-                                    valueName="id"
-                                />
-                            </div>
-
-                            {/* Search Button */}
-                            <div className="sm:col-span-2">
-                                <ButtonCommon
-                                    onClick={onSearchParam}
-                                    title={'Tìm kiếm'}
+                <ProductList />
+                {
+                    dataDetail?.content &&
+                    <div className="bg-white">
+                        <div className={`padding-common`}>
+                            <div className="tiny-style">
+                                <article
+                                    className="prose max-w-none"
+                                    dangerouslySetInnerHTML={{ __html: dataDetail.content }}
                                 />
                             </div>
                         </div>
-
-                        {/* Loading State */}
-                        {
-                            initialLoading || loading ? (
-                                <SkeletonProduct />
-                            ) : listProduct.length > 0 ? (
-                                /* Data State */
-                                <div className={styles.galleryContainer}>
-                                    <div className={styles.galleryGrid}>
-                                        {listProduct.map(item => (
-                                            <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
-                                                key={item.id}
-                                                className={styles.galleryItem}
-                                            >
-                                                <div className={styles.itemMedia}>
-                                                    <div className={styles.mediaContainer}>
-                                                        <div className={styles.thumbnailWrapper}>
-                                                            <Image src={configImageURL(item.image)} alt={item.name} fill className="object-cover" />
-                                                            <div className={styles.mediaOverlay}></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className={styles.itemContent}>
-                                                    <div className={styles.contentWrapper}>
-                                                        <h2 className={styles.itemTitle}>{item.name}</h2>
-                                                        <div className={styles.itemPrice}>
-                                                            {item.price_sale ? (
-                                                                <>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                                        <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
-                                                                    </div>
-                                                                    <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                                </>
-                                                            ) : (
-                                                                <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                    <PaginationNoSizeCommon
-                                        total={total}
-                                        currentPage={Number(page)}
-                                        onChangePage={onChangePage}
-                                        pageSize={pageSize}
-                                    />
-                                </div>
-                            ) : (
-                                <div className={styles.galleryContainer}>
-                                    <div className={styles.noDataContainer}>
-                                        <div className={styles.noDataIcon}>
-                                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                <circle cx="12" cy="12" r="10" />
-                                                <line x1="8" y1="8" x2="16" y2="16" />
-                                                <line x1="16" y1="8" x2="8" y2="16" />
-                                            </svg>
-                                        </div>
-                                        <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                        <p className={styles.noDataDescription}>
-                                            Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                        </p>
-                                        <ButtonCommon
-                                            onClick={onReset}
-                                            title={'Xóa bộ lọc'}
-                                        />
-                                    </div>
-                                </div>
-                            )}
                     </div>
-                </div>
+                }
             </div>
         </ClientLayout>
-
-    );
-};
-
-const ProductPage = () => {
-    return (
-        <Suspense fallback={<SkeletonProduct />}>
-            <ProductContent />
-        </Suspense>
     );
 };
 
