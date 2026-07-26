@@ -1,7 +1,7 @@
+import RequestService from "@/infrastructure/utils/response";
 import { Endpoint } from "../../../core/common/apiLink";
 import { FailMessage, SuccessMessage } from "../../common/toast/message";
 import { SEOProductInterface, SEOProductParams } from "../../interface/seo-product/seoProduct.interface";
-import { RequestService } from "../../utilities/response";
 
 
 class SEOProductService {
@@ -29,7 +29,7 @@ class SEOProductService {
         setLoading(true)
         try {
             return await RequestService
-                .get(`${Endpoint.SEOProduct.GetById}/${id}`)
+                .get(`${Endpoint.SEOProduct.GetBySlug}/${id}`)
                 .then(response => {
                     if (response) {
                         return response
