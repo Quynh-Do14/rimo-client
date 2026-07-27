@@ -127,12 +127,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
+        title: `${product.title}` || "Sản phẩm RIMO",
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
+            title: `${product.title}` || "Sản phẩm RIMO",
             description: description,
             images: [
                 {
@@ -150,7 +150,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
+            title: `${product.title}` || "Sản phẩm RIMO",
             description: description,
             images: [
                 {
