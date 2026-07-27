@@ -127,19 +127,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: `${product.title}` || "Sản phẩm RIMO",
+        title: product.title ? product.title : "Sản phẩm RIMO",
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: `${product.title}` || "Sản phẩm RIMO",
+            title: product.title ? product.title : "Sản phẩm RIMO",
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
                     width: 1200,
                     height: 630,
-                    alt: product.title || 'Sản phẩm RIMO',
+                    alt: product.title ? product.title : "Sản phẩm RIMO",
                 }
             ],
             type: 'website',
@@ -150,12 +150,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: `${product.title}` || "Sản phẩm RIMO",
+            title: product.title ? product.title : "Sản phẩm RIMO",
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
-                    alt: product.title || 'Sản phẩm RIMO',
+                    alt: product.title ? product.title : "Sản phẩm RIMO",
                 }
             ],
         },
