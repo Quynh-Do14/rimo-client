@@ -15,6 +15,14 @@ type Props = {
 const baseURL = process.env.NEXT_PUBLIC_API_URL;
 const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
+// Định nghĩa fallback data
+const FALLBACK_DATA = {
+    title: 'Sản phẩm RIMO',
+    content: 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO',
+    description: 'Sản phẩm RIMO - Phụ kiện ô tô chính hãng, giá tốt nhất thị trường',
+    slug: 'san-pham',
+};
+
 // Cache product data để tái sử dụng
 let cachedProduct: SEOProductInterface | null = null;
 
@@ -31,50 +39,123 @@ async function getProduct(slug: string): Promise<SEOProductInterface> {
     return data;
 }
 
-// ✅ Metadata tối ưu
+// Hàm tạo meta description
+function generateDescription(product: SEOProductInterface | null): string {
+    if (!product) {
+        return 'Sản phẩm RIMO - Phụ kiện ô tô chính hãng, chất lượng cao, giá tốt nhất thị trường';
+    }
+
+    // Tạo description từ content
+    if (product.content) {
+        // Loại bỏ HTML tags và lấy text thuần
+        const plainText = product.content.replace(/<[^>]*>/g, '');
+        const truncated = plainText.length > 160
+            ? plainText.slice(0, 160) + '...'
+            : plainText;
+        return `${product.title} - ${truncated}`;
+    }
+
+    // Tạo description từ các thuộc tính
+    const parts = [];
+    if (product.title) parts.push(product.title);
+
+    return `${parts.join(' - ')} - Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO`;
+}
+
+// Hàm tạo keywords
+function generateKeywords(product: SEOProductInterface | null): string {
+    if (!product) {
+        return 'Sản phẩm RIMO, phụ kiện ô tô, RIMO, phụ kiện xe hơi, đồ chơi xe hơi, nội thất ô tô, phụ kiện chính hãng';
+    }
+
+    const keywords = new Set<string>();
+
+    // Thêm title
+    if (product.title) keywords.add(product.title);
+
+    // Thêm từ khóa từ API
+    if (product.keyword && Array.isArray(product.keyword)) {
+        product.keyword.forEach(item => {
+            if (item.keyword) keywords.add(item.keyword);
+        });
+    }
+
+    // Thêm từ khóa mở rộng
+    if (product.title) {
+        // Tách từ khóa từ title
+        const titleWords = product.title.split(' ');
+        titleWords.forEach(word => {
+            if (word.length > 2) keywords.add(word);
+        });
+    }
+
+    // Thêm từ khóa mặc định nếu chưa đủ
+    if (keywords.size < 5) {
+        keywords.add('Sản phẩm RIMO');
+        keywords.add('phụ kiện ô tô');
+        keywords.add('RIMO');
+        keywords.add('phụ kiện xe hơi');
+        keywords.add('nội thất ô tô');
+        keywords.add('phụ kiện chính hãng');
+    }
+
+    return Array.from(keywords).join(', ');
+}
+
+// ✅ Metadata với fallback và SEO đầy đủ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct("san-pham");
     const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
 
-    const description = "Sản phẩm RIMO chính hãng"
+    // Nếu không có sản phẩm, trả về metadata mặc định
+    if (!product) {
+        return {
+            title: 'Sản phẩm RIMO | Phụ kiện ô tô chính hãng',
+            description: 'Sản phẩm RIMO - Phụ kiện ô tô chính hãng, chất lượng cao, giá tốt nhất thị trường',
+            keywords: 'Sản phẩm RIMO, phụ kiện ô tô, RIMO, phụ kiện xe hơi, đồ chơi xe hơi, nội thất ô tô',
+            robots: {
+                index: true,
+                follow: true,
+            },
+            alternates: {
+                canonical: productUrl,
+            },
+        };
+    }
 
-    // const keywords = [
-    //     `Sản phẩm RIMO`,
-    //     product.category_name,
-    //     product.brand_name,
-    //     ...(product.keyword?.map(item => item.keyword) || [])
-    // ].filter(Boolean).join(', ');
+    const description = generateDescription(product);
+    const keywords = generateKeywords(product);
 
     return {
-        title: `Sản phẩm RIMO`,
+        title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
         description: description,
-        keywords: `Sản phẩm RIMO`,
+        keywords: keywords,
 
         openGraph: {
-            title: `Sản phẩm RIMO`,
+            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
                     width: 1200,
                     height: 630,
-                    alt: `Sản phẩm RIMO`,
+                    alt: product.title || 'Sản phẩm RIMO',
                 }
             ],
             type: 'website',
             url: productUrl,
-            siteName: `Sản phẩm RIMO`,
+            siteName: 'RIMO - Phụ kiện ô tô',
             locale: 'vi_VN',
         },
 
         twitter: {
             card: 'summary_large_image',
-            title: `${`Sản phẩm RIMO`}`,
-            description: `Sản phẩm RIMO`,
+            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
+            description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
-                    alt: `Sản phẩm RIMO`,
+                    alt: product.title || 'Sản phẩm RIMO',
                 }
             ],
         },
@@ -95,9 +176,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             google: process.env.GOOGLE_VERIFICATION,
         },
 
-        category: 'Sản phẩm của RIMO',
-
-        // Thêm author nếu có
+        category: 'Phụ kiện ô tô',
         authors: [{ name: 'RIMO' }],
     };
 }
@@ -109,36 +188,41 @@ const ProductPage = async ({ params }: Props) => {
 
     const imageUrl = configImageURL('/uploads/RIMO-logo.png');
 
+    const productName = dataDetail.title || FALLBACK_DATA.title;
+    const productDescription = dataDetail.content
+        ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
+        : FALLBACK_DATA.description;
+
     // ✅ Schema Product - chi tiết hơn
     const productSchema = {
         "@context": "https://schema.org",
         "@type": "Product",
         "@id": productUrl,
         "url": productUrl,
-        "name": dataDetail.title,
-        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "name": productName,
+        "description": productDescription,
         "image": imageUrl,
         "sku": params.slug,
         "brand": {
             "@type": "Brand",
             "name": "RIMO"
         },
-        "category": "Sản phẩm của RIMO",
+        "category": "Phụ kiện ô tô",
         "offers": {
             "@type": "Offer",
             "url": productUrl,
             "priceCurrency": "VND",
             "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             "itemCondition": "https://schema.org/NewCondition",
+            "availability": "https://schema.org/InStock",
             "seller": {
                 "@type": "Organization",
                 "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
             }
         },
-
     };
 
-    // ✅ Schema Breadcrumb
+    // ✅ Schema Breadcrumb - chi tiết hơn
     const breadcrumbSchema = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -155,6 +239,12 @@ const ProductPage = async ({ params }: Props) => {
                 "name": "Sản phẩm",
                 "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
             },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": productName,
+                "item": productUrl
+            }
         ]
     };
 
@@ -164,18 +254,18 @@ const ProductPage = async ({ params }: Props) => {
         "@type": "WebPage",
         "@id": productUrl,
         "url": productUrl,
-        "name": dataDetail.title,
-        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "name": productName,
+        "description": productDescription,
         "isPartOf": {
             "@type": "WebSite",
             "@id": `${publicURL}/#website`,
             "url": publicURL,
-            "name": "Sản phẩm của RIMO"
+            "name": "RIMO - Phụ kiện ô tô"
         },
         "primaryImageOfPage": {
             "@type": "ImageObject",
             "url": imageUrl,
-            "caption": dataDetail.title,
+            "caption": productName,
             "width": "1200",
             "height": "630"
         },
@@ -185,14 +275,14 @@ const ProductPage = async ({ params }: Props) => {
         }
     };
 
-    // ✅ Schema Article - quan trọng cho bài viết giới thiệu sản phẩm
-    const articleSchema = {
+    // ✅ Schema Article - chỉ hiển thị khi có content
+    const articleSchema = dataDetail.content ? {
         "@context": "https://schema.org",
         "@type": "Article",
         "@id": `${productUrl}#article`,
         "url": productUrl,
-        "headline": `${dataDetail.title}`,
-        "description": dataDetail.content?.slice(0, 200) || dataDetail.title,
+        "headline": `Bài viết giới thiệu ${productName}`,
+        "description": productDescription,
         "image": imageUrl,
         "author": {
             "@type": "Organization",
@@ -200,23 +290,25 @@ const ProductPage = async ({ params }: Props) => {
         },
         "publisher": {
             "@type": "Organization",
-            "name": dataDetail.title,
+            "name": "RIMO - Phụ kiện ô tô",
             "logo": {
                 "@type": "ImageObject",
                 "url": configImageURL('/uploads/RIMO-logo.png')
             }
         },
+        "datePublished": dataDetail.created_at || new Date().toISOString(),
+        "dateModified": dataDetail.updated_at || new Date().toISOString(),
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": productUrl
         },
-        "articleBody": dataDetail.title,
-        "keywords": dataDetail.title
-    };
+        "articleBody": dataDetail.content || productName,
+        "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
+    } : null;
 
     return (
         <ClientLayout>
-            {/* JSON-LD Schemas */}
+            {/* Hidden h1 cho SEO */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}

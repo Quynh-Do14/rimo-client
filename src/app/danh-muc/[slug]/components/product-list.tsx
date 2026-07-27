@@ -23,7 +23,7 @@ type ParamsType = {
 };
 
 type Props = {
-    title?: string
+    title: string
 }
 const ProductContent = (props: Props) => {
     const { title } = props
@@ -190,7 +190,7 @@ const ProductContent = (props: Props) => {
                 <BreadcrumbCommon
                     breadcrumb={"Sản phẩm"}
                     redirect={ROUTE_PATH.PRODUCT}
-                    title={"Danh sách sản phẩm"}
+                    title={title}
                 />
                 <div className={styles.productContent}>
                     <div className="pageHeader">

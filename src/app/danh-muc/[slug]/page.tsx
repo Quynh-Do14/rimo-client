@@ -27,37 +27,26 @@ const FALLBACK_DATA = {
 // Cache product data để tái sử dụng
 let cachedProduct: SEOProductInterface | null = null;
 
-async function getProduct(slug: string): Promise<SEOProductInterface | null> {
-    try {
-        const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
-            cache: 'no-store',
-        });
-
-        if (!response.ok) {
-            return null;
-        }
-
-        const data = await response.json();
-
-        // Kiểm tra dữ liệu có hợp lệ không
-        if (!data || !data.title) {
-            return null;
-        }
-
-        cachedProduct = data;
-        return data;
-    } catch (error) {
-        console.error('Error fetching product:', error);
-        return null;
+async function getProduct(slug: string): Promise<SEOProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
+        cache: 'no-store', // Tắt cache
+    });
+    if (!response.ok) {
+        throw new Error('Failed to fetch product');
     }
+
+    const data = await response.json();
+    cachedProduct = data;
+    return data;
 }
 
-// Hàm tạo meta description fallback
+// Hàm tạo meta description
 function generateDescription(product: SEOProductInterface | null): string {
     if (!product) {
-        return 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO';
+        return 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO - Phụ kiện ô tô chính hãng, giá tốt nhất thị trường';
     }
 
+    // Tạo description từ content
     if (product.content) {
         // Loại bỏ HTML tags và lấy text thuần
         const plainText = product.content.replace(/<[^>]*>/g, '');
@@ -67,19 +56,63 @@ function generateDescription(product: SEOProductInterface | null): string {
         return `${product.title} - ${truncated}`;
     }
 
-    return `${product.title} - Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO`;
+    // Tạo description từ các thuộc tính
+    const parts = [];
+    if (product.title) parts.push(product.title);
+
+    return `${parts.join(' - ')} - Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO`;
 }
 
-// ✅ Metadata với fallback
+// Hàm tạo keywords
+function generateKeywords(product: SEOProductInterface | null): string {
+    if (!product) {
+        return 'phụ kiện ô tô, RIMO, phụ kiện xe hơi, đồ chơi xe hơi, nội thất ô tô, phụ kiện chính hãng';
+    }
+
+    const keywords = new Set<string>();
+
+    // Thêm title
+    if (product.title) keywords.add(product.title);
+
+    // Thêm từ khóa từ API
+    if (product.keyword && Array.isArray(product.keyword)) {
+        product.keyword.forEach(item => {
+            if (item.keyword) keywords.add(item.keyword);
+        });
+    }
+
+    // Thêm từ khóa mở rộng
+    if (product.title) {
+        // Tách từ khóa từ title
+        const titleWords = product.title.split(' ');
+        titleWords.forEach(word => {
+            if (word.length > 2) keywords.add(word);
+        });
+    }
+
+    // Thêm từ khóa mặc định nếu chưa đủ
+    if (keywords.size < 5) {
+        keywords.add('phụ kiện ô tô');
+        keywords.add('RIMO');
+        keywords.add('phụ kiện xe hơi');
+        keywords.add('nội thất ô tô');
+        keywords.add('phụ kiện chính hãng');
+    }
+
+    return Array.from(keywords).join(', ');
+}
+
+// ✅ Metadata với fallback và SEO đầy đủ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${params.slug}`;
 
     // Nếu không có sản phẩm, trả về metadata mặc định
     if (!product) {
         return {
             title: 'Sản phẩm | RIMO - Phụ kiện ô tô chính hãng',
-            description: 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO',
+            description: 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO - Phụ kiện ô tô chính hãng, giá tốt nhất thị trường',
+            keywords: 'phụ kiện ô tô, RIMO, phụ kiện xe hơi, đồ chơi xe hơi, nội thất ô tô',
             robots: {
                 index: true,
                 follow: true,
@@ -91,15 +124,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const description = generateDescription(product);
-    // const keywords = generateKeywords(product);
+    const keywords = generateKeywords(product);
 
     return {
-        title: `${product.title}`,
+        title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
         description: description,
-        keywords: product.title,
+        keywords: keywords,
 
         openGraph: {
-            title: `${product.title}`,
+            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
             description: description,
             images: [
                 {
@@ -117,7 +150,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: `${product.title}`,
+            title: `${product.title} | RIMO - Phụ kiện ô tô chính hãng`,
             description: description,
             images: [
                 {
@@ -143,7 +176,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
             google: process.env.GOOGLE_VERIFICATION,
         },
 
-        category: product.title,
+        category: 'Phụ kiện ô tô',
         authors: [{ name: 'RIMO' }],
     };
 }
@@ -151,17 +184,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 // Component ProductPage
 const ProductPage = async ({ params }: Props) => {
     const dataDetail = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}`;
+    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${params.slug}`;
 
     const imageUrl = configImageURL('/uploads/RIMO-logo.png');
 
-    const productName = dataDetail?.title || FALLBACK_DATA.title;
-    const productContent = dataDetail?.content || FALLBACK_DATA.content;
-    const productDescription = dataDetail?.content
+    const productName = dataDetail.title || FALLBACK_DATA.title;
+    const productContent = dataDetail.content || FALLBACK_DATA.content;
+    const productDescription = dataDetail.content
         ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
         : FALLBACK_DATA.description;
 
-    // ✅ Schema Product
+    // ✅ Schema Product - chi tiết hơn
     const productSchema = {
         "@context": "https://schema.org",
         "@type": "Product",
@@ -175,12 +208,11 @@ const ProductPage = async ({ params }: Props) => {
             "@type": "Brand",
             "name": "RIMO"
         },
-        "category": dataDetail?.title || "Phụ kiện ô tô",
+        "category": "Phụ kiện ô tô",
         "offers": {
             "@type": "Offer",
             "url": productUrl,
             "priceCurrency": "VND",
-            // "price": dataDetail.price.toString(),
             "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             "itemCondition": "https://schema.org/NewCondition",
             "availability": "https://schema.org/InStock",
@@ -188,10 +220,10 @@ const ProductPage = async ({ params }: Props) => {
                 "@type": "Organization",
                 "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
             }
-        }
+        },
     };
 
-    // ✅ Schema Breadcrumb - có fallback
+    // ✅ Schema Breadcrumb - chi tiết hơn
     const breadcrumbSchema = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -208,15 +240,9 @@ const ProductPage = async ({ params }: Props) => {
                 "name": "Sản phẩm",
                 "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
             },
-            ...(dataDetail?.title ? [{
-                "@type": "ListItem",
-                "position": 3,
-                "name": dataDetail.title || "Danh mục",
-                "item": `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`
-            }] : []),
             {
                 "@type": "ListItem",
-                "position": dataDetail?.slug ? 4 : 3,
+                "position": 3,
                 "name": productName,
                 "item": productUrl
             }
@@ -246,17 +272,17 @@ const ProductPage = async ({ params }: Props) => {
         },
         "about": {
             "@type": "Thing",
-            "name": dataDetail?.title || "Phụ kiện ô tô"
+            "name": "Phụ kiện ô tô"
         }
     };
 
-    // ✅ Schema Article - giữ nguyên nhưng không hiển thị UI
-    const articleSchema = dataDetail?.content ? {
+    // ✅ Schema Article - chỉ hiển thị khi có content
+    const articleSchema = dataDetail.content ? {
         "@context": "https://schema.org",
         "@type": "Article",
         "@id": `${productUrl}#article`,
         "url": productUrl,
-        "headline": `${productName}`,
+        "headline": `Bài viết giới thiệu ${productName}`,
         "description": productDescription,
         "image": imageUrl,
         "author": {
@@ -278,7 +304,7 @@ const ProductPage = async ({ params }: Props) => {
             "@id": productUrl
         },
         "articleBody": dataDetail.content || productName,
-        "keywords": dataDetail.title
+        "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
     } : null;
 
     return (
@@ -318,9 +344,7 @@ const ProductPage = async ({ params }: Props) => {
                         </div>
                     </div>
                 }
-
             </div>
-
         </ClientLayout>
     );
 };
