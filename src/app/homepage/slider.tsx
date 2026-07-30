@@ -34,7 +34,7 @@ const FullWidthSlider = (props: Props) => {
     } = props;
     const configContent: ConfigPageInterface[] = configPage.filter(item => item.type == type);
     const [currentSlide, setCurrentSlide] = useState<number>(0);
-    const [listBanner, setListBanner] = useState<Array<string>>([]);
+    const [listBanner, setListBanner] = useState<Array<BannerInterface>>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
     const [isAnimate, setIsAnimate] = useState<boolean>(false);
@@ -48,8 +48,7 @@ const FullWidthSlider = (props: Props) => {
                 },
                 setLoading
             ).then((res) => {
-                const listImg = res.data.map((item: BannerInterface) => item.image)
-                setListBanner(listImg);
+                setListBanner(res.data);
             })
         }
         catch (error) {
@@ -181,28 +180,23 @@ const FullWidthSlider = (props: Props) => {
             {/* Main Slider */}
             {
                 !loading ?
-                    <Link href={ROUTE_PATH.PRODUCT} className="slider-wrapper">
+                    <div className="slider-wrapper">
                         <Slider {...settings}>
-                            {
-
-                                listBanner.map((slide: string, index: number) => (
-                                    <div key={index} className="slide-item">
-                                        {/* Background Image with Overlay */}
-                                        <div
-                                            className="slide-background"
-                                            style={{
-                                                backgroundImage: `url(${configImageURL(slide)})`,
-                                                '--overlay-color': 'rgba(0, 0, 0, 0.4)'
-                                            } as React.CSSProperties}
-                                        >
-                                        </div>
-
+                            {listBanner.map((slide, index: number) => (
+                                <Link href={slide.url ? slide.url : ROUTE_PATH.PRODUCT} key={index} className="slide-item">
+                                    {/* Background Image with Overlay */}
+                                    <div
+                                        className="slide-background"
+                                        style={{
+                                            backgroundImage: `url(${configImageURL(slide.image)})`,
+                                            '--overlay-color': 'rgba(0, 0, 0, 0.4)'
+                                        } as React.CSSProperties}
+                                    >
                                     </div>
-                                ))
-
-                            }
+                                </Link>
+                            ))}
                         </Slider>
-                    </Link>
+                    </div>
                     :
                     <div className="slider-wrapper">
                         <div className="slide-item"></div>
