@@ -41,7 +41,7 @@ const ClientLayout = ({ ...props }: any) => {
                     data-tooltip="Tiktok RIMO">
                     <Image src={tiktok} alt='RIMO' />
                 </a>
-                <a href="www.youtube.com/@RimoViệtNam"
+                <a href="https://www.youtube.com/@RimoViệtNam"
                     target='_blank'
                     rel="noopener noreferrer"
                     className='social-item'
