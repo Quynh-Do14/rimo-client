@@ -2,6 +2,8 @@ import FooterSection from './FooterSection'
 import HeaderSection from './HeaderSection'
 import mess from '@/assets/images/icon/icon_mess.png';
 import facebook from '@/assets/images/icon/icon_facebook.png';
+import tiktok from '@/assets/images/icon/icon_tiktok.png';
+import youtube from '@/assets/images/icon/icon_youtube.png';
 import call from '@/assets/images/icon/icon_call.png';
 import Image from 'next/image';
 import '@/assets/styles/components/MainLayout.css'
@@ -31,6 +33,20 @@ const ClientLayout = ({ ...props }: any) => {
                     className='social-item'
                     data-tooltip="Messenger RIMO">
                     <Image src={mess} alt='RIMO' />
+                </a>
+                <a href="https://www.tiktok.com/@rimo.vn"
+                    target='_blank'
+                    rel="noopener noreferrer"
+                    className='social-item'
+                    data-tooltip="Tiktok RIMO">
+                    <Image src={tiktok} alt='RIMO' />
+                </a>
+                <a href="www.youtube.com/@RimoViệtNam"
+                    target='_blank'
+                    rel="noopener noreferrer"
+                    className='social-item'
+                    data-tooltip="Youtube RIMO">
+                    <Image src={youtube} alt='RIMO' />
                 </a>
             </div>
         </div>
