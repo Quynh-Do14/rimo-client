@@ -43,6 +43,25 @@ class CategoryProductService {
         }
     };
 
+    async GetCategoryBySlug(id: string, setLoading: Function) {
+        setLoading(true)
+        try {
+            return await RequestService
+                .get(`${Endpoint.Category.GetBySlug}/${id}`)
+                .then(response => {
+                    if (response) {
+                        return response
+                    }
+                    setLoading(false)
+                    return response;
+                });
+        } catch (error) {
+            console.error(error)
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     async AddCategoryAdmin(data: CategoryProductInterface, onBack: Function, setLoading: Function) {
         setLoading(true)

@@ -19,7 +19,13 @@ import SkeletonProduct from "@/app/tim-kiem/skeleton";
 import { useParams } from 'next/navigation';
 import { PaginationNoSizeCommon } from "@/infrastructure/common/pagination/PaginationNoSize";
 
-const ProductContent = () => {
+type Props = {
+    name: string
+    title: string
+}
+
+const ProductContent = (props: Props) => {
+    const { name, title } = props
     const [listProduct, setListProduct] = useState<Array<ProductInterface>>([])
     const [searchText, setSearchText] = useState<string>("");
     const [totalPage, setTotalPage] = useState<number>(0);
@@ -263,10 +269,14 @@ const ProductContent = () => {
     );
 };
 
-const ProductList = () => {
+const ProductList = (props: Props) => {
+    const { name, title } = props
     return (
         <Suspense fallback={<SkeletonProduct />}>
-            <ProductContent />
+            <ProductContent
+                name={name}
+                title={title}
+            />
         </Suspense>
     );
 };

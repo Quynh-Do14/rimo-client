@@ -5,9 +5,8 @@ import ProductList from "./components/product-list";
 import { Metadata } from "next";
 import { ROUTE_PATH } from "@/core/common/appRouter";
 import { Endpoint } from "@/core/common/apiLink";
-import { SEOProductInterface } from "@/infrastructure/interface/seo-product/seoProduct.interface";
 import { configImageURL } from "@/infrastructure/helper/helper";
-import { notFound } from "next/navigation";
+import { CategoryProductInterface } from "@/infrastructure/interface/category/categoryProduct.interface";
 
 type Props = {
     params: { slug: string };
@@ -25,10 +24,10 @@ const FALLBACK_DATA = {
 };
 
 // Cache product data để tái sử dụng
-let cachedProduct: SEOProductInterface | null = null;
+let cachedProduct: CategoryProductInterface | null = null;
 
-async function getProduct(slug: string): Promise<SEOProductInterface> {
-    const response = await fetch(`${baseURL}${Endpoint.SEOProduct.GetBySlug}/${slug}`, {
+async function getProduct(slug: string): Promise<CategoryProductInterface> {
+    const response = await fetch(`${baseURL}${Endpoint.Category.GetBySlug}/${slug}`, {
         cache: 'no-store', // Tắt cache
     });
     if (!response.ok) {
@@ -41,7 +40,7 @@ async function getProduct(slug: string): Promise<SEOProductInterface> {
 }
 
 // Hàm tạo meta description
-function generateDescription(product: SEOProductInterface | null): string {
+function generateDescription(product: CategoryProductInterface | null): string {
     if (!product) {
         return 'Sản phẩm phụ kiện ô tô chất lượng cao tại RIMO - Phụ kiện ô tô chính hãng, giá tốt nhất thị trường';
     }
@@ -64,7 +63,7 @@ function generateDescription(product: SEOProductInterface | null): string {
 }
 
 // Hàm tạo keywords
-function generateKeywords(product: SEOProductInterface | null): string {
+function generateKeywords(product: CategoryProductInterface | null): string {
     if (!product) {
         return 'phụ kiện ô tô, RIMO, phụ kiện xe hơi, đồ chơi xe hơi, nội thất ô tô, phụ kiện chính hãng';
     }
@@ -127,19 +126,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const keywords = generateKeywords(product);
 
     return {
-        title: product.title ? product.title : "Sản phẩm RIMO",
+        title: product.title ? product.title : product.name,
         description: description,
         keywords: keywords,
 
         openGraph: {
-            title: product.title ? product.title : "Sản phẩm RIMO",
+            title: product.title ? product.title : product.name,
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
                     width: 1200,
                     height: 630,
-                    alt: product.title ? product.title : "Sản phẩm RIMO",
+                    alt: product.title ? product.title : product.name,
                 }
             ],
             type: 'website',
@@ -150,12 +149,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         twitter: {
             card: 'summary_large_image',
-            title: product.title ? product.title : "Sản phẩm RIMO",
+            title: product.title ? product.title : product.name,
             description: description,
             images: [
                 {
                     url: configImageURL('/uploads/RIMO-logo.png'),
-                    alt: product.title ? product.title : "Sản phẩm RIMO",
+                    alt: product.title ? product.title : product.name,
                 }
             ],
         },
@@ -330,7 +329,10 @@ const ProductPage = async ({ params }: Props) => {
             )}
 
             <div className={styles.productSection}>
-                <ProductList title={dataDetail?.title} />
+                <ProductList
+                    name={dataDetail.name}
+                    title={dataDetail.title}
+                />
                 {
                     dataDetail?.content &&
                     <div className="bg-white">
