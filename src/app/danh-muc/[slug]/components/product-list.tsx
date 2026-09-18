@@ -192,7 +192,7 @@ const ProductContent = (props: Props) => {
                 <BreadcrumbCommon
                     breadcrumb={"Sản phẩm"}
                     redirect={ROUTE_PATH.PRODUCT}
-                    title={title}
+                    title={name}
                 />
                 <div className={styles.productContent}>
                     <div className="pageHeader">

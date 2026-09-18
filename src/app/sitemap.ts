@@ -17,11 +17,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products: ProductInterface[] = productsRaw.data
 
   // Fetch blogs
-  const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}`, {
+  const blogsRes = await fetch(`${baseURL}${Endpoint.Blog.Get}/link`, {
     next: { revalidate: 3600 }
   })
   const blogsRaw = await blogsRes.json()
   const blogs: BlogInterface[] = blogsRaw.data
+
+  const categoryRes = await fetch(`${baseURL}${Endpoint.Category.Get}`, {
+    next: { revalidate: 3600 }
+  })
+  const categoryRaw = await categoryRes.json()
+  const category: BlogInterface[] = categoryRaw.data
 
   // Static URLs
   const staticUrls = [
@@ -105,7 +111,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${publicURL}/san-pham/${product.slug}`,
     lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
-    priority: 0.7,
+    priority: 0.9,
   }))
 
   // Dynamic blog URLs
@@ -113,8 +119,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${publicURL}/tin-tuc/${blog.slug}.html`,
     lastModified: blog.updated_at ? new Date(blog.updated_at) : new Date(),
     changeFrequency: 'weekly' as const,
-    priority: 0.6,
+    priority: 0.8,
   }))
 
-  return [...staticUrls, ...productUrls || [], ...blogUrls || []]
+  const categoryUrls = category && category.length && category.map((product) => ({
+    url: `${publicURL}/danh-muc/${product.slug}`,
+    lastModified: product.updated_at ? new Date(product.updated_at) : new Date(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.8,
+  }))
+
+  return [...staticUrls, ...productUrls || [], ...blogUrls || [], ...categoryUrls || []]
 }

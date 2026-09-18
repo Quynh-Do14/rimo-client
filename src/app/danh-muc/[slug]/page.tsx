@@ -47,7 +47,6 @@ function generateDescription(product: CategoryProductInterface | null): string {
 
     // Tạo description từ content
     if (product.content) {
-        // Loại bỏ HTML tags và lấy text thuần
         const plainText = product.content.replace(/<[^>]*>/g, '');
         const truncated = plainText.length > 160
             ? plainText.slice(0, 160) + '...'
@@ -70,26 +69,21 @@ function generateKeywords(product: CategoryProductInterface | null): string {
 
     const keywords = new Set<string>();
 
-    // Thêm title
     if (product.title) keywords.add(product.title);
 
-    // Thêm từ khóa từ API
     if (product.keyword && Array.isArray(product.keyword)) {
         product.keyword.forEach(item => {
             if (item.keyword) keywords.add(item.keyword);
         });
     }
 
-    // Thêm từ khóa mở rộng
     if (product.title) {
-        // Tách từ khóa từ title
         const titleWords = product.title.split(' ');
         titleWords.forEach(word => {
             if (word.length > 2) keywords.add(word);
         });
     }
 
-    // Thêm từ khóa mặc định nếu chưa đủ
     if (keywords.size < 5) {
         keywords.add('phụ kiện ô tô');
         keywords.add('RIMO');
@@ -104,7 +98,8 @@ function generateKeywords(product: CategoryProductInterface | null): string {
 // ✅ Metadata với fallback và SEO đầy đủ
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const product = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${params.slug}`;
+    // ⚠️ Đây là trang danh mục, URL chỉ có /san-pham (không có slug sản phẩm)
+    const productUrl = `${publicURL}${ROUTE_PATH.CATEGORY}/${product.slug}`;
 
     // Nếu không có sản phẩm, trả về metadata mặc định
     if (!product) {
@@ -180,49 +175,65 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
-// Component ProductPage
+// Component ProductPage - Trang danh sách sản phẩm (Category Page)
 const ProductPage = async ({ params }: Props) => {
     const dataDetail = await getProduct(params.slug);
-    const productUrl = `${publicURL}${ROUTE_PATH.PRODUCT}/${params.slug}`;
+    // ⚠️ URL của trang danh mục chỉ là /san-pham, không có slug sản phẩm cụ thể
+    const productUrl = `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`;
 
     const imageUrl = configImageURL('/uploads/RIMO-logo.png');
 
     const productName = dataDetail.title || FALLBACK_DATA.title;
-    const productContent = dataDetail.content || FALLBACK_DATA.content;
     const productDescription = dataDetail.content
         ? dataDetail.content.replace(/<[^>]*>/g, '').slice(0, 200)
         : FALLBACK_DATA.description;
 
-    // ✅ Schema Product - chi tiết hơn
-    const productSchema = {
+    // ✅ SCHEMA CHÍNH: CollectionPage (chuẩn cho trang danh mục sản phẩm)
+    // KHÔNG có offers, price, review, aggregateRating vì đây không phải sản phẩm cụ thể
+    const collectionPageSchema = {
         "@context": "https://schema.org",
-        "@type": "Product",
+        "@type": "CollectionPage",
         "@id": productUrl,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
-        "image": imageUrl,
-        "sku": params.slug,
-        "brand": {
-            "@type": "Brand",
-            "name": "RIMO"
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "RIMO - Phụ kiện ô tô"
         },
-        "category": "Phụ kiện ô tô",
-        "offers": {
-            "@type": "Offer",
-            "url": productUrl,
-            "priceCurrency": "VND",
-            "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            "itemCondition": "https://schema.org/NewCondition",
-            "availability": "https://schema.org/InStock",
-            "seller": {
-                "@type": "Organization",
-                "name": "Công ty TNHH Thương Mại XNK Nội Thất Ô Tô Quang Minh"
-            }
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": productName,
+            "width": "1200",
+            "height": "630"
         },
+        "about": {
+            "@type": "Thing",
+            "name": "Phụ kiện ô tô"
+        },
+        "inLanguage": "vi-VN"
     };
 
-    // ✅ Schema Breadcrumb - chi tiết hơn
+    // ✅ SCHEMA ItemList: Liệt kê các sản phẩm con trong danh mục (nếu API có trả về)
+    // Chỉ chứa position, url, name - KHÔNG có offers/price
+    // const itemListSchema = (dataDetail.products && Array.isArray(dataDetail.products) && dataDetail.products.length > 0) ? {
+    //     "@context": "https://schema.org",
+    //     "@type": "ItemList",
+    //     "@id": `${productUrl}#itemlist`,
+    //     "name": productName,
+    //     "numberOfItems": dataDetail.products.length,
+    //     "itemListElement": dataDetail.products.map((item: any, index: number) => ({
+    //         "@type": "ListItem",
+    //         "position": index + 1,
+    //         "url": `${publicURL}${ROUTE_PATH.PRODUCT}/${item.slug || item.id}`,
+    //         "name": item.title || item.name || `Sản phẩm ${index + 1}`
+    //     }))
+    // } : null;
+
+    // ✅ Schema Breadcrumb - CHỈ 2 cấp vì đây là trang danh mục
     const breadcrumbSchema = {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
@@ -237,22 +248,16 @@ const ProductPage = async ({ params }: Props) => {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Sản phẩm",
-                "item": `${publicURL}${ROUTE_PATH.PRODUCT}`
-            },
-            {
-                "@type": "ListItem",
-                "position": 3,
-                "name": productName,
-                "item": productUrl
+                "item": `${publicURL}${ROUTE_PATH.CATEGORY}/${dataDetail.slug}`
             }
         ]
     };
 
-    // ✅ Schema WebPage
+    // ✅ Schema WebPage (bổ sung cho CollectionPage)
     const webpageSchema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "@id": productUrl,
+        "@id": `${productUrl}#webpage`,
         "url": productUrl,
         "name": productName,
         "description": productDescription,
@@ -275,43 +280,12 @@ const ProductPage = async ({ params }: Props) => {
         }
     };
 
-    // ✅ Schema Article - chỉ hiển thị khi có content
-    const articleSchema = dataDetail.content ? {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "@id": `${productUrl}#article`,
-        "url": productUrl,
-        "headline": `Bài viết giới thiệu ${productName}`,
-        "description": productDescription,
-        "image": imageUrl,
-        "author": {
-            "@type": "Organization",
-            "name": "RIMO"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "RIMO - Phụ kiện ô tô",
-            "logo": {
-                "@type": "ImageObject",
-                "url": configImageURL('/uploads/RIMO-logo.png')
-            }
-        },
-        "datePublished": dataDetail.created_at || new Date().toISOString(),
-        "dateModified": dataDetail.updated_at || new Date().toISOString(),
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": productUrl
-        },
-        "articleBody": dataDetail.content || productName,
-        "keywords": dataDetail.keyword?.map(item => item.keyword).join(', ') || productName
-    } : null;
-
     return (
         <ClientLayout>
-            {/* JSON-LD Schemas */}
+            {/* JSON-LD Schemas cho trang danh sách sản phẩm */}
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
             />
             <script
                 type="application/ld+json"
@@ -321,12 +295,12 @@ const ProductPage = async ({ params }: Props) => {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
             />
-            {articleSchema && (
+            {/* {itemListSchema && (
                 <script
                     type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
                 />
-            )}
+            )} */}
 
             <div className={styles.productSection}>
                 <ProductList
