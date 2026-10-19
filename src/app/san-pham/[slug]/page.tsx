@@ -195,6 +195,7 @@ const ProductSlugPage = async ({ params }: Props) => {
                                     productName={dataDetail.name}
                                     slides={dataDetail.images}
                                     avatarImage={dataDetail.image}
+                                    item={dataDetail}
                                 />
                             </div>
                             <div className={styles.productInfo}>

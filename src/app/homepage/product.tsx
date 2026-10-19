@@ -69,6 +69,12 @@ const ProductContent = () => {
                                     key={item.id}
                                     className={styles.galleryItem}
                                 >
+                                    {Number(item.price_sale) !== 0 ? (
+                                        <div className={styles.goldSaleBadge}>
+                                            -<span className={styles.goldBadgeText}>{Math.round((1 - item.price_sale / item.price) * 100)}%</span>
+                                            <div className={styles.goldBadgeCorner}></div>
+                                        </div>
+                                    ) : null}
                                     <div className={styles.itemMedia}>
                                         {/* Thumbnail */}
                                         <div className={styles.thumbnailWrapper}>

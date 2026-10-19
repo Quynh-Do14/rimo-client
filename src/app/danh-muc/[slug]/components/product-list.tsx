@@ -248,6 +248,12 @@ const ProductContent = (props: Props) => {
                                             key={item.id}
                                             className={styles.galleryItem}
                                         >
+                                            {Number(item.price_sale) !== 0 ? (
+                                                <div className={styles.goldSaleBadge}>
+                                                    -<span className={styles.goldBadgeText}>{Math.round((1 - Number(item.price_sale) / Number(item.price)) * 100)}%</span>
+                                                    <div className={styles.goldBadgeCorner}></div>
+                                                </div>
+                                            ) : null}
                                             <div className={styles.itemMedia}>
                                                 <div className={styles.mediaContainer}>
                                                     <div className={styles.thumbnailWrapper}>
