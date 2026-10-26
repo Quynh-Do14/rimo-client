@@ -1,254 +1,204 @@
-'use client'
-import React, { useState, useEffect, Suspense, useLayoutEffect } from "react";
-import productService from "@/infrastructure/repository/product/product.service";
-import { configImageURL, convertSlug, formatCurrencyVND } from "@/infrastructure/helper/helper";
-import Link from "next/link";
-import { ROUTE_PATH } from "@/core/common/appRouter";
+import React from "react";
 import styles from "@/assets/styles/pages/product/product.module.css"
 import ClientLayout from "@/infrastructure/common/Layouts/Client-Layout";
-import BreadcrumbCommon from "@/infrastructure/common/Layouts/Breadcumb";
-import InputSearchCommon from "@/infrastructure/common/input/input-search-common";
-import SelectSearchCommon from "@/infrastructure/common/input/select-search-common";
-import ButtonCommon from "@/infrastructure/common/button/button-common";
-import { useRecoilValue } from "recoil";
-import { CategoryProductState } from "@/core/common/atoms/category/categoryState";
-import { useRouter, useSearchParams } from "next/navigation";
-import SkeletonProduct from "./skeleton";
-const SearchContent = () => {
-    const [listProduct, setListProduct] = useState<Array<any>>([])
-    const [searchText, setSearchText] = useState<string>("");
-    const [totalPage, setTotalPage] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalElement, setTotalElement] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(8);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [categoryId, setCategoryId] = useState<string>("");
-    const [initialLoading, setInitialLoading] = useState<boolean>(true);
+import { Metadata } from "next";
+import { ROUTE_PATH } from "@/core/common/appRouter";
+import { configImageURL } from "@/infrastructure/helper/helper";
+import SearchList from "./content";
 
-    const router = useRouter(); // Từ next/navigation
-    const searchParams = useSearchParams(); // Dùng useSearchParams thay vì router.query
+type Props = {
+    params: { slug: string };
+};
 
-    // Lấy các query parameters
-    const search = searchParams?.get('search') || '';
-    const page = searchParams?.get('page') || '1';
-    const limit = searchParams?.get('limit') || '8';
-    const category_id = searchParams?.get('category_id') || '';
+const publicURL = process.env.NEXT_PUBLIC_PUBLIC_URL;
 
-    const categoryProductState = useRecoilValue(CategoryProductState).data
+// ✅ Fallback data SEO cho trang tìm kiếm sản phẩm
+const FALLBACK_DATA = {
+    title: 'Tìm kiếm sản phẩm – Phụ kiện ô tô chính hãng | RIMO',
+    description: 'Tìm kiếm phụ kiện ô tô chính hãng tại RIMO. Tra cứu nhanh theo tên, loại xe hoặc danh mục, giá tốt, bảo hành uy tín.',
+    keywords: 'tìm kiếm phụ kiện ô tô, tra cứu phụ kiện xe hơi, tìm sản phẩm phụ kiện ô tô, RIMO',
+};
 
-    const onGetListProductAsync = async ({ name = searchText, limit = pageSize, page = currentPage, category_id = categoryId }) => {
-        const param = {
-            page: page,
-            limit: limit,
-            search: name,
-            category_id: category_id
-        }
-        try {
-            await productService.GetProduct(
-                param,
-                setLoading
-            ).then((res) => {
-                setListProduct(res.data);
-                setTotalElement(res.limit);
-                setTotalPage(res.totalPages);
-                setTotal(res.total);
-            })
-        }
-        catch (error) {
-            console.error(error)
-        }
-    }
+// ✅ Metadata SEO đầy đủ cho trang tìm kiếm
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const searchUrl = `${publicURL}${ROUTE_PATH.SEARCH}`;
 
-    const onSearch = async (name = searchText, limit = pageSize, page = 1, category_id = categoryId) => {
-        await onGetListProductAsync({ name: name, limit: limit, page: page, category_id: category_id }).then(_ => { });
+    const title = FALLBACK_DATA.title;
+    const description = FALLBACK_DATA.description;
+    const keywords = FALLBACK_DATA.keywords;
+    const imageUrl = configImageURL('/uploads/RIMO-logo.png');
+
+    return {
+        title,
+        description,
+        keywords,
+
+        openGraph: {
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                }
+            ],
+            type: 'website',
+            url: searchUrl,
+            siteName: 'RIMO',
+            locale: 'vi_VN',
+        },
+
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: [
+                {
+                    url: imageUrl,
+                    alt: title,
+                }
+            ],
+        },
+
+        alternates: {
+            canonical: searchUrl,
+        },
+
+        robots: {
+            index: true,
+            follow: true,
+            'max-image-preview': 'large',
+            'max-snippet': -1,
+            'max-video-preview': -1,
+        },
+
+        verification: {
+            google: process.env.GOOGLE_VERIFICATION,
+        },
+
+        category: 'Tìm kiếm sản phẩm',
+        authors: [{ name: 'RIMO' }],
+    };
+}
+
+// Component SearchPage - Trang tìm kiếm sản phẩm
+const SearchPage = async ({ params }: Props) => {
+    const searchUrl = `${publicURL}${ROUTE_PATH.SEARCH}`;
+    const imageUrl = configImageURL('/uploads/RIMO-logo.png');
+
+    const pageName = FALLBACK_DATA?.title;
+    const pageDescription = FALLBACK_DATA?.description;
+
+    // ✅ CollectionPage (trang danh mục sản phẩm)
+    const collectionPageSchema = {
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": searchUrl,
+        "url": searchUrl,
+        "name": pageName,
+        "description": pageDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "RIMO"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": pageName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Tìm kiếm phụ kiện ô tô"
+        },
+        "inLanguage": "vi-VN"
     };
 
-
-    const onSearchParam = async () => {
-        // Tạo URL mới với search params
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('search', searchText);
-        params.set('category_id', categoryId);
-        params.set('page', '1'); // Reset về trang 1 khi search
-        router.push(`${ROUTE_PATH.SEARCH}?${params.toString()}`);
-
-        await onSearch(searchText, pageSize, 1, categoryId).then(_ => { });
-    }
-
-    const onChangeSearchText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchText(e.target.value);
+    // ✅ Breadcrumb 2 cấp
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Trang chủ",
+                "item": publicURL
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Tìm kiếm",
+                "item": searchUrl
+            }
+        ]
     };
 
-    const onChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setCategoryId(e.target.value);
+    // ✅ WebPage
+    const webpageSchema = {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${searchUrl}#webpage`,
+        "url": searchUrl,
+        "name": pageName,
+        "description": pageDescription,
+        "isPartOf": {
+            "@type": "WebSite",
+            "@id": `${publicURL}/#website`,
+            "url": publicURL,
+            "name": "RIMO"
+        },
+        "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": imageUrl,
+            "caption": pageName,
+            "width": "1200",
+            "height": "630"
+        },
+        "about": {
+            "@type": "Thing",
+            "name": "Tìm kiếm phụ kiện ô tô"
+        }
     };
 
-    const onChangePage = async (page: number) => {
-        setCurrentPage(page);
-
-        // Cập nhật params với page mới
-        const params = new URLSearchParams(searchParams?.toString() || '');
-        params.set('page', page.toString());
-        router.push(`${ROUTE_PATH.SEARCH}?${params.toString()}`);
-
-        await onSearch(searchText, pageSize, page, categoryId).then(_ => { });
-    }
-
-
-    useEffect(() => {
-        const parsedPage = parseInt(page) || 1;
-        const parsedLimit = parseInt(limit) || 8;
-        const parsedSearch = search || "";
-        const parsedCategory = category_id || "";
-
-        setSearchText(parsedSearch);
-        setCurrentPage(parsedPage);
-        setPageSize(parsedLimit);
-        setCategoryId(parsedCategory);
-
-        onSearch(parsedSearch, parsedLimit, parsedPage, parsedCategory);
-    }, [search, page, limit, category_id]); // Theo dõi các giá trị từ searchParams
-
-    const onReset = () => {
-        setSearchText('');
-        setCategoryId('');
-        setCurrentPage(1);
-        router.push(`${ROUTE_PATH.SEARCH}`);
-    }
-
-    useLayoutEffect(() => {
-        setInitialLoading(false);
-    });
+    // ✅ Organization (thương hiệu)
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "RIMO",
+        "url": publicURL,
+        "logo": imageUrl,
+        "sameAs": []
+    };
 
     return (
         <ClientLayout>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(webpageSchema) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+            />
+
             <div className={styles.productSection}>
-                <div className="padding-common">
-                    <BreadcrumbCommon
-                        breadcrumb={"Tìm kiếm sản phẩm"}
-                        redirect={ROUTE_PATH.PRODUCT}
-                        title={""}
-                    />
-                    <div className={styles.productContent}>
-                        <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 sm:gap-4">
-                            {/* Search Input */}
-                            <div className="sm:col-span-5">
-                                <InputSearchCommon
-                                    placeholder={'Tìm kiếm tin tức'}
-                                    value={searchText}
-                                    onChange={onChangeSearchText}
-                                    disabled={false}
-                                />
-                            </div>
-
-                            {/* Category Select */}
-                            <div className="sm:col-span-4">
-                                <SelectSearchCommon
-                                    listDataOfItem={categoryProductState}
-                                    onChange={onChangeCategory}
-                                    label={"Danh mục sản phẩm"}
-                                    value={categoryId}
-                                />
-                            </div>
-
-                            {/* Search Button */}
-                            <div className="sm:col-span-3">
-                                <ButtonCommon
-                                    onClick={onSearchParam}
-                                    title={'Tìm kiếm'}
-                                />
-                            </div>
-                        </div>
-
-                        {/* Loading State */}
-                        {initialLoading || loading ? (
-                            <SkeletonProduct />
-                        ) : (
-                            /* Data State */
-                            <div className={styles.galleryContainer}>
-                                {listProduct.length > 0 ? (
-                                    <div className={styles.galleryGrid}>
-                                        {listProduct.map(item => (
-                                            <Link href={`${ROUTE_PATH.PRODUCT}/${item.slug}`}
-                                                key={item.id}
-                                                className={styles.galleryItem}
-                                            >
-                                                {Number(item.price_sale) !== 0 ? (
-                                                    <div className={styles.goldSaleBadge}>
-                                                        -<span className={styles.goldBadgeText}>{Math.round((1 - item.price_sale / item.price) * 100)}%</span>
-                                                    </div>
-                                                ) : null}
-                                                <div className={styles.itemMedia}>
-                                                    <div className={styles.mediaContainer}>
-                                                        <div className={styles.thumbnailWrapper}>
-                                                            <div
-                                                                className={styles.thumbnail}
-                                                                style={{ backgroundImage: `url(${configImageURL(item.image)})` }}
-                                                            />
-                                                            <div className={styles.mediaOverlay}></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className={styles.itemContent}>
-                                                    <div className={styles.contentWrapper}>
-                                                        <h3 className={styles.itemTitle}>{item.name}</h3>
-                                                        <div className={styles.itemPrice}>
-                                                            {item.price_sale ? (
-                                                                <>
-                                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                                                        <span className={styles.salePrice}>{formatCurrencyVND(item.price_sale)}</span>
-                                                                    </div>
-                                                                    <span className={styles.originalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                                </>
-                                                            ) : (
-                                                                <span className={styles.normalPrice}>{formatCurrencyVND(item.price)}</span>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    /* No Data State */
-                                    <div className={styles.galleryContainer}>
-                                        <div className={styles.noDataContainer}>
-                                            <div className={styles.noDataIcon}>
-                                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                                                    <circle cx="12" cy="12" r="10" />
-                                                    <line x1="8" y1="8" x2="16" y2="16" />
-                                                    <line x1="16" y1="8" x2="8" y2="16" />
-                                                </svg>
-                                            </div>
-                                            <h3 className={styles.noDataTitle}>Không tìm thấy sản phẩm</h3>
-                                            <p className={styles.noDataDescription}>
-                                                Không có sản phẩm nào phù hợp với tìm kiếm của bạn.
-                                            </p>
-                                            <ButtonCommon
-                                                onClick={onReset}
-                                                title={'Xóa bộ lọc'}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </div>
-                </div>
+                <SearchList />
             </div>
         </ClientLayout>
-
-    );
-};
-
-
-const SearchPage = () => {
-    return (
-        <Suspense fallback={<SkeletonProduct />}>
-            <SearchContent />
-        </Suspense>
     );
 };
 

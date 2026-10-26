@@ -12,7 +12,7 @@ import SelectSearchCommon from '@/infrastructure/common/input/select-search-comm
 import ButtonCommon from '@/infrastructure/common/button/button-common';
 import { useRecoilValue } from 'recoil';
 import { CategoryAgencyState, CategoryBlogState } from '@/core/common/atoms/category/categoryState';
-import LocationMap from './map';
+import LocationMap from './components/map';
 import districtService from '@/infrastructure/repository/district/district.service';
 import InputSearchCommon from '@/infrastructure/common/input/input-search-common';
 import SelectSearchProvince from '@/infrastructure/common/input/select-search-province';

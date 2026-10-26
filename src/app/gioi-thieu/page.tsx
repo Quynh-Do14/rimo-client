@@ -177,7 +177,7 @@ export const metadata: Metadata = {
     },
 
     alternates: {
-        canonical: `${publicURL}/${ROUTE_PATH.INTRODUCE}`,
+        canonical: `${publicURL}${ROUTE_PATH.INTRODUCE}`,
     },
 
     other: {
